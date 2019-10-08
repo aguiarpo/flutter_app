@@ -24,8 +24,8 @@ class _PageViewListPersonsState extends State<PageViewListPersons> with SingleTi
   ];
 
   static final _kTabs = <Tab>[
-    Tab(text: 'Usuaários'),
-    Tab(text: 'Tutores2'),
+    Tab(text: 'Usuários'),
+    Tab(text: 'Tutores'),
   ];
 
   @override
