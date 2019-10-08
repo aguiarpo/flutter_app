@@ -96,7 +96,9 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
         actions: <Widget>[
           IconButton(icon: Icon(Icons.dehaze),
           color: color,
-          onPressed: (){},)
+          onPressed: (){
+            Navigator.pushNamed(context, "/config");
+          },)
         ],
         backgroundColor: mainColor,
       ),
