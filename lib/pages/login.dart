@@ -96,6 +96,9 @@ class _LoginPage extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
                       child: GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, "/resetPassword1");
+                        },
                         child: Text("Esqueceu a senha?", style: TextStyle(
                             color: Color(0xff2C1871),
                             fontSize: 15,
