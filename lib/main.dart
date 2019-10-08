@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/config.dart';
 import 'package:flutter_app/pages/home.dart';
 import 'package:flutter_app/pages/login.dart';
+import 'package:flutter_app/pages/reset_password_page1.dart';
 
 void main() => runApp(MaterialApp(
   title: 'Registro de animais',
@@ -15,6 +16,7 @@ void main() => runApp(MaterialApp(
     '/': (context) => LoginPage(),
     '/home': (context) => HomePage(),
     '/config' : (context) => ConfigPage(),
+    '/resetPassword1' : (context) => PageSelectorExample(),
   },
 )
 );
