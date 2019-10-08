@@ -18,12 +18,12 @@ class PageViewListPersons extends StatefulWidget {
 class _PageViewListPersonsState extends State<PageViewListPersons> with SingleTickerProviderStateMixin {
   TabController _tabController;
 
-  static final List<Widget> _kTabPages = [
+  final List<Widget> _kTabPages = [
     PageViewListUsers(),
     PageViewListTutors()
   ];
 
-  static final _kTabs = <Tab>[
+  final _kTabs = <Tab>[
     Tab(text: 'Usuários'),
     Tab(text: 'Tutores'),
   ];

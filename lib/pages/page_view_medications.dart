@@ -58,6 +58,30 @@ class _PageViewListMedications extends State<PageViewListMedications> {
     {
       "Nome" : "Nome"
     },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
   ];
 
   @override
@@ -110,6 +134,7 @@ class _PageViewListMedications extends State<PageViewListMedications> {
                 child: ListView.builder(
                     padding: EdgeInsets.only(bottom: 100),
                     shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: itens.length,
                     itemBuilder: (BuildContext context, int index) {
                       final item = itens[index];
@@ -164,7 +189,7 @@ class _PageViewListMedications extends State<PageViewListMedications> {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("$index - ${itens[index]['Nome']}", style: TextStyle(fontWeight: FontWeight.bold),),
+                                          Text("${itens[index]['Nome']}", style: TextStyle(fontWeight: FontWeight.bold),),
                                         ],
                                       ),
                                     ),
