@@ -2,54 +2,6 @@ import 'package:flutter/material.dart';
 
 Color mainColor = Color(0xff8CFFBA);
 
-List<Map> widgetsVehicle = [{
-  "Nome" : "Nome"
-},
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-  {
-    "Nome" : "Nome"
-  },
-
-];
-
 class PageViewListIncidents extends StatefulWidget {
 
   @override
@@ -60,6 +12,55 @@ class PageViewListIncidents extends StatefulWidget {
 
 class _PageViewListIncidents extends State<PageViewListIncidents> {
   String title;
+
+  List<Map> itens = [{
+    "Nome" : "Nome"
+  },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+    {
+      "Nome" : "Nome"
+    },
+
+  ];
+
 
   @override
   void initState() {
@@ -112,49 +113,75 @@ class _PageViewListIncidents extends State<PageViewListIncidents> {
                     padding: EdgeInsets.only(bottom: 100),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 10,
+                    itemCount: itens.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                          margin: new EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          width: 25.0,
-                          height: 70.0,
-                          child: Card(
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                            color: Colors.white,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  color: Color(0xff179cbf),
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {},
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("${widgetsVehicle[index]['Nome']}", style: TextStyle(fontWeight: FontWeight.bold),),
-                                      ],
+                      final item = itens[index];
+                      return Dismissible(
+                        key: Key(UniqueKey().toString()),
+                        onDismissed: (DismissDirection dir){
+                          setState(() => itens.removeAt(index));
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('$index - ${item["Nome"]} removido.'),
+                              action: SnackBarAction(
+                                label: 'UNDO',
+                                onPressed: () {
+                                  setState(() => itens.insert(index, item));
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          child: Icon(Icons.delete),
+                          alignment: Alignment.centerLeft,
+                        ),
+                        // Background when swipping from right to left
+                        secondaryBackground: Container(
+                          color: Colors.red,
+                          child: Icon(Icons.delete),
+                          alignment: Alignment.centerRight,
+                        ),
+                        child: Container(
+                            height: 70.0,
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              color: Colors.white,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    color: Color(0xff179cbf),
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("${itens[index]['Nome']}", style: TextStyle(fontWeight: FontWeight.bold),),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                MaterialButton(
-                                  onPressed: (){},
-                                  child: Text("Editar", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),),
-                                  padding: EdgeInsets.only(left: 10, right: 10),
-                                  height: 70,
-                                  color: Color(0xff179cbf),
-                                )
-                              ],
-                            ),
-                          )
+                                  MaterialButton(
+                                    onPressed: (){},
+                                    child: Text("Editar", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),),
+                                    padding: EdgeInsets.only(left: 10, right: 10),
+                                    color: Color(0xff179cbf),
+                                  )
+                                ],
+                              ),
+                            )
+                        ),
                       );
                     }
                 ),
