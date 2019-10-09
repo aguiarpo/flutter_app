@@ -13,7 +13,7 @@ class PageViewListUsers extends StatefulWidget {
 class _PageViewListUsers extends State<PageViewListUsers> {
   String title;
 
-  List<Map> itens = [{
+  List<Map> list = [{
     "Nome" : "Nome", "Email" : "Email", "CRMV" : "CRMV"
   },
     {
@@ -53,6 +53,92 @@ class _PageViewListUsers extends State<PageViewListUsers> {
       "Nome" : "Nome", "Email" : "Email", "CRMV" : "CRMV"
     },
   ];
+
+  Widget listBuilder(itens){
+    return ListView.builder(
+        padding: EdgeInsets.only(bottom: 100),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: itens.length,
+        itemBuilder: (BuildContext context, int index) {
+          final item = itens[index];
+          return Dismissible(
+            key: Key(UniqueKey().toString()),
+            onDismissed: (DismissDirection dir){
+              setState(() => itens.removeAt(index));
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('$index - ${item["Nome"]} removido.'),
+                  action: SnackBarAction(
+                    label: 'UNDO',
+                    onPressed: () {
+                      setState(() => itens.insert(index, item));
+                    },
+                  ),
+                ),
+              );
+            },
+            background: Container(
+              color: Colors.red,
+              child: Icon(Icons.delete),
+              alignment: Alignment.centerLeft,
+            ),
+            // Background when swipping from right to left
+            secondaryBackground: Container(
+              color: Colors.red,
+              child: Icon(Icons.delete),
+              alignment: Alignment.centerRight,
+            ),
+            child: Container(
+                height: 90.0,
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0)),
+                  color: Colors.white,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        color: Color(0xff179cbf),
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${itens[index]['Nome']}", style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text("${itens[index]['Email']}"),
+                              Text((itens[index]['CRMV'] == null) ? "" : "${itens[index]['CRMV']}"),
+                            ],
+                          ),
+                        ),
+                      ),
+                      MaterialButton(
+                        onPressed: (){},
+                        child: Text("Editar", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),),
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        color: Color(0xff179cbf),
+                      )
+                    ],
+                  ),
+                )
+            ),
+          );
+        }
+    );
+  }
+
+  Future<List> display() async {
+    await Future.delayed(Duration(milliseconds: 700));
+    return list;
+  }
 
   @override
   void initState() {
@@ -101,83 +187,23 @@ class _PageViewListUsers extends State<PageViewListUsers> {
               ),
               margin: EdgeInsets.only(top: 110),
               child: SingleChildScrollView(
-                child: ListView.builder(
-                    padding: EdgeInsets.only(bottom: 100),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: itens.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final item = itens[index];
-                      return Dismissible(
-                        key: Key(UniqueKey().toString()),
-                        onDismissed: (DismissDirection dir){
-                          setState(() => itens.removeAt(index));
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('$index - ${item["Nome"]} removido.'),
-                              action: SnackBarAction(
-                                label: 'UNDO',
-                                onPressed: () {
-                                  setState(() => itens.insert(index, item));
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                        background: Container(
-                          color: Colors.red,
-                          child: Icon(Icons.delete),
-                          alignment: Alignment.centerLeft,
-                        ),
-                        // Background when swipping from right to left
-                        secondaryBackground: Container(
-                          color: Colors.red,
-                          child: Icon(Icons.delete),
-                          alignment: Alignment.centerRight,
-                        ),
-                        child: Container(
-                            height: 90.0,
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0)),
-                              color: Colors.white,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Container(
-                                    color: Color(0xff179cbf),
-                                    width: 10,
-                                  ),
-                                  SizedBox(
-                                    width: 10.0,
-                                  ),
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {},
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("${itens[index]['Nome']}", style: TextStyle(fontWeight: FontWeight.bold),),
-                                          Text("${itens[index]['Email']}"),
-                                          Text((itens[index]['CRMV'] == null) ? "" : "${itens[index]['CRMV']}"),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  MaterialButton(
-                                    onPressed: (){},
-                                    child: Text("Editar", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),),
-                                    padding: EdgeInsets.only(left: 10, right: 10),
-                                    color: Color(0xff179cbf),
-                                  )
-                                ],
-                              ),
-                            )
+                child: FutureBuilder(
+                  future: display(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting: return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
                         ),
                       );
+                      default:
+                        if (snapshot.hasError)
+                          return new Text('Error: ${snapshot.error}');
+                        else
+                          return listBuilder(snapshot.data);
                     }
+                  },
                 ),
               ),
             ),
