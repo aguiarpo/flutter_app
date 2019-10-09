@@ -74,8 +74,8 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Visibility(
-        visible: bloc.getCurrentNavigation != 0,
+      floatingActionButton: AnimatedOpacity(
+        opacity: bloc.getCurrentNavigation == 0 ? 0 : 1,
         child: DraggableFab(
           child: FloatingActionButton(
             onPressed: () {
@@ -84,7 +84,7 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
             child: Icon(Icons.add, color: Colors.white,),
             backgroundColor: Color(0xffAD4347),
           ),
-      ),
+      ), duration: Duration(milliseconds: 500),
     ),
       appBar: AppBar(
         elevation: bloc.getCurrentNavigation == 3 ? 0 : 1,
@@ -111,6 +111,7 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
           unselectedLabelColor: color2,
           tabs: _kTabs(),
           onTap: (index){
+            _tabController.animateTo(index, duration: Duration(milliseconds: 1000));
             setState(() {
               bloc.updateNavigation(index);
             });

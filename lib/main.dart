@@ -16,7 +16,7 @@ void main() => runApp(MaterialApp(
     '/': (context) => LoginPage(),
     '/home': (context) => HomePage(),
     '/config' : (context) => ConfigPage(),
-    '/resetPassword1' : (context) => PageSelectorExample(),
+    '/resetPassword1' : (context) => ResetPassword(),
   },
 )
 );
