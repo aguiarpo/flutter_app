@@ -110,6 +110,9 @@ class _LoginPage extends State<LoginPage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
                       child: GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, "/register");
+                        },
                         child: Text("Não possui uma conta?", style: TextStyle(
                           color: Color(0xff2C1871),
                           fontSize: 15,
