@@ -57,6 +57,7 @@ class _PageViewListPersonsState extends State<PageViewListPersons> with SingleTi
             unselectedLabelColor: color2,
             tabs: _kTabs,
             onTap: (index){
+              Scaffold.of(context).hideCurrentSnackBar();
               widget.parentAction(index);
             },
           ),
