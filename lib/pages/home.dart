@@ -105,18 +105,22 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
       backgroundColor: Colors.white,
       bottomNavigationBar: Material(
         color: mainColor,
-        child: TabBar(
-          indicatorColor: color,
-          labelColor: color,
-          unselectedLabelColor: color2,
-          tabs: _kTabs(),
-          onTap: (index){
-            _tabController.animateTo(index, duration: Duration(milliseconds: 1000));
-            setState(() {
-              bloc.updateNavigation(index);
-            });
-          },
-          controller: _tabController,
+        child: Builder(
+          builder: (context) {
+            return TabBar(
+              indicatorColor: color,
+              labelColor: color,
+              unselectedLabelColor: color2,
+              tabs: _kTabs(),
+              onTap: (index){
+                Scaffold.of(context).hideCurrentSnackBar();
+                setState(() {
+                  bloc.updateNavigation(index);
+                });
+              },
+              controller: _tabController,
+            );
+          }
         ),
       ),
       body: StreamBuilder<Object>(
