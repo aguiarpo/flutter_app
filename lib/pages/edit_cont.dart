@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/components/my_tab_page_selector.dart';
-import 'package:flutter_app/components/style_text_field.dart';
+import 'package:flutter_app/components/my_text_field.dart';
 import 'package:flutter_app/colors.dart';
 
 class EditCont extends StatefulWidget {
