@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
+import 'package:flutter_app/components/my_button.dart';
 import 'package:flutter_app/components/my_tab_page_selector.dart';
 import 'package:flutter_app/components/my_text_field.dart';
 import 'package:flutter_app/colors.dart';
@@ -28,19 +29,9 @@ class _EditCont extends State<EditCont> with SingleTickerProviderStateMixin {
         children: <Widget>[
           Visibility(
             visible: _tabController.index != 0,
-            child: MaterialButton(
-              minWidth: 100,
-              height: 45,
-              color: Color(0xff179CBF),
-              child: Center(
-                child: Text('Anterior'.toUpperCase(),
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-              ),
-              onPressed: (){
+            child: MyButton(
+              text: "Anterior",
+              onPress: (){
                 if(_tabController.index == 0){
 
                 }else{
@@ -48,21 +39,11 @@ class _EditCont extends State<EditCont> with SingleTickerProviderStateMixin {
                   setState(() {});
                 }
               },
-            ),
+            )
           ),
-          MaterialButton(
-            minWidth: 100,
-            height: 45,
-            color: Color(0xff179CBF),
-            child: Center(
-              child: Text('Continuar'.toUpperCase(),
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold
-                ),
-              ),
-            ),
-            onPressed: (){
+          MyButton(
+            text: "Continuar",
+            onPress: (){
               if(_tabController.length - 1 == _tabController.index){
                 Navigator.pop(context);
               }else{
@@ -70,7 +51,7 @@ class _EditCont extends State<EditCont> with SingleTickerProviderStateMixin {
                 setState(() {});
               }
             },
-          ),
+          )
         ],
       ),
     );
