@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/colors.dart';
+import 'package:flutter_app/components/my_button.dart';
 
 class PageViewListTutors extends StatefulWidget {
 
@@ -125,11 +126,9 @@ class _PageViewListTutors extends State<PageViewListTutors> {
                           ),
                         ),
                       ),
-                      MaterialButton(
-                        onPressed: (){},
-                        child: Text("Editar", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),),
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        color: ColorsUsed.blueColor,
+                      MyButton(
+                        text: "Editar",
+                        onPress: (){},
                       )
                     ],
                   ),

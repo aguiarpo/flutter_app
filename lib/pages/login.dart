@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/my_button.dart';
 import 'package:flutter_app/components/my_text_field.dart';
 import 'package:flutter_app/colors.dart';
 
@@ -33,20 +34,10 @@ class _LoginPage extends State<LoginPage> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top : 30, left: 100, right: 100),
-                      child: MaterialButton(
-                        minWidth: 100,
-                        height: 45,
-                        color: ColorsUsed.blueColor,
-                        child: Center(
-                          child: Text('Login'.toUpperCase(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        ),
-                        onPressed: (){Navigator.pushReplacementNamed(context, "/home");},
-                      ),
+                      child: MyButton(
+                        text: "Logar",
+                        onPress: (){Navigator.pushReplacementNamed(context, "/home");},
+                      )
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
