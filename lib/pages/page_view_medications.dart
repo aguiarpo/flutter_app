@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-Color mainColor = Color(0xff8CFFBA);
+import 'package:flutter_app/components/dropdown_button.dart';
+import 'package:flutter_app/colors.dart';
 
 class PageViewListMedications extends StatefulWidget {
 
@@ -131,7 +131,7 @@ class _PageViewListMedications extends State<PageViewListMedications> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        color: Color(0xff179cbf),
+                        color: ColorsUsed.blueColor,
                         width: 10,
                       ),
                       SizedBox(
@@ -151,11 +151,13 @@ class _PageViewListMedications extends State<PageViewListMedications> {
                         ),
                       ),
                       MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/editMedications");
+                        },
                         child: Text("Editar", style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w400),),
                         padding: EdgeInsets.only(left: 10, right: 10),
-                        color: Color(0xff179cbf),
+                        color: ColorsUsed.blueColor,
                       )
                     ],
                   ),
@@ -202,7 +204,9 @@ class _PageViewListMedications extends State<PageViewListMedications> {
                 SizedBox(
                   width: 10.0,
                 ),
-                Select()
+                Select(
+                  list: ["Nome", "Removidos"],
+                )
               ],
             ),
             Container(
@@ -243,59 +247,3 @@ class _PageViewListMedications extends State<PageViewListMedications> {
     );
   }
 }
-
-class Select extends StatefulWidget {
-  Select({Key key}) : super(key: key);
-
-  @override
-  _Select createState() => new _Select();
-}
-
-class _Select extends State<Select> {
-
-  List levelsOfAccess =
-  ["Modelo", "Placa"];
-
-  List<DropdownMenuItem<String>> _dropDownMenuItems;
-  String _currentLevel;
-
-  @override
-  void initState() {
-    _dropDownMenuItems = getDropDownMenuItems();
-    _currentLevel = _dropDownMenuItems[0].value;
-    super.initState();
-  }
-
-  List<DropdownMenuItem<String>> getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = new List();
-    for (String levelOfAccess in levelsOfAccess) {
-      items.add(new DropdownMenuItem(
-          value: levelOfAccess,
-          child: new Text(levelOfAccess)
-      ));
-    }
-    return items;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      child: DropdownButton(
-        style: TextStyle(color: Colors.grey),
-        iconEnabledColor: Colors.grey,
-        underline: SizedBox(),
-        value: _currentLevel,
-        items: _dropDownMenuItems,
-        onChanged: changedDropDownItem,
-      ),
-    );
-  }
-
-  void changedDropDownItem(String selectedCity) {
-    setState(() {
-      _currentLevel = selectedCity;
-    });
-  }
-
-}
-

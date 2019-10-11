@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-const mainColor = Color(0xff8CFFBA);
-const color = Color(0xff1A773F);
+import 'package:flutter_app/components/style_text_field.dart';
+import 'package:flutter_app/colors.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -15,73 +14,29 @@ class _LoginPage extends State<LoginPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
       automaticallyImplyLeading: false,
-        title: Text("Surca", style: TextStyle(color: Color(0xff1A773F),
+        title: Text("Surca", style: TextStyle(color: ColorsUsed.greenDarkColor,
         fontFamily: 'Roboto', fontWeight: FontWeight.w400,),),
-      backgroundColor: mainColor,
+      backgroundColor: ColorsUsed.mainColor,
       ),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
                 child: Column(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                      child: TextField(
-                        style: new TextStyle(color: Colors.grey),
-                        decoration: InputDecoration(
-                          prefixIcon: Container(
-                            margin: EdgeInsets.only(right: 20),
-                            padding: EdgeInsets.all(19),
-                            decoration: BoxDecoration(
-                              color: color,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(Icons.email,
-                              color: Colors.white,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey, width: 1),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey, width: 1),
-                          ),
-                            hintText: 'Email',
-                        ),
-                      ),
+                    MyTextField(
+                      icon: Icons.email,
+                      hint: "Email",
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-                      child: TextField(
-                        style: new TextStyle(color: Colors.grey),
-                        decoration: InputDecoration(
-                          prefixIcon: Container(
-                            margin: EdgeInsets.only(right: 20),
-                            padding: EdgeInsets.all(19),
-                            decoration: BoxDecoration(
-                              color: color,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(Icons.vpn_key,
-                              color: Colors.white,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey, width: 1),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey, width: 1),
-                          ),
-                          hintText: 'Senha',
-                        ),
-                      ),
+                    MyTextField(
+                      icon: Icons.vpn_key,
+                      hint: "Senha",
                     ),
                     Padding(
                       padding: EdgeInsets.only(top : 30, left: 100, right: 100),
                       child: MaterialButton(
                         minWidth: 100,
                         height: 45,
-                        color: Color(0xff179CBF),
+                        color: ColorsUsed.blueColor,
                         child: Center(
                           child: Text('Login'.toUpperCase(),
                             style: TextStyle(
@@ -100,7 +55,7 @@ class _LoginPage extends State<LoginPage> {
                           Navigator.pushNamed(context, "/resetPassword1");
                         },
                         child: Text("Esqueceu a senha?", style: TextStyle(
-                            color: Color(0xff2C1871),
+                            color: ColorsUsed.blueDarkColor,
                             fontSize: 15,
                             decoration: TextDecoration.underline,
                           ),
@@ -114,7 +69,7 @@ class _LoginPage extends State<LoginPage> {
                           Navigator.pushNamed(context, "/register");
                         },
                         child: Text("Não possui uma conta?", style: TextStyle(
-                          color: Color(0xff2C1871),
+                          color: ColorsUsed.blueDarkColor,
                           fontSize: 15,
                           decoration: TextDecoration.underline,
                         ),

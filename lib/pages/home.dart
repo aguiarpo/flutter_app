@@ -8,10 +8,7 @@ import 'package:flutter_app/pages/page_view_persons.dart';
 import 'package:flutter_app/icons/surca_icons.dart';
 
 import '../globals_var.dart';
-
-Color mainColor = Color(0xff8CFFBA);
-const color = Color(0xff1A773F);
-const color2 = Color(0xff66D994);
+import 'package:flutter_app/colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -90,27 +87,27 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
         elevation: bloc.getCurrentNavigation == 3 ? 0 : 1,
         title: Text("Reserva", style: TextStyle(
           fontFamily: 'Roboto', fontWeight: FontWeight.w400,
-          color: color,
+          color: ColorsUsed.greenDarkColor,
         ),
         ),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.dehaze),
-          color: color,
+          color: ColorsUsed.greenDarkColor,
           onPressed: (){
             Navigator.pushNamed(context, "/config");
           },)
         ],
-        backgroundColor: mainColor,
+        backgroundColor: ColorsUsed.mainColor,
       ),
       backgroundColor: Colors.white,
       bottomNavigationBar: Material(
-        color: mainColor,
+        color: ColorsUsed.mainColor,
         child: Builder(
           builder: (context) {
             return TabBar(
-              indicatorColor: color,
-              labelColor: color,
-              unselectedLabelColor: color2,
+              indicatorColor: ColorsUsed.greenDarkColor,
+              labelColor: ColorsUsed.greenDarkColor,
+              unselectedLabelColor: ColorsUsed.secundaryColor,
               tabs: _kTabs(),
               onTap: (index){
                 Scaffold.of(context).hideCurrentSnackBar();

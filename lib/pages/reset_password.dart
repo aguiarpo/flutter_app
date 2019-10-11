@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_tab_page_selector.dart';
-
-Color mainColor = Color(0xff8CFFBA);
-const color = Color(0xff1A773F);
-const color2 = Color(0xff66D994);
+import 'package:flutter_app/components/style_text_field.dart';
+import 'package:flutter_app/colors.dart';
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key key}) : super(key: key);
@@ -33,7 +31,7 @@ class _ResetPasswordState extends State<ResetPassword> with SingleTickerProvider
             child: MaterialButton(
                 minWidth: 100,
                 height: 45,
-                color: Color(0xff179CBF),
+                color: ColorsUsed.blueColor,
                 child: Center(
                   child: Text('Anterior'.toUpperCase(),
                     style: TextStyle(
@@ -55,7 +53,7 @@ class _ResetPasswordState extends State<ResetPassword> with SingleTickerProvider
             MaterialButton(
               minWidth: 100,
               height: 45,
-              color: Color(0xff179CBF),
+              color: ColorsUsed.blueColor,
               child: Center(
                 child: Text('Continuar'.toUpperCase(),
                   style: TextStyle(
@@ -99,14 +97,14 @@ class _ResetPasswordState extends State<ResetPassword> with SingleTickerProvider
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: color, //change your color here
+          color: ColorsUsed.greenDarkColor, //change your color here
         ),
         title: Text("Reserva", style: TextStyle(
           fontFamily: 'Roboto', fontWeight: FontWeight.w400,
-          color: color,
+          color: ColorsUsed.greenDarkColor,
         ),
         ),
-        backgroundColor: mainColor,
+        backgroundColor: ColorsUsed.mainColor,
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 30),
@@ -116,15 +114,15 @@ class _ResetPasswordState extends State<ResetPassword> with SingleTickerProvider
               color: Colors.white,
               controller: _tabController,
               indicatorSize: 9,
-              selectedColor: Color(0xff179cbf),
+              selectedColor: ColorsUsed.blueColor,
             ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    height: _tabController.index == 1 ? 150 :
-                      _tabController.index == 2 ? 190 : 100,
+                    height: _tabController.index == 1 ? 160 :
+                      _tabController.index == 2 ? 210 : 110,
                     child: IconTheme(
                       data: IconThemeData(
                         size: 128.0,
@@ -156,31 +154,9 @@ class ResetPasswordPage1 extends StatelessWidget {
         child: Container(
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.email,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Email',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.email,
+                hint: "Email",
               ),
             ],
           ),
@@ -198,31 +174,9 @@ class ResetPasswordPage2 extends StatelessWidget {
         child: Container(
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.code,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Código',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.code,
+                hint: "Código",
               ),
               GestureDetector(
                 onTap: (){
@@ -233,7 +187,7 @@ class ResetPasswordPage2 extends StatelessWidget {
                   );
                 },
                 child: Text("Enviar email novamente", style: TextStyle(
-                  color: Color(0xff2C1871),
+                  color: ColorsUsed.blueDarkColor,
                   fontSize: 15,
                   decoration: TextDecoration.underline,
                 ),
@@ -255,57 +209,13 @@ class ResetPasswordPage3 extends StatelessWidget {
         child: Container(
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.vpn_key,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Senha',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.vpn_key,
+                hint: "Senha",
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.mode_edit,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Confirmar senha',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.mode_edit,
+                hint: "Confirmar Senha",
               ),
             ],
           ),

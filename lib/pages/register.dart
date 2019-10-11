@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/components/my_tab_page_selector.dart';
-
-Color mainColor = Color(0xff8CFFBA);
-const color = Color(0xff1A773F);
-const color2 = Color(0xff66D994);
+import 'package:flutter_app/components/style_text_field.dart';
+import 'package:flutter_app/colors.dart';
 
 class Register extends StatefulWidget {
   const Register({Key key}) : super(key: key);
@@ -33,7 +32,7 @@ class _RegisterState extends State<Register> with SingleTickerProviderStateMixin
             child: MaterialButton(
               minWidth: 100,
               height: 45,
-              color: Color(0xff179CBF),
+              color: ColorsUsed.blueColor,
               child: Center(
                 child: Text('Anterior'.toUpperCase(),
                   style: TextStyle(
@@ -55,7 +54,7 @@ class _RegisterState extends State<Register> with SingleTickerProviderStateMixin
           MaterialButton(
             minWidth: 100,
             height: 45,
-            color: Color(0xff179CBF),
+            color: ColorsUsed.blueColor,
             child: Center(
               child: Text('Continuar'.toUpperCase(),
                 style: TextStyle(
@@ -99,14 +98,14 @@ class _RegisterState extends State<Register> with SingleTickerProviderStateMixin
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: color, //change your color here
+          color: ColorsUsed.greenDarkColor, //change your color here
         ),
         title: Text("Reserva", style: TextStyle(
           fontFamily: 'Roboto', fontWeight: FontWeight.w400,
-          color: color,
+          color: ColorsUsed.greenDarkColor,
         ),
         ),
-        backgroundColor: mainColor,
+        backgroundColor: ColorsUsed.mainColor,
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 30),
@@ -116,14 +115,14 @@ class _RegisterState extends State<Register> with SingleTickerProviderStateMixin
               color: Colors.white,
               controller: _tabController,
               indicatorSize: 9,
-              selectedColor: Color(0xff179cbf),
+              selectedColor: ColorsUsed.blueColor,
             ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    height: 350,
+                    height: 420,
                     child: IconTheme(
                       data: IconThemeData(
                         size: 128.0,
@@ -155,109 +154,21 @@ class RegisterPage1 extends StatelessWidget {
         child: Container(
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.person,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Nome',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.person,
+                hint: "Nome",
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.email,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Email',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.email,
+                hint: "Email",
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.vpn_key,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Senha',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.vpn_key,
+                hint: "Senha",
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.mode_edit,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Confirmar senha',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.mode_edit,
+                hint: "Confirmar Senha",
               ),
             ],
           ),
@@ -279,86 +190,30 @@ class RegisterPage2 extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                  child: Select(),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.location_city,
-                        color: Colors.white,
-                      ),
+                  child: Select(
+                    list: [ "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+                      "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ",
+                      "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
+                    ],
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    border: BoxDecoration(
+                      border: Border.all(color: Colors.grey,),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Cidade',
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.phone,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Telefone',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.location_city,
+                hint: "Cidade",
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-                child: TextField(
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    prefixIcon: Container(
-                      margin: EdgeInsets.only(right: 20),
-                      padding: EdgeInsets.all(19),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Icon(Icons.phone,
-                        color: Colors.white,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    hintText: 'Telefone',
-                  ),
-                ),
+              MyTextField(
+                icon: Icons.phone,
+                hint: "Telefone",
+              ),
+              MyTextField(
+                icon: Icons.phone,
+                hint: "Telefone",
               ),
             ],
           ),
@@ -366,65 +221,4 @@ class RegisterPage2 extends StatelessWidget {
       ),
     );
   }
-}
-
-class Select extends StatefulWidget {
-  Select({Key key}) : super(key: key);
-
-  @override
-  _Select createState() => new _Select();
-}
-
-class _Select extends State<Select> {
-
-  List levelsOfAccess =
-  ["SC", "RJ"];
-
-  List<DropdownMenuItem<String>> _dropDownMenuItems;
-  String _currentLevel;
-
-  @override
-  void initState() {
-    _dropDownMenuItems = getDropDownMenuItems();
-    _currentLevel = null;
-    super.initState();
-  }
-
-  List<DropdownMenuItem<String>> getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = new List();
-    for (String levelOfAccess in levelsOfAccess) {
-      items.add(new DropdownMenuItem(
-          value: levelOfAccess,
-          child: new Text(levelOfAccess)
-      ));
-    }
-    return items;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      padding: EdgeInsets.only(right: 10, left: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: DropdownButton(
-        hint: Text("Estado"),
-        style: TextStyle(color: Colors.grey),
-        iconEnabledColor: Colors.grey,
-        underline: SizedBox(),
-        value: _currentLevel == null ? null : _currentLevel,
-        items: _dropDownMenuItems,
-        onChanged: changedDropDownItem,
-      ),
-    );
-  }
-
-  void changedDropDownItem(String selectedCity) {
-    setState(() {
-      _currentLevel = selectedCity;
-    });
-  }
-
 }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/page_view_tutors.dart';
 import 'package:flutter_app/pages/page_view_users.dart';
-
-Color mainColor = Color(0xff8CFFBA);
-const color = Color(0xff1A773F);
-const color2 = Color(0xff66D994);
+import 'package:flutter_app/colors.dart';
 
 class PageViewListPersons extends StatefulWidget {
   final ValueChanged<int> parentAction;
@@ -49,12 +46,12 @@ class _PageViewListPersonsState extends State<PageViewListPersons> with SingleTi
     return Column(
       children: <Widget>[
         Container(
-          color: mainColor,
+          color: ColorsUsed.mainColor,
           child: TabBar(
             controller: _tabController,
-            indicatorColor: color,
-            labelColor: color,
-            unselectedLabelColor: color2,
+            indicatorColor: ColorsUsed.greenDarkColor,
+            labelColor: ColorsUsed.greenDarkColor,
+            unselectedLabelColor: ColorsUsed.secundaryColor,
             tabs: _kTabs,
             onTap: (index){
               Scaffold.of(context).hideCurrentSnackBar();
