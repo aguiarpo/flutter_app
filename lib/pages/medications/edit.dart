@@ -24,10 +24,6 @@ class EditMedications extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(bottom: 5),
-                child: Text("Medicação", style: TextStyle(fontSize: 20, color: ColorsUsed.secundaryColor),),
-              ),
               MyTextField(
                 icon: Surca.vaccine,
                 hint: "Nome",

@@ -123,7 +123,7 @@ class _PageViewListAnimals extends State<PageViewListAnimals> {
                       ),
                       MyButton(
                         text: "Editar",
-                        onPress: (){},
+                        onPress: (){Navigator.pushNamed(context, '/editAnimals');},
                       )
                     ],
                   ),

@@ -123,7 +123,7 @@ class _PageViewListUsers extends State<PageViewListUsers> {
                       ),
                       MyButton(
                         text: "Editar",
-                        onPress: (){},
+                        onPress: (){Navigator.pushNamed(context, '/editUsers');},
                       )
                     ],
                   ),

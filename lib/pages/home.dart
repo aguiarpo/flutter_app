@@ -76,7 +76,29 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
         child: DraggableFab(
           child: FloatingActionButton(
             onPressed: () {
-              // Add your onPressed code here!
+              switch(bloc.getCurrentNavigation){
+                case 1:
+                  Navigator.pushNamed(context, '/registerMedications');
+                  break;
+                case 2:
+                  Navigator.pushNamed(context, '/registerAnimals');
+                  break;
+                case 3:
+                  switch(bloc.getCurrentNavigationPagePersons){
+                    case 0:
+                      Navigator.pushNamed(context, '/registerUser');
+                      break;
+                    case 1:
+                      Navigator.pushNamed(context, '/registerTutors');
+                      break;
+                  }
+                  break;
+                case 4:
+                  Navigator.pushNamed(context, '/registerIncidents');
+                  break;
+
+              }
+
             },
             child: Icon(Icons.add, color: Colors.white,),
             backgroundColor: Color(0xffAD4347),

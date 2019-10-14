@@ -30,13 +30,25 @@ class _EditIncidentsState extends State<EditIncidents> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(bottom: 5),
-                child: Text("Incidente", style: TextStyle(fontSize: 20, color: ColorsUsed.secundaryColor),),
-              ),
               MyTextField(
                 icon: Surca.incident,
                 hint: "Nome",
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+                child: TextField(
+                  maxLines: 5,
+                  style: new TextStyle(color: Colors.grey),
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey, width: 1),
+                    ),
+                    hintText: "Observações",
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(top : 30, left: 100, right: 100),

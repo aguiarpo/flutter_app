@@ -128,7 +128,7 @@ class _PageViewListTutors extends State<PageViewListTutors> {
                       ),
                       MyButton(
                         text: "Editar",
-                        onPress: (){},
+                        onPress: (){Navigator.pushNamed(context, "/editTutors");},
                       )
                     ],
                   ),
