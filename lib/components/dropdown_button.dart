@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Select extends StatefulWidget {
+  final ValueChanged<String> parentAction;
   EdgeInsetsGeometry padding;
   Decoration border;
   List<String> list = [];
-  Select({Key key, this.list, this.border, this.padding}) : super(key: key);
+  Select({Key key, this.list, this.border, this.padding, this.parentAction}) : super(key: key);
 
   @override
   _Select createState() => new _Select();
@@ -60,6 +61,7 @@ class _Select extends State<Select> {
     setState(() {
       _currentLevel = selectedCity;
     });
+    if(widget.parentAction != null) widget.parentAction(selectedCity);
   }
 
 }
