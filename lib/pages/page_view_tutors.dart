@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/colors.dart';
 import 'package:flutter_app/components/my_button.dart';
+import 'package:flutter_app/components/show_modal_options.dart';
 
 class PageViewListTutors extends StatefulWidget {
 
@@ -55,6 +56,164 @@ class _PageViewListTutors extends State<PageViewListTutors> {
     },
 
   ];
+
+  List<Widget> showBottomSheet(){
+    return <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Nome: "),
+          ),
+          subtitle: Text("Nome"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("CPF: "),
+          ),
+          subtitle: Text("Cpf"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("RG: "),
+          ),
+          subtitle: Text("Rg"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Nome da mãe: "),
+          ),
+          subtitle: Text("Nome da mãe"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Estado: "),
+          ),
+          subtitle: Text("Estado"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Cidade: "),
+          ),
+          subtitle: Text("Cidade"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Bairro: "),
+          ),
+          subtitle: Text("Bairro"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Rua: "),
+          ),
+          subtitle: Text("Rua"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Número: "),
+          ),
+          subtitle: Text("Número"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Complemento: "),
+          ),
+          subtitle: Text("Complemento"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Profissão: "),
+          ),
+          subtitle: Text("Profissão"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Telefones: "),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text("(47) 9999-0000"),
+              ),
+              Text("(47) 99999-0000"),
+            ],
+          ),
+        ),
+      ),
+    ];
+  }
 
   Future<List> display() async {
     await Future.delayed(Duration(milliseconds: 700));
@@ -114,8 +273,10 @@ class _PageViewListTutors extends State<PageViewListTutors> {
                         width: 10.0,
                       ),
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
+                        child: InkWell(
+                          onTap: () {
+                            ShowModalOptions.showOption(context, index, showBottomSheet());
+                          },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,

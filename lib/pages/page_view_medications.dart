@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/colors.dart';
 import 'package:flutter_app/components/my_button.dart';
+import 'package:flutter_app/components/show_modal_options.dart';
 
 class PageViewListMedications extends StatefulWidget {
 
@@ -86,6 +87,23 @@ class _PageViewListMedications extends State<PageViewListMedications> {
     },
   ];
 
+  List<Widget> showBottomSheet(){
+    return <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Nome: "),
+          ),
+          subtitle: Text("Nome"),
+        ),
+      ),
+    ];
+  }
+
   Widget listBuilder(itens){
     return ListView.builder(
         padding: EdgeInsets.only(bottom: 100),
@@ -139,8 +157,10 @@ class _PageViewListMedications extends State<PageViewListMedications> {
                         width: 10.0,
                       ),
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
+                        child: InkWell(
+                          onTap: () {
+                            ShowModalOptions.showOption(context, index, showBottomSheet());
+                          },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,

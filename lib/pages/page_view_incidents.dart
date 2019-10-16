@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/colors.dart';
 import 'package:flutter_app/components/my_button.dart';
+import 'package:flutter_app/components/show_modal_options.dart';
 
 class PageViewListIncidents extends StatefulWidget {
 
@@ -62,6 +63,35 @@ class _PageViewListIncidents extends State<PageViewListIncidents> {
 
   ];
 
+  List<Widget> showBottomSheet(){
+    return <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Nome: "),
+          ),
+          subtitle: Text("Nome"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Observações: "),
+          ),
+          subtitle: Text("Observações"),
+        ),
+      ),
+    ];
+  }
+
   Future<List> display() async {
     await Future.delayed(Duration(milliseconds: 700));
     return list;
@@ -70,10 +100,9 @@ class _PageViewListIncidents extends State<PageViewListIncidents> {
   Widget listBuilder(itens){
     return ListView.builder(
         padding: EdgeInsets.only(bottom: 100),
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
         itemCount: itens.length,
-        itemBuilder: (BuildContext context, int index) {
+        shrinkWrap: true,
+        itemBuilder: ( context,  index) {
           final item = itens[index];
           return Dismissible(
             key: Key(UniqueKey().toString()),
@@ -120,16 +149,18 @@ class _PageViewListIncidents extends State<PageViewListIncidents> {
                         width: 10.0,
                       ),
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("${itens[index]['Nome']}", style: TextStyle(fontWeight: FontWeight.bold),),
-                            ],
-                          ),
+                          child: InkWell(
+                            onTap: () {
+                              ShowModalOptions.showOption(context, index, showBottomSheet());
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("${itens[index]['Nome']}", style: TextStyle(fontWeight: FontWeight.bold),),
+                              ],
                         ),
+                          ),
                       ),
                       MyButton(
                         text: "Editar",
@@ -217,4 +248,5 @@ class _PageViewListIncidents extends State<PageViewListIncidents> {
         )
     );
   }
+
 }

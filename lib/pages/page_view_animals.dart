@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/colors.dart';
 import 'package:flutter_app/components/my_button.dart';
+import 'package:flutter_app/components/show_modal_options.dart';
 
 class PageViewListAnimals extends StatefulWidget {
 
@@ -49,6 +50,135 @@ class _PageViewListAnimals extends State<PageViewListAnimals> {
       "Nome" : "Nome", "Número" : "1111", "CPF" : "CPF"
     },
   ];
+
+  List<Widget> showBottomSheet(){
+    // bool castradorVisible = false;
+    return <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Nome: "),
+          ),
+          subtitle: Text("Nome"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Microchip: "),
+          ),
+          subtitle: Text("Microchip"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Nascimento: "),
+          ),
+          subtitle: Text("Data"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Raça: "),
+          ),
+          subtitle: Text("Raça"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Cor da pelagem: "),
+          ),
+          subtitle: Text("Cor"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Espécie: "),
+          ),
+          subtitle: Text("Espécie"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Microchipagem: "),
+          ),
+          subtitle: Text("Data"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Altura: "),
+          ),
+          subtitle: Text("Cm"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Observações: "),
+          ),
+          subtitle: Text("Observações"),
+        ),
+      ),
+      InkWell(
+        child: Container(
+          decoration: BoxDecoration(
+            color: ColorsUsed.terciaryColor,
+            border : Border(bottom: BorderSide(width: 1, color: Colors.white,)),
+          ),
+          child: ListTile(
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text("Castrador: ", style: TextStyle(color: Colors.white),),
+            ),
+            subtitle: Text("Crmv", style: TextStyle(color: Colors.white)),
+          ),
+        ),
+      ),
+    ];
+  }
 
   Future<List> display() async {
     await Future.delayed(Duration(milliseconds: 700));
@@ -108,8 +238,10 @@ class _PageViewListAnimals extends State<PageViewListAnimals> {
                         width: 10.0,
                       ),
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
+                        child: InkWell(
+                          onTap: () {
+                            ShowModalOptions.showOption(context, index, showBottomSheet());
+                          },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,

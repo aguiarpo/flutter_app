@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/colors.dart';
 import 'package:flutter_app/components/my_button.dart';
+import 'package:flutter_app/components/show_modal_options.dart';
 
 class PageViewListUsers extends StatefulWidget {
 
@@ -54,6 +55,104 @@ class _PageViewListUsers extends State<PageViewListUsers> {
       "Nome" : "Nome", "Email" : "Email", "CRMV" : "CRMV"
     },
   ];
+
+  List<Widget> showBottomSheet(){
+    return <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Nome: "),
+          ),
+          subtitle: Text("Nome"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Email: "),
+          ),
+          subtitle: Text("Email"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Nível: "),
+          ),
+          subtitle: Text("Veterinário"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Crmv: "),
+          ),
+          subtitle: Text("Crmv"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Cidade: "),
+          ),
+          subtitle: Text("Cidade"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Estado: "),
+          ),
+          subtitle: Text("Estado"),
+        ),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border : Border(bottom: BorderSide(width: 1, color: Colors.grey)),
+        ),
+        child: ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text("Telefones: "),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Text("(47) 9999-0000"),
+              ),
+              Text("(47) 99999-0000"),
+            ],
+          ),
+        ),
+      ),
+    ];
+  }
 
   Widget listBuilder(itens){
     return ListView.builder(
@@ -108,8 +207,10 @@ class _PageViewListUsers extends State<PageViewListUsers> {
                         width: 10.0,
                       ),
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {},
+                        child: InkWell(
+                          onTap: () {
+                            ShowModalOptions.showOption(context, index, showBottomSheet());
+                          },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
