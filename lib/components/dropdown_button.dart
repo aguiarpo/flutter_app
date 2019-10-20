@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../colors.dart';
+
 class Select extends StatefulWidget {
   final ValueChanged<String> parentAction;
   EdgeInsetsGeometry padding;
@@ -35,7 +37,7 @@ class _Select extends State<Select> {
     for (String levelOfAccess in _list) {
       items.add(new DropdownMenuItem(
           value: levelOfAccess,
-          child: new Text(levelOfAccess)
+          child:Text(levelOfAccess),
       ));
     }
     return items;
