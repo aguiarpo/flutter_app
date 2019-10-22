@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
-
+// ignore: must_be_immutable
 class Select extends StatefulWidget {
   final ValueChanged<String> parentAction;
   EdgeInsetsGeometry padding;
@@ -20,7 +19,7 @@ class _Select extends State<Select> {
   List<String> _list;
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
-  String _currentLevel;
+  String _value;
 
   @override
   void initState() {
@@ -28,16 +27,16 @@ class _Select extends State<Select> {
     _border = widget.border;
     _list = widget.list;
     _dropDownMenuItems = getDropDownMenuItems();
-    _currentLevel = _dropDownMenuItems[0].value;
+    _value = _dropDownMenuItems[0].value;
     super.initState();
   }
 
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
-    for (String levelOfAccess in _list) {
+    for (String value in _list) {
       items.add(new DropdownMenuItem(
-          value: levelOfAccess,
-          child:Text(levelOfAccess),
+          value: value,
+          child:Text(value),
       ));
     }
     return items;
@@ -52,18 +51,18 @@ class _Select extends State<Select> {
         style: TextStyle(color: Colors.grey),
         iconEnabledColor: Colors.grey,
         underline: SizedBox(),
-        value: _currentLevel,
+        value: _value,
         items: _dropDownMenuItems,
         onChanged: changedDropDownItem,
       ),
     );
   }
 
-  void changedDropDownItem(String selectedCity) {
+  void changedDropDownItem(String value) {
     setState(() {
-      _currentLevel = selectedCity;
+      _value = value;
     });
-    if(widget.parentAction != null) widget.parentAction(selectedCity);
+    if(widget.parentAction != null) widget.parentAction(value);
   }
 
 }

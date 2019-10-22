@@ -15,8 +15,8 @@ class _LoginPage extends State<LoginPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
       automaticallyImplyLeading: false,
-        title: Text("Surca", style: TextStyle(color: ColorsUsed.greenDarkColor,
-        fontFamily: 'Roboto', fontWeight: FontWeight.w400,),),
+        title: Text("Registro de animais", style: TextStyle(color: ColorsUsed.greenDarkColor,
+          fontFamily: 'Roboto', fontWeight: FontWeight.w400,),),
       backgroundColor: ColorsUsed.mainColor,
       ),
       body: Center(

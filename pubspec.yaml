@@ -26,6 +26,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   datetime_picker_formfield: ^0.1.8
   flutter_typeahead:  ^1.7.0
+  rounded_modal: ^1.0.1
 
 
 dev_dependencies:
@@ -49,9 +50,8 @@ flutter:
         - asset: fonts/Surca.ttf
 
   # To add assets to your application, add an assets section, like this:
-  #  assets:
-  #    - fonts/
-  #  - images/a_dot_ham.jpeg
+  assets:
+    - images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

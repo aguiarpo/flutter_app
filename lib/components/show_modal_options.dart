@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:rounded_modal/rounded_modal.dart';
 
 class ShowModalOptions{
  static void showOption(context, int index, listTitles){
-    showModalBottomSheet(
+   showRoundedModalBottomSheet(
+        radius: 10,
         context: context,
         builder: (context){
           return BottomSheet(

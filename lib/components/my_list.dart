@@ -11,9 +11,11 @@ class MyList extends StatefulWidget {
   final String snackRemove;
   final List<String> indexName;
   final double height;
+  final String navigation;
 
 
-  const MyList({Key key, this.list, this.showBottomSheet, this.snackRemove, this.indexName, this.height}) : super(key: key);
+  const MyList({Key key, this.list, this.showBottomSheet, this.snackRemove, this.indexName, this.height,
+  this.navigation}) : super(key: key);
 
   @override
   _MyListState createState() => _MyListState();
@@ -38,9 +40,11 @@ class _MyListState extends State<MyList> {
     if(widget.indexName.isNotEmpty){
       listWidget = widget.indexName;
       listWidget.forEach((value){
-        if(count == 0)listNames.add(Text("${widget.list[index][value]}", style: TextStyle(fontWeight: FontWeight.w600),));
-        else listNames.add(Text("${widget.list[index][value]}"));
-        count++;
+        if(widget.list[index][value] != null){
+          if(count == 0)listNames.add(Text("${widget.list[index][value]}", style: TextStyle(fontWeight: FontWeight.w600),));
+          else listNames.add(Text("${widget.list[index][value]}"));
+          count++;
+        }
       });
     }
     return listNames;
@@ -111,7 +115,7 @@ class _MyListState extends State<MyList> {
                       ),
                       MyButton(
                         text: "Editar",
-                        onPress: (){Navigator.pushNamed(context, '/editAnimals');},
+                        onPress: (){Navigator.pushNamed(context, widget.navigation);},
                       )
                     ],
                   ),

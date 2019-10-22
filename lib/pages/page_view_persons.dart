@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/page_view_tutors.dart';
-import 'package:flutter_app/pages/page_view_users.dart';
+import 'package:flutter_app/pages/tutor/page_view_tutors.dart';
+import 'package:flutter_app/pages/users/page_view_users.dart';
 import 'package:flutter_app/colors.dart';
 
 class PageViewListPersons extends StatefulWidget {

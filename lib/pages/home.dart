@@ -1,8 +1,8 @@
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/pages/page_view_animals.dart';
-import 'package:flutter_app/pages/page_view_incidents.dart';
-import 'package:flutter_app/pages/page_view_medications.dart';
+import 'package:flutter_app/pages/animals/page_view_animals.dart';
+import 'package:flutter_app/pages/incidents/page_view_incidents.dart';
+import 'package:flutter_app/pages/medications/page_view_medications.dart';
 import 'package:flutter_app/pages/page_view_persons.dart';
 
 import 'package:flutter_app/icons/surca_icons.dart';
@@ -41,7 +41,7 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
       Tab(icon: Icon(Surca.vaccine)),
       Tab(icon: Icon(Surca.animal),),
       Tab(icon: Icon(Icons.person),),
-      Tab(icon: Icon(Surca.incident),),
+      Tab(icon: Icon(Surca.alert),),
     ];
   }
 
@@ -107,11 +107,8 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
     ),
       appBar: AppBar(
         elevation: bloc.getCurrentNavigation == 3 ? 0 : 1,
-        title: Text("Reserva", style: TextStyle(
-          fontFamily: 'Roboto', fontWeight: FontWeight.w400,
-          color: ColorsUsed.greenDarkColor,
-        ),
-        ),
+        title: Text("Registro de animais", style: TextStyle(color: ColorsUsed.greenDarkColor,
+          fontFamily: 'Roboto', fontWeight: FontWeight.w400,),),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.dehaze),
           color: ColorsUsed.greenDarkColor,

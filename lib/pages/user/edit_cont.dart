@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_scaffold_tabs.dart';
-import 'package:flutter_app/pages/incidents/tabs/tab_page1.dart';
+import 'package:flutter_app/pages/user/tabs/tab_page1.dart';
+import 'package:flutter_app/pages/user/tabs/tab_page2.dart';
 
-class EditIncidents extends StatefulWidget {
+class EditCont extends StatefulWidget {
+
   @override
-  _EditIncidentsState createState() => _EditIncidentsState();
+  _EditCont createState() => _EditCont();
 }
 
-class _EditIncidentsState extends State<EditIncidents> {
+class _EditCont extends State<EditCont>{
 
   var kIcons = <Widget>[
     TabPage1(),
+    TabPage2()
   ];
 
   @override

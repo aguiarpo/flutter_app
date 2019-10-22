@@ -20,7 +20,8 @@ class Surca {
 
   static const _kFontFam = 'Surca';
 
-  static const IconData vaccine = const IconData(0xe800, fontFamily: _kFontFam);
+  static const IconData alert = const IconData(0xe800, fontFamily: _kFontFam);
   static const IconData animal = const IconData(0xe801, fontFamily: _kFontFam);
-  static const IconData incident = const IconData(0xe802, fontFamily: _kFontFam);
+  static const IconData vaccine = const IconData(0xe802, fontFamily: _kFontFam);
+  static const IconData logo = const IconData(0xe803, fontFamily: _kFontFam);
 }

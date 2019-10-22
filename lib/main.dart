@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/animals/edit.dart';
 import 'package:flutter_app/pages/animals/register.dart';
 import 'package:flutter_app/pages/config.dart';
-import 'package:flutter_app/pages/edit_cont.dart';
+import 'package:flutter_app/pages/user/edit_cont.dart';
 import 'package:flutter_app/pages/home.dart';
 import 'package:flutter_app/pages/incidents/edit.dart';
 import 'package:flutter_app/pages/incidents/register.dart';
-import 'package:flutter_app/pages/login.dart';
+import 'package:flutter_app/pages/logo.dart';
+import 'package:flutter_app/pages/user/login.dart';
 import 'package:flutter_app/pages/medications/edit.dart';
 import 'package:flutter_app/pages/medications/register.dart';
-import 'package:flutter_app/pages/register.dart';
-import 'package:flutter_app/pages/reset_password.dart';
+import 'package:flutter_app/pages/user/register.dart';
+import 'package:flutter_app/pages/user/reset_password.dart';
 import 'package:flutter_app/pages/tutor/edit.dart';
 import 'package:flutter_app/pages/tutor/register.dart';
 import 'package:flutter_app/pages/users/edit.dart';
@@ -25,7 +26,8 @@ void main() => runApp(MaterialApp(
   ),
   initialRoute: '/',
   routes: {
-    '/': (context) => LoginPage(),
+    '/': (context) => PageInit(),
+    '/login': (context) => LoginPage(),
     '/home': (context) => HomePage(),
     '/config' : (context) => ConfigPage(),
     '/resetPassword1' : (context) => ResetPassword(),
