@@ -25,7 +25,25 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
 
   List<Widget> _kTabPages(){
     return [
-      Container(),
+      SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(80),
+                child: Image.asset('images/logo.png'),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 40, right: 40),
+                child: Text(
+                  "Este sistema foi desenvolvido pela AMVALI em parceria com a prefeitura de Guaramirim para fins de registro de animais microchipados",
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
+          )
+        ),
+      ),
       PageViewListMedications(),
       PageViewListAnimals(),
       PageViewListPersons(
