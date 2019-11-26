@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/database/connect.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart';
 
 class AutoComplete extends StatefulWidget {
+  final select;
+  final title;
+  final ValueChanged<String> parentAction;
+
+  const AutoComplete({Key key,this.select, this.title, this.parentAction}) : super(key: key);
   @override
   _AutoCompleteState createState() => _AutoCompleteState();
 }
@@ -9,41 +16,14 @@ class AutoComplete extends StatefulWidget {
 class _AutoCompleteState extends State<AutoComplete> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _typeAheadController = TextEditingController();
+  DatabaseConnect db = DatabaseConnect();
 
-  List<String> suggestions = [
-    "Apple",
-    "Armidillo",
-    "Actual",
-    "Actuary",
-    "America",
-    "Argentina",
-    "Australia",
-    "Antarctica",
-    "Blueberry",
-    "Cheese",
-    "Danish",
-    "Eclair",
-    "Fudge",
-    "Granola",
-    "Hazelnut",
-    "Ice Cream",
-    "Jely",
-    "Kiwi Fruit",
-    "Lamb",
-    "Macadamia",
-    "Nachos",
-    "Oatmeal",
-    "Palm Oil",
-    "Quail",
-    "Rabbit",
-    "Salad",
-    "T-Bone Steak",
-    "Urid Dal",
-    "Vanilla",
-    "Waffles",
-    "Yam",
-    "Zest"
-  ];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  List suggestions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +40,12 @@ class _AutoCompleteState extends State<AutoComplete> {
               hintText: 'Pesquisar',
             )
         ),
-        suggestionsCallback: (pattern) {
+        suggestionsCallback: (pattern)async{
+          if(pattern == "")widget.parentAction(pattern);
+          else{
+            suggestions = await db.getLike(widget.title, widget.select, pattern);
+          }
+          if(suggestions == null)suggestions = [];
           return suggestions;
         },
         itemBuilder: (context, suggestion) {
@@ -73,6 +58,7 @@ class _AutoCompleteState extends State<AutoComplete> {
         },
         onSuggestionSelected: (suggestion) {
           this._typeAheadController.text = suggestion;
+          widget.parentAction(suggestion);
         },
       ),
     );

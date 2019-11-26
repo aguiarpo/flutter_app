@@ -1,51 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_bootom_sheet.dart';
+import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/models/tutor.dart';
+import 'package:flutter_app/models/tutors_incidents.dart';
 
-List<Widget> showMyBottomSheet(){
+import '../../../user_login.dart';
+
+List<Widget> showMyBottomSheet(Tutor tutor){
   return <Widget>[
     MyBottomSheet(
       title: "Nome: ",
-      subtitle: "Nome",
+      subtitle: tutor.name,
     ),
-    MyBottomSheet(
-      title: "CPF: ",
-      subtitle: "Cpf",
+    Visibility(
+      visible: LoginDatabase.levelsOfAccess != "USUARIO",
+      child: MyBottomSheet(
+        title: "CPF: ",
+        subtitle: tutor.cpf,
+      ),
     ),
-    MyBottomSheet(
-      title: "RG: ",
-      subtitle: "Rg",
+    Visibility(
+      visible: LoginDatabase.levelsOfAccess != "USUARIO",
+      child: MyBottomSheet(
+        title: "RG: ",
+        subtitle: tutor.rg,
+      ),
     ),
     MyBottomSheet(
       title: "Nome da mãe: ",
-      subtitle: "Nome da mãe",
+      subtitle: tutor.motherName,
     ),
     MyBottomSheet(
       title: "Estado: ",
-      subtitle: "Estado",
+      subtitle: tutor.state,
     ),
     MyBottomSheet(
       title: "Cidade: ",
-      subtitle: "Cidade",
+      subtitle: tutor.city,
     ),
     MyBottomSheet(
       title: "Bairro: ",
-      subtitle: "Bairro",
+      subtitle: tutor.neighborhood,
     ),
     MyBottomSheet(
       title: "Rua: ",
-      subtitle: "Rua",
+      subtitle: tutor.street,
     ),
     MyBottomSheet(
       title: "Número: ",
-      subtitle: "Número",
+      subtitle: tutor.number.toString(),
     ),
     MyBottomSheet(
       title: "Complemento: ",
-      subtitle: "Complemnto",
+      subtitle: tutor.complements == null ? "" : tutor.complements,
     ),
     MyBottomSheet(
       title: "Profissão: ",
-      subtitle: "Profissão",
+      subtitle: tutor.profession,
     ),
     Container(
       child: ListTile(
@@ -58,10 +69,22 @@ List<Widget> showMyBottomSheet(){
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
-              child: Text("(47) 9999-0000"),
+              child: Text(tutor.telephone1),
             ),
-            Text("(47) 99999-0000"),
+            Text(tutor.telephone2 == null ? "" : tutor.telephone2),
           ],
+        ),
+      ),
+    ),
+    Container(
+      child: ListTile(
+        title: Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: Text("Incidentes: "),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: tutor.nameIncidents,
         ),
       ),
     ),

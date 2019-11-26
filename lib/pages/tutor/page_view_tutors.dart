@@ -1,91 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_list.dart';
 import 'package:flutter_app/components/my_list_ui.dart';
+import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/pages/tutor/components/bottom_sheet_tutors.dart';
 
-class PageViewListTutors extends StatefulWidget {
+import '../../user_login.dart';
 
+class PageViewListTutors extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _PageViewListTutors();
   }
 }
 
-class _PageViewListTutors extends State<PageViewListTutors> {
-  String title;
-  List<String> listIndexNames = [];
+class _PageViewListTutors extends State<PageViewListTutors> with AutomaticKeepAliveClientMixin<PageViewListTutors>{
+  DatabaseConnect db = DatabaseConnect();
+  String suggestion;
+  String valueSelect;
 
-  List<Map> list = [{
-    "Nome" : "Nome", "CPF" : "CPF",
-  },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
-    {
-      "Nome" : "Nome", "CPF" : "CPF",
-    },
+  dynamic list = [];
 
-  ];
+  void removeTutor(tutor) async{
+    tutor.removed = 1;
+    int erro = await db.updateTutor(tutor);
+  }
 
-  void _listIndexNamesFunction(){
-    if(list[0] != null){
-      var item = list[0];
-      item.forEach((index, value){
-        if(index != null) listIndexNames.add(index);
-      });
-    }
+  void saveTutor(tutor) async{
+    tutor.removed = 0;
+    await db.updateTutor(tutor);
+  }
+
+  getSuggestion(String suggestion){
+    this.suggestion = suggestion;
+    setState(() {});
+  }
+
+  getSelect(String value){
+    this.valueSelect = value;
+    setState(() {});
   }
 
   @override
   void initState() {
+    valueSelect = "Nome";
     super.initState();
-    title = "Tutores";
-    _listIndexNamesFunction();
   }
 
   @override
   Widget build(BuildContext context) {
     return MyListUI(
-      selectList : ["Nome", "CPF", "RG", "Removidos"],
+      selectAction: getSelect,
+      parentAction: getSuggestion,
+      selectList : LoginDatabase.levelsOfAccess == "USUARIO" ?  ["Nome"] : ["Nome", "CPF", "RG", "Removidos"],
       title: "Tutores",
       list: MyList(
+        selectValue: valueSelect,
+        suggestion: suggestion,
         navigation: '/editTutors',
-        list: list,
         showBottomSheet: showMyBottomSheet,
         snackRemove: "Nome",
-        indexName: listIndexNames,
+        indexName: 3,
+        indexName2: 1,
         height: 70,
+        remove: removeTutor,
+        add: saveTutor,
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

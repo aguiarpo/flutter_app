@@ -3,9 +3,12 @@ import 'package:flutter_app/components/my_button.dart';
 
 class MyRaiseButton extends StatelessWidget {
   final tabController;
-  final ValueChanged<int> parentAction;
+  final color;
+  final ValueChanged<int> continueButton;
+  final ValueChanged<Map> backButton;
 
-  const MyRaiseButton({Key key, this.tabController, this.parentAction}) : super(key: key);
+  const MyRaiseButton({Key key, this.tabController, this.continueButton, this.backButton,
+  this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,25 +20,15 @@ class MyRaiseButton extends StatelessWidget {
           Visibility(
               visible: tabController.index != 0,
               child: MyButton(
+                color: color,
                 text: "Anterior",
-                onPress: (){
-                  if(tabController.index == 0){
-
-                  }else{
-                    parentAction(tabController.index - 1);
-                  }
-                },
+                onPress: () => backButton({'page' : tabController.index - 1, 'currentPage' : tabController.index}),
               )
           ),
           MyButton(
+            color: color,
             text: "Continuar",
-            onPress: (){
-              if(tabController.length - 1 == tabController.index){
-                Navigator.pop(context);
-              }else{
-                parentAction(tabController.index + 1);
-              }
-            },
+            onPress: () => continueButton(tabController.index + 1),
           )
         ],
       ),

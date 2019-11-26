@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/tutor/page_view_tutors.dart';
 import 'package:flutter_app/pages/users/page_view_users.dart';
 import 'package:flutter_app/colors.dart';
+import 'package:flutter_app/user_login.dart';
 
 class PageViewListPersons extends StatefulWidget {
   final ValueChanged<int> parentAction;
-
   const PageViewListPersons({Key key, this.parentAction}) : super(key: key);
 
   @override
@@ -15,13 +15,29 @@ class PageViewListPersons extends StatefulWidget {
 class _PageViewListPersonsState extends State<PageViewListPersons> with SingleTickerProviderStateMixin {
   TabController _tabController;
 
-  final List<Widget> _kTabPages = [
-    PageViewListUsers(),
-    PageViewListTutors()
+  List<Widget> _kTabPages(){
+    switch(LoginDatabase.levelsOfAccess){
+      case "ADMIN":
+        return [
+          PageViewListUsers(
+          ),
+          PageViewListTutors(
+          )
+        ];
+      default:
+        return [
+          PageViewListTutors(
+          )
+        ];
+    }
+  }
+
+  final _kTabsADMIN = <Tab>[
+    Tab(text: 'Usuários'),
+    Tab(text: 'Tutores'),
   ];
 
   final _kTabs = <Tab>[
-    Tab(text: 'Usuários'),
     Tab(text: 'Tutores'),
   ];
 
@@ -29,7 +45,7 @@ class _PageViewListPersonsState extends State<PageViewListPersons> with SingleTi
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: _kTabPages.length,
+      length: _kTabPages().length,
       initialIndex: 0,
       vsync: this,
     );
@@ -47,22 +63,25 @@ class _PageViewListPersonsState extends State<PageViewListPersons> with SingleTi
       children: <Widget>[
         Container(
           color: ColorsUsed.mainColor,
-          child: TabBar(
-            controller: _tabController,
-            indicatorColor: ColorsUsed.greenDarkColor,
-            labelColor: ColorsUsed.greenDarkColor,
-            unselectedLabelColor: ColorsUsed.secundaryColor,
-            tabs: _kTabs,
-            onTap: (index){
-              Scaffold.of(context).hideCurrentSnackBar();
-              widget.parentAction(index);
-            },
+          child: Visibility(
+            visible: LoginDatabase.levelsOfAccess == "ADMIN",
+            child: TabBar(
+              controller: _tabController,
+              indicatorColor: ColorsUsed.greenDarkColor,
+              labelColor: ColorsUsed.greenDarkColor,
+              unselectedLabelColor: ColorsUsed.secundaryColor,
+              tabs: LoginDatabase.levelsOfAccess == "ADMIN" ? _kTabsADMIN : _kTabs,
+              onTap: (index){
+                Scaffold.of(context).hideCurrentSnackBar();
+                widget.parentAction(index);
+              },
+            ),
           ),
         ),
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: _kTabPages,
+            children: _kTabPages(),
           ),
         )
       ],

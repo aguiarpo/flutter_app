@@ -26,7 +26,7 @@ void main() => runApp(MaterialApp(
   ),
   initialRoute: '/',
   routes: {
-    '/': (context) => PageInit(),
+    '/': (context) => SplashScreen(),
     '/login': (context) => LoginPage(),
     '/home': (context) => HomePage(),
     '/config' : (context) => ConfigPage(),

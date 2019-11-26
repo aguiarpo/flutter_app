@@ -1,60 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_bootom_sheet.dart';
+import 'package:flutter_app/models/animal.dart';
+import 'package:flutter_app/user_login.dart';
 
 import '../../../colors.dart';
 
-List<Widget> showMyBottomSheet(){
+List<Widget> showMyBottomSheet(animal){
   // bool castradorVisible = false;
   return <Widget>[
     MyBottomSheet(
+      title: "Nome: ",
+      subtitle: animal.name,
+    ),
+    MyBottomSheet(
       title: "Microchip: ",
-      subtitle: "Microchip",
+      subtitle: animal.microchipNumber,
     ),
     MyBottomSheet(
       title: "Nascimento: ",
-      subtitle: "Data",
+      subtitle: animal.birthDate,
     ),
     MyBottomSheet(
       title: "Raça: ",
-      subtitle: "Raça",
+      subtitle: animal.breed,
     ),
     MyBottomSheet(
       title: "Espécie: ",
-      subtitle: "Espécie",
+      subtitle: animal.species,
     ),
     MyBottomSheet(
       title: "Microchipagem: ",
-      subtitle: "Data",
+      subtitle: animal.dateMicrochip,
     ),
     MyBottomSheet(
       title: "Altura: ",
-      subtitle: "Cm",
+      subtitle: animal.sizeCm.toString(),
     ),
-    MyBottomSheet(
-      title: "Observações: ",
-      subtitle: "Observações",
+    Visibility(
+      visible: LoginDatabase.levelsOfAccess != "USUARIO",
+      child: MyBottomSheet(
+        title: "Observações: ",
+        subtitle: animal.comments == null ? "" : animal.comments,
+      ),
     ),
-    Container(
-        decoration: BoxDecoration(
-          color: ColorsUsed.terciaryColor,
-          border : Border(bottom: BorderSide(width: 1, color: Colors.white,)),
-        ),
-        child: MyBottomSheet(
-          title: "Castrador: ",
-          subtitle: "Crmv",
-          color: Colors.white,
-        )
-    ),
-    Container(
-        decoration: BoxDecoration(
-          color: ColorsUsed.terciaryColor,
-          border : Border(bottom: BorderSide(width: 1, color: Colors.white,)),
-        ),
-        child: MyBottomSheet(
-          title: "Veterinário: ",
-          subtitle: "Crmv",
-          color: Colors.white,
-        )
+    Visibility(
+      visible: LoginDatabase.levelsOfAccess != "USUARIO",
+      child: Container(
+          decoration: BoxDecoration(
+            color: ColorsUsed.terciaryColor,
+            border : Border(bottom: BorderSide(width: 1, color: Colors.white,)),
+          ),
+          child: MyBottomSheet(
+            title: "Veterinário: ",
+            subtitle: animal.vet.crmv == null ? "" : animal.vet.crmv,
+            color: Colors.white,
+          )
+      ),
     ),
     Container(
         decoration: BoxDecoration(
@@ -63,8 +64,17 @@ List<Widget> showMyBottomSheet(){
         ),
         child: MyBottomSheet(
           title: "Tutor: ",
-          subtitle: "Cpf",
+          subtitle: LoginDatabase.levelsOfAccess == "USUARIO" ? animal.tutor.name == null ? "" : animal.tutor.name : animal.tutor.cpf == null ? "" : animal.tutor.cpf,
           color: Colors.white,
+        )
+    ),
+    Container(
+        decoration: BoxDecoration(
+          color: ColorsUsed.terciaryColor,
+          border : Border(bottom: BorderSide(width: 1, color: Colors.white,)),
+        ),
+        child: Column(
+          children: animal.medicationsWidget
         )
     ),
   ];

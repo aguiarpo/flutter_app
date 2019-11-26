@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_bootom_sheet.dart';
+import 'package:flutter_app/models/incidents.dart';
 
-List<Widget> showMyBottomSheet(){
+List<Widget> showMyBottomSheet(Incidents incidents){
   return <Widget>[
     MyBottomSheet(
       title: "Nome: ",
-      subtitle: "Nome",
+      subtitle: incidents.name,
     ),
     MyBottomSheet(
       title: "Observações: ",
-      subtitle: "Observações",
+      subtitle: incidents.comments != null ? incidents.comments : "",
     )
   ];
 }

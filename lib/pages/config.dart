@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/colors.dart';
-
-import 'user/login.dart';
+import 'package:flutter_app/components/my_config_button.dart';
 
 class ConfigPage extends StatefulWidget {
 
@@ -13,45 +12,12 @@ class ConfigPage extends StatefulWidget {
 }
 
 class _ConfigPageState extends State<ConfigPage> {
-
-  @override
-  void initState(){
-    super.initState();
-  }
-
-  // ignore: non_constant_identifier_names
-  Widget MyContainer(text, navigation){
-    return GestureDetector(
-      onTap: (){
-        if(text == "Sair"){
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LoginPage()
-              ),
-              ModalRoute.withName("/login")
-          );
-        } else Navigator.pushNamed(context, navigation);
-      },
-      child: Container(
-        margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 10, bottom: 20),
-        width: MediaQuery.of(context).size.width - 80,
-        decoration: BoxDecoration(
-          color:  ColorsUsed.terciaryColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Text(text, style: TextStyle(color: Colors.white),),
-        ),
-      ),
-    );
-  }
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: ColorsUsed.greenDarkColor, //change your color here
@@ -79,8 +45,16 @@ class _ConfigPageState extends State<ConfigPage> {
                         color: ColorsUsed.terciaryColor,
                         height: 1,
                     ),
-                    MyContainer("Editar Conta", '/editCont'),
-                    MyContainer("Sair", '/login'),
+                    MyConfigButton(
+                      scaffoldKey: _scaffoldKey,
+                      text: "Editar Conta",
+                      navigation: '/editCont',
+                    ),
+                    MyConfigButton(
+                      scaffoldKey: _scaffoldKey,
+                      text: "Sair",
+                      navigation: '/login',
+                    ),
                   ],
                 ),
               ),

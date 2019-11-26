@@ -7,14 +7,34 @@ class MyListUI extends StatefulWidget {
   final Widget list;
   final String title;
   final List<String> selectList;
+  final ValueChanged<String> parentAction;
+  final ValueChanged<String> selectAction;
 
-  const MyListUI({Key key, this.list, this.title, this.selectList}) : super(key: key);
+  const MyListUI({Key key, this.list, this.title, this.selectList, this.parentAction, this.selectAction}) : super(key: key);
 
   @override
   _MyListUIState createState() => _MyListUIState();
 }
 
 class _MyListUIState extends State<MyListUI> {
+  String valueSelect;
+  String suggestion;
+
+  @override
+  void initState() {
+    super.initState();
+    valueSelect = "Nome";
+  }
+
+  getSuggestion(String suggestion){
+    widget.parentAction(suggestion);
+  }
+
+  setValue(value){
+    valueSelect = value;
+    widget.selectAction(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,13 +45,19 @@ class _MyListUIState extends State<MyListUI> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
-                    child: AutoComplete(),
+                    child: AutoComplete(
+                      select : valueSelect,
+                      title : widget.title,
+                      parentAction: getSuggestion,
+                    ),
                   ),
                 ),
                 SizedBox(
                   width: 10.0,
                 ),
                 Select(
+                  title: "Nome",
+                  parentAction: setValue,
                   list: widget.selectList,
                 )
               ],

@@ -6,8 +6,9 @@ import '../colors.dart';
 class MyButton extends StatelessWidget {
   final String text;
   final Function onPress;
+  final Color color;
 
-  const MyButton({Key key, this.text, this.onPress}) : super(key: key);
+  const MyButton({Key key, this.text, this.onPress, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +16,11 @@ class MyButton extends StatelessWidget {
       padding: EdgeInsets.only(left: 20,right: 20),
       minWidth: 100,
       height: 45,
-      color: ColorsUsed.blueColor,
+      color: color == null ? ColorsUsed.blueColor : color,
       child: Center(
         child: Text(text.toUpperCase(),
           style: TextStyle(
-              color: Colors.white,
+              color: color == null ? Colors.white : Colors.black38,
               fontWeight: FontWeight.w500,
               fontFamily: "Roboto",
           ),

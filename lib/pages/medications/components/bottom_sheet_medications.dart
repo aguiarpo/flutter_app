@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_app/components/my_bootom_sheet.dart';
+import 'package:flutter_app/models/medications.dart';
 
-List<Widget> showMyBottomSheet(){
-  return <Widget>[
+List<Widget> showMyBottomSheet(Medications medications){
+  return [
     MyBottomSheet(
       title: "Nome: ",
-      subtitle: "Nome",
+      subtitle: medications.name,
     )
   ];
 }
