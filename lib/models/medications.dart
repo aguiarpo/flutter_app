@@ -3,6 +3,7 @@ class Medications{
   String name;
   String createdBy;
   String createdDate;
+  String lastModifiedBy;
   int removed;
   int registered;
   int edited;
@@ -14,6 +15,7 @@ class Medications{
     name = map['nameColumn'];
     createdBy = map['createdByColumn'];
     createdDate = map['createdDateColumn'];
+    lastModifiedBy = map['lastModifiedByColumn'];
     removed = map['removedColumn'];
     registered = map['registeredColumn'];
     edited = map['editedColumn'];
@@ -24,6 +26,7 @@ class Medications{
     name = map['name'];
     createdBy = map['createdBy'];
     createdDate = map['createdDate'];
+    lastModifiedBy = map['lastModifiedBy'];
     removed = 0;
     registered = 0;
     edited = 0;
@@ -33,6 +36,7 @@ class Medications{
     Map<String, dynamic> map = {
       'nameColumn' : name,
       'createdByColumn': createdBy,
+      'lastModifiedByColumn' : lastModifiedBy,
       'createdDateColumn': createdDate,
       'removedColumn' : removed,
       'registeredColumn' : registered,

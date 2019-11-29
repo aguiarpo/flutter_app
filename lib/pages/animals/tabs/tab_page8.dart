@@ -27,9 +27,9 @@ class _TabPage8State extends State<TabPage8> with AutomaticKeepAliveClientMixin<
 
 
   void onSaved(value, check){
-    if(value == null)datesSaved[check['id']] = widget.dates[check['id']];
+    if(value == null)datesSaved[check['id']] = DateFormat("yyyy-MM-dd").format(widget.dates[check['id']]);
     else{
-      if(check['value'])datesSaved[check['id']] = value;
+      if(check['value'])datesSaved[check['id']] = DateFormat("yyyy-MM-dd").format(value);
     }
     print('');
     jsonBloc.addValue('medications', datesSaved);

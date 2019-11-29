@@ -2,7 +2,7 @@ import 'package:http_auth/http_auth.dart' as http;
 
 import '../user_login.dart';
 
-abstract class UserAgentClient{
+class UserAgentClient{
   static var client;
 
   UserAgentClient(){

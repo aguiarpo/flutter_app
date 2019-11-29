@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_list.dart';
 import 'package:flutter_app/components/my_list_ui.dart';
-import 'package:flutter_app/database/connect.dart';
-import 'package:flutter_app/models/tutor.dart';
+import 'package:flutter_app/database/repository/tutor_repository.dart';
 import 'package:flutter_app/pages/tutor/components/bottom_sheet_tutors.dart';
 
 import '../../user_login.dart';
@@ -15,7 +14,6 @@ class PageViewListTutors extends StatefulWidget {
 }
 
 class _PageViewListTutors extends State<PageViewListTutors> with AutomaticKeepAliveClientMixin<PageViewListTutors>{
-  DatabaseConnect db = DatabaseConnect();
   String suggestion;
   String valueSelect;
 
@@ -23,12 +21,13 @@ class _PageViewListTutors extends State<PageViewListTutors> with AutomaticKeepAl
 
   void removeTutor(tutor) async{
     tutor.removed = 1;
-    int erro = await db.updateTutor(tutor);
+    await TutorRepository.updateTutor(tutor);
   }
 
   void saveTutor(tutor) async{
     tutor.removed = 0;
-    await db.updateTutor(tutor);
+    tutor.edited = 1;
+    await TutorRepository.updateTutor(tutor);
   }
 
   getSuggestion(String suggestion){

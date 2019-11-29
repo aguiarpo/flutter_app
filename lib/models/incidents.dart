@@ -2,6 +2,7 @@ class Incidents{
   int id;
   String name;
   String createdBy;
+  String lastModifiedBy;
   String createdDate;
   String comments;
   int removed;
@@ -16,6 +17,7 @@ class Incidents{
     createdBy = map['createdByColumn'];
     createdDate = map['createdDateColumn'];
     comments = map['commentsColumn'];
+    lastModifiedBy = map['lastModifiedByColumn'];
     removed = map['removedColumn'];
     registered = map['registeredColumn'];
     edited = map['editedColumn'];
@@ -26,6 +28,7 @@ class Incidents{
     name = map['name'];
     createdBy = map['createdBy'];
     createdDate = map['createdDate'];
+    lastModifiedBy = map['lastModifiedBy'];
     comments = map['comments'];
     removed = 0;
     registered = 0;
@@ -37,6 +40,7 @@ class Incidents{
       'nameColumn' : name,
       'createdByColumn': createdBy,
       'createdDateColumn': createdDate,
+      'lastModifiedByColumn' : lastModifiedBy,
       'removedColumn' : removed,
       'commentsColumn' : comments,
       'registeredColumn' : registered,

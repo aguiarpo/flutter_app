@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/json_bloc.dart';
 import 'package:flutter_app/components/my_body_tabs.dart';
-import 'package:flutter_app/database/connect.dart';
-import 'package:flutter_app/models/animal_medications.dart';
+import 'package:flutter_app/database/repository/tutor_incidents_repository.dart';
+import 'package:flutter_app/models/animal.dart';
+import 'package:flutter_app/models/tutor.dart';
+import 'package:flutter_app/models/tutors_incidents.dart';
 import 'package:flutter_app/pages/animals/tabs/tab_page6.dart';
 import 'package:flutter_app/pages/animals/tabs/tab_page8.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page1.dart';
@@ -11,11 +13,6 @@ import 'package:flutter_app/pages/tutor/tabs/tab_page2.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page3.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page4.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page5.dart' as prefix0;
-import 'package:flutter_app/validates/validator_animals.dart';
-import 'package:flutter_app/validates/validator_tutor.dart';
-import 'package:flutter_app/validates/validator_user.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
-import 'package:flutter_app/validates/validator_vet.dart';
 import '../../components/my_scaffold_tabs.dart';
 import 'tabs/tab_page5.dart';
 import 'tabs/tab_page7.dart';
@@ -31,55 +28,56 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
   var bloc = JsonBloc();
   int id;
   var level;
-  DatabaseConnect db = DatabaseConnect();
   List medications = [];
   Map dates = {};
   List list =[];
   var incidents;
+  Tutor tutor = Tutor();
+  Animal animal;
 
   List<Widget> kIcons(bloc){
     return <Widget>[
       TabPage1(
-        validateName: ValidateUserLogin.validateName,
-        validateCpf: ValidateTutor.validateCpf,
-        validateRG: ValidateTutor.validateRg,
-        validateMotherName: ValidateUserLogin.validateName,
+        incidentsWithTutor: incidentsWithTutorsFunction,
+        rg: tutor.rg,
+        cpf: tutor.cpf,
+        motherName: tutor.motherName,
+        name: tutor.name,
+        parentAction: getTutor,
         jsonBloc: bloc,
       ),
       TabPage2(
-        validateCep: ValidateTutor.validateCep,
-        validateNeighborhood: ValidateUserLogin.validateCity,
-        validateCity: ValidateUserLogin.validateCity,
+        state: tutor.state,
+        neighborhood: tutor.neighborhood,
+        city: tutor.city,
+        cep: tutor.cep,
         jsonBloc: bloc,
       ),
       TabPage3(
-        validateStreet: ValidateUserLogin.validateCity,
+        street: tutor.street,
+        number: tutor.number.toString(),
+        complements: tutor.complements,
         jsonBloc: bloc,
       ),
       TabPage4(
-        validateTelephone1: ValidateUserLogin.validateTelephone,
-        validateProfession: ValidateUserLogin.validateCity,
+        telephone2: tutor.telephone2,
+        telephone1: tutor.telephone1,
+        profession: tutor.profession,
         jsonBloc: bloc,
       ),
       prefix0.TabPage5(
-        incidentsWithTutor : [],
+        incidentsWithTutor : tutor.incidentsWithTutors,
         jsonBloc: bloc,
         incidents: incidents,
       ),
       TabPage5(
-        validateName: ValidateUserLogin.validateCity,
-        validateMicrochip: ValidateTutor.validateRg,
-        validateBreed: ValidateUserLogin.validateCity,
         jsonBloc: bloc,
       ),
       TabPage6(
-        validateSpecies: ValidateUserLogin.validateCity,
-        validateSize: ValidateAnimals.validateSizeCm,
-        validateCoatColor: ValidateUserLogin.validateCity,
+        size: "Médio",
         jsonBloc: bloc,
       ),
       TabPage7(
-        validateCrmv: ValidateVet.validateCRMV3,
         jsonBloc: bloc,
       ),
       TabPage8(
@@ -92,21 +90,29 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
     ];
   }
 
-  Future display() async{
-    var list2 = [];
-    incidents = await db.getAllIncidents();
-    list =  await db.getAllMedications();
+  void incidentsWithTutorsFunction(idTutor)async{
+    List incidents = await TutorIncidentRepository.getAllIncidentsByIdTutor(idTutor);
+    for(TutorsIncidents value in incidents){
+      tutor.incidentsWithTutors.add(value.idIncidents);
+    }
+  }
+
+  void getTutor(tutor){
+    this.tutor = tutor;
+    setState(() {});
   }
 
   @override
   void initState() {
+    tutor.state = "SC";
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(id == null)id = ModalRoute.of(context).settings.arguments;
-    display();
+    if(animal == null)animal = ModalRoute.of(context).settings.arguments;
+    list = animal.list;
+    incidents = animal.tutor.incidents;
     return MyScaffoldTabs(
       body: StreamBuilder<Object>(
           stream: bloc.getJSON,
@@ -114,7 +120,6 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return MyBodyTabs(
-                id : id,
                 requestNumber: 10,
                 jsonSchemaBloc: bloc,
                 kIcons: kIcons(bloc),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_bootom_sheet.dart';
 import 'package:flutter_app/models/animal.dart';
 import 'package:flutter_app/user_login.dart';
+import 'package:intl/intl.dart';
+
 
 import '../../../colors.dart';
 
@@ -18,7 +20,11 @@ List<Widget> showMyBottomSheet(animal){
     ),
     MyBottomSheet(
       title: "Nascimento: ",
-      subtitle: animal.birthDate,
+      subtitle: DateFormat("dd-MM-yyyy").format( DateTime.parse(animal.birthDate)).toString(),
+    ),
+    MyBottomSheet(
+      title: "Porte: ",
+      subtitle: animal.sizeCm,
     ),
     MyBottomSheet(
       title: "Raça: ",
@@ -29,18 +35,28 @@ List<Widget> showMyBottomSheet(animal){
       subtitle: animal.species,
     ),
     MyBottomSheet(
-      title: "Microchipagem: ",
-      subtitle: animal.dateMicrochip,
-    ),
-    MyBottomSheet(
-      title: "Altura: ",
-      subtitle: animal.sizeCm.toString(),
+      title: "Microchipagem data: ",
+      subtitle: DateFormat("dd-MM-yyyy").format( DateTime.parse(animal.dateMicrochip)).toString(),
     ),
     Visibility(
       visible: LoginDatabase.levelsOfAccess != "USUARIO",
       child: MyBottomSheet(
         title: "Observações: ",
         subtitle: animal.comments == null ? "" : animal.comments,
+      ),
+    ),
+    Visibility(
+      visible: LoginDatabase.levelsOfAccess == "ADMIN",
+      child: MyBottomSheet(
+        title: "Criado por: ",
+        subtitle: animal.createdBy == null ? LoginDatabase.email : animal.createdBy,
+      ),
+    ),
+    Visibility(
+      visible: LoginDatabase.levelsOfAccess == "ADMIN",
+      child: MyBottomSheet(
+        title: "Último a modificar: ",
+        subtitle: animal.lastModifiedBy == null ? LoginDatabase.email : animal.lastModifiedBy,
       ),
     ),
     Visibility(

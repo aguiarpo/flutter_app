@@ -2,17 +2,25 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/database/columns_names.dart';
+import 'package:flutter_app/database/repository/all_repository.dart';
+import 'package:flutter_app/database/repository/animal_medications_repository.dart';
+import 'package:flutter_app/database/repository/animal_repository.dart';
+import 'package:flutter_app/database/repository/incidents_repository.dart';
+import 'package:flutter_app/database/repository/medications_repository.dart';
+import 'package:flutter_app/database/repository/tutor_incidents_repository.dart';
+import 'package:flutter_app/database/repository/tutor_repository.dart';
+import 'package:flutter_app/database/repository/user_login_repository.dart';
+import 'package:flutter_app/database/repository/vet_repository.dart';
 import 'package:flutter_app/models/animal.dart';
 import 'package:flutter_app/models/animal_medications.dart';
 import 'package:flutter_app/models/incidents.dart';
 import 'package:flutter_app/models/medications.dart';
 import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/models/tutors_incidents.dart';
-import 'package:flutter_app/models/user.dart';
 import 'package:flutter_app/models/user_login.dart';
 import 'package:flutter_app/models/vet.dart';
-import 'package:flutter_app/services/login_request.dart';
+import 'package:flutter_app/services/user_request.dart';
 import 'package:flutter_app/user_login.dart';
 
 import '../colors.dart';
@@ -37,33 +45,12 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
   int _requestNumber;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool disabledButton = false;
-  int _backPage = 0;
-  DatabaseConnect db = DatabaseConnect();
+  int _maxPage = 0;
   var text = "";
   int maxTabs;
 
   void formValidate(int value) {
-    if(value != _backPage){
       if(_formKey.currentState.validate()){
-        switch(_requestNumber){
-          case 0:
-          case 1:
-          case 6:
-            if(maxTabs == value && !widget.jsonSchemaBloc.getSelectValidator){
-              formSaved();
-              Map valuesMap = widget.jsonSchemaBloc.getValue;
-              if(valuesMap['password'] == null && valuesMap['confirmPassword'] == null){
-                optionsButtons(value);
-              }else{
-                if(comparePasswords(valuesMap['password'], valuesMap['confirmPassword'])){
-                  optionsButtons(value);
-                }
-              }
-            }else{
-              showTabs({'page' : value, 'currentPage' : _tabController.index});
-            }
-            break;
-          default:
             formSaved();
             Map valuesMap = widget.jsonSchemaBloc.getValue;
             if(valuesMap['password'] == null && valuesMap['confirmPassword'] == null){
@@ -72,13 +59,10 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
               if(comparePasswords(valuesMap['password'], valuesMap['confirmPassword'])){
                 optionsButtons(value);
               }
-            }
-            break;
         }
+      }else{
+        showTabs({'page' : _maxPage, 'currentPage' : _tabController.index});
       }
-    }else{
-      showTabs({'page' : value, 'currentPage' : _tabController.index});
-    }
   }
 
   Future formSaved()async{
@@ -102,7 +86,7 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
   }
 
   void showTabs(Map value){
-    _backPage = value['currentPage'];
+    if(_maxPage  < value['page'])_maxPage = value['page'];
     _tabController.animateTo(value['page']);
     setState(() {});
   }
@@ -111,7 +95,7 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     try {
       var response;
       var text = '';
-      LoginRequest loginRequest = LoginRequest();
+      UserRequest loginRequest = UserRequest();
       disabledOrEnabledButton(true);
       Map value = widget.jsonSchemaBloc.getValue;
       switch (_requestNumber) {
@@ -133,44 +117,42 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
             LoginDatabase.password = value['password'];
           else
             value['password'] = LoginDatabase.password;
-          UserLogin user = await db.getContactEmail();
+          UserLogin user = await UserLoginRepository.getContactEmail();
           if (user != null) {
             value['email'] = LoginDatabase.email;
             UserLogin saveUser = UserLogin();
             saveUser.setValues(value);
             saveUser.id = user.id;
-            db.updateContact(saveUser);
+            UserLoginRepository.updateContact(saveUser);
           }
           text = 'Usuário Editado com Sucesso';
           break;
         case 2:
-          saveMedications(value);
+          if(await uniqueValidate(medicationsTable, nameColumn, value['name']) == 0) saveMedications(value);
           break;
         case 3:
-          updateMedications(value);
+          if(await uniqueValidate(medicationsTable, nameColumn, value['name']) == 0) updateMedications(value);
           break;
         case 4:
-          saveIncidents(value);
+          if(await uniqueValidate(incidentsTable, nameColumn, value['name']) == 0) saveIncidents(value);
           break;
         case 5:
-          updateIncidents(value);
-          break;
-        case 6:
-          saveUser(value);
-          break;
-        case 7:
-          updateUsers(value);
+          if(await uniqueValidate(incidentsTable, nameColumn, value['name']) == 0) updateIncidents(value);
           break;
         case 9:
-          updateTutors(value);
+          if(await uniqueValidate(tutorTable, cpfColumn, value['cpf']) == 0)
+            if(await uniqueValidate(tutorTable, rgColumn, value['rg']) == 0)
+              updateTutors(value);
           break;
         case 10:
           Map animalValue = widget.jsonSchemaBloc.getValueAnimal;
-          saveAnimal(value, animalValue);
+          if(await uniqueValidate(animalTable, microchipNumberColumn, animalValue['microchipNumber']) == 0)
+            saveAnimal(value, animalValue);
           break;
         case 11:
           Map animalValue = widget.jsonSchemaBloc.getValueAnimal;
-          updateAnimal(value, animalValue);
+          if(await uniqueValidate(animalTable, microchipNumberColumn, animalValue['microchipNumber']) == 0)
+            updateAnimal(value, animalValue);
           break;
       }
       disabledOrEnabledButton(false);
@@ -197,15 +179,36 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     }
   }
 
+  Future uniqueValidate(table, column, value)async{
+    var exists;
+    String text;
+    switch(column){
+      case "nameColumn":
+        text = "Esse nome já foi cadastrado";
+        break;
+      case "cpfColumn":
+        text = "Esse cpf já foi cadastrado";
+        break;
+      case "rgColumn":
+        text = "Esse rg já foi cadastrado";
+        break;
+      case "microchipNumberColumn":
+        text = "Esse microchip já foi cadastrado";
+    }
+    if(widget.id == null)exists = await AllRepository.getExists(table, column, value);
+    else exists = await AllRepository.getExists(table, column, value, id: widget.id);
+    if(exists[0]['rowExists'] == 1) Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text(text))
+    );
+    return exists[0]["rowExists"];
+  }
+
   void saveAnimal(value, animalValue)async{
-    db = DatabaseConnect();
     var text = "";
     Tutor tutor = Tutor();
     Animal animal = Animal();
-    Vet vet = Vet();
     Vet dbVet;
-    Tutor dbTutor;
-    dbVet = await db.getVetByCrmv(animalValue['crmv']);
+    dbVet = await VetRepository.getVetByCrmv(animalValue['crmv']);
     if(dbVet == null){
       text = "CRMV não existe";
       Navigator.pop(context, text);
@@ -214,25 +217,33 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
       var number = int.parse(value['number']);
       tutor.number = number;
       tutor.registered = 1;
-      animalValue['sizeCm'] = int.parse(animalValue['sizeCm']);
       animal.setValuesWithoutId(animalValue);
       animal.idVet = dbVet.id;
-      animal.registered = 1;
-      Tutor savedTutor = await db.saveTutor(tutor);
-      if(savedTutor == null){
+      Tutor savedTutor;
+      Tutor findTutor = await TutorRepository.getTutorByCpf(tutor.cpf);
+      if(findTutor == null) savedTutor = await TutorRepository.saveTutor(tutor);
+      else{
+        tutor.id = findTutor.id;
+        tutor.edited = 1;
+        tutor.registered = 0;
+        await TutorRepository.updateTutor(tutor);
+        savedTutor = tutor;
+      }
+      if(savedTutor == null ){
         Navigator.pop(context, "Erro");
       }else{
-        await db.deleteTutorIncidents(savedTutor.id);
+        await TutorIncidentRepository.deleteTutorIncidents(savedTutor.id);
         var incidents = value['incidents'];
         if(incidents.isNotEmpty){
           for(var i = 0; i < incidents.length; i++){
-            await saveIncidentsTutor(incidents, i);
+            await saveIncidentsTutor(incidents, i, id:savedTutor.id);
           }
         }
         animal.idTutor = savedTutor.id;
-        Animal savedAnimal = await db.saveAnimal(animal);
+        animal.registered = 1;
+        Animal savedAnimal = await AnimalRepository.saveAnimal(animal);
         if(savedAnimal != null){
-          await db.deleteMedicationsByIdAnimal(savedAnimal.id);
+          await AnimalMedicationRepository.deleteMedicationsByIdAnimal(savedAnimal.id);
           Map medicationsList = value['medications'];
           if(medicationsList != null){
             medicationsList.forEach((index, value)async{
@@ -240,10 +251,10 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
               animalMedications.idAnimal = animal.id;
               animalMedications.idMedication = index;
               animalMedications.dateMedication = value.toString();
-              await db.saveAnimalMedications(animalMedications);
+              await AnimalMedicationRepository.saveAnimalMedications(animalMedications);
             });
           }
-          text = "Animal Editado com sucesso";
+          text = "Animal Cadastrado com sucesso";
           Navigator.pop(context, text);
         }else{
           Navigator.pop(context, "Erro");
@@ -253,19 +264,17 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
   }
 
   void updateAnimal(value, animalValue)async{
-    db = DatabaseConnect();
     var text = "";
     Tutor tutor = Tutor();
     Animal animal = Animal();
-    Vet vet = Vet();
     Vet dbVet;
     Tutor dbTutor;
-    Animal dbAnimal = await db.getAnimal(widget.id);
+    Animal dbAnimal = await AnimalRepository.getAnimal(widget.id);
     if(value['cpf'] == ""){
-      dbTutor = await db.getTutor(dbAnimal.idTutor);
+      dbTutor = await TutorRepository.getTutor(dbAnimal.idTutor);
       value['cpf'] = dbTutor.cpf;
     }else{
-      dbTutor = await db.getTutorByCpf(value['cpf']);
+      dbTutor = await TutorRepository.getTutorByCpf(value['cpf']);
     }
     if(dbTutor == null){
       text = "CPF não existe";
@@ -276,7 +285,7 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
         dbVet = dbAnimal.vet;
         dbVet.id = dbAnimal.idVet;
       }else{
-        dbVet = await db.getVetByCrmv(animalValue['crmv']);
+        dbVet = await VetRepository.getVetByCrmv(animalValue['crmv']);
       }
       if(dbVet == null){
         text = "CRMV não existe";
@@ -314,28 +323,17 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
         }else{
           value['number'] = int.parse(value['number']);
         }
-        if(value['complements'] == ""){
-          value['complements'] = dbTutor.complements;
-        }
         if(value['profession'] == ""){
           value['profession'] = dbTutor.profession;
         }
         if(value['telephone1'] == ""){
           value['telephone1'] = dbTutor.telephone1;
         }
-        if(value['telephone2'] == ""){
-          value['telephone2'] = dbTutor.telephone2;
-        }
         if(animalValue['name'] == ""){
           animalValue['name'] = dbAnimal.name;
         }
         if(animalValue['breed'] == ""){
           animalValue['breed'] = dbAnimal.breed;
-        }
-        if(animalValue['sizeCm'] == ""){
-          animalValue['sizeCm'] = dbAnimal.sizeCm;
-        }else{
-          animalValue['sizeCm'] = int.parse(animalValue['sizeCm']);
         }
         if(animalValue['coatColor'] == ""){
           animalValue['coatColor'] = dbAnimal.coatColor;
@@ -346,17 +344,11 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
         if(animalValue['microchipNumber'] == ""){
           animalValue['microchipNumber'] = dbAnimal.microchipNumber;
         }
-        if(animalValue['comments'] == ""){
-          animalValue['comments'] = dbAnimal.comments;
-        }
         if(animalValue['dateMicrochip'] == "" || animalValue['dateMicrochip'] == null){
           animalValue['dateMicrochip'] = dbAnimal.dateMicrochip;
         }
         if(animalValue['birthDate'] == "" || animalValue['birthDate'] == null){
           animalValue['birthDate'] = dbAnimal.birthDate;
-        }
-        if(animalValue['animalCastrated'] == "" || animalValue['animalCastrated'] == null){
-          animalValue['animalCastrated'] = dbAnimal.animalCastrated == 1 ? true : false;
         }
         tutor.setValues(value);
         tutor.id = dbTutor.id;
@@ -374,13 +366,13 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
         animal.removed = 0;
         animal.registered = animal.registered;
         animal.edited = 1;
-        var response = await db.updateTutor(tutor);
+        var response = await TutorRepository.updateTutor(tutor);
         if(response != 1){
           Navigator.pop(context, "Erro");
         }else{
-          response = await db.updateAnimal(animal);
+          response = await AnimalRepository.updateAnimal(animal);
           if(response == 1){
-            await db.deleteMedicationsByIdAnimal(animal.id);
+            await AnimalMedicationRepository.deleteMedicationsByIdAnimal(animal.id);
             Map medicationsList = value['medications'];
             if(medicationsList != null){
               medicationsList.forEach((index, value)async{
@@ -388,7 +380,7 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
                 animalMedications.idAnimal = animal.id;
                 animalMedications.idMedication = index;
                 animalMedications.dateMedication = value.toString();
-                await db.saveAnimalMedications(animalMedications);
+                await AnimalMedicationRepository.saveAnimalMedications(animalMedications);
               });
             }
             }
@@ -400,15 +392,11 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     }
 
   void updateIncidents(value) async {
-    db = DatabaseConnect();
     var text = "";
     Incidents incident = Incidents();
-    Incidents dbIncidents = await db.getIncidents(widget.id);
+    Incidents dbIncidents = await IncidentsRepository.getIncidents(widget.id);
     if(value['name'] == ""){
       value['name'] = dbIncidents.name;
-    }
-    if(value['comments'] == ""){
-      value['comments'] = dbIncidents.comments;
     }
     incident.setValues(value);
     incident.id = widget.id;
@@ -417,7 +405,7 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     incident.removed = 0;
     incident.registered = dbIncidents.registered;
     incident.edited = 1;
-    var response = await db.updateIncidents(incident);
+    var response = await IncidentsRepository.updateIncidents(incident);
     if(response == 1){
       text = "Incidente Editado com sucesso";
       Navigator.pop(context, text);
@@ -425,10 +413,9 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
   }
 
   void updateTutors(value) async {
-    db = DatabaseConnect();
     var text = "";
     Tutor tutor = Tutor();
-    Tutor dbTutor = await db.getTutor(widget.id);
+    Tutor dbTutor = await TutorRepository.getTutor(widget.id);
     if(value['name'] == ""){
       value['name'] = dbTutor.name;
     }
@@ -464,17 +451,11 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     }else{
       value['number'] = int.parse(value['number']);
     }
-    if(value['complements'] == ""){
-      value['complements'] = dbTutor.complements;
-    }
     if(value['profession'] == ""){
       value['profession'] = dbTutor.profession;
     }
     if(value['telephone1'] == ""){
       value['telephone1'] = dbTutor.telephone1;
-    }
-    if(value['telephone2'] == ""){
-      value['telephone2'] = dbTutor.telephone2;
     }
     tutor.setValues(value);
     tutor.id = widget.id;
@@ -483,8 +464,8 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     tutor.removed = 0;
     tutor.registered = dbTutor.registered;
     tutor.edited = 1;
-    var response = await db.updateTutor(tutor);
-    await db.deleteTutorIncidents(widget.id);
+    var response = await TutorRepository.updateTutor(tutor);
+    await TutorIncidentRepository.deleteTutorIncidents(widget.id);
     var incidents = value['incidents'];
     if(incidents.isNotEmpty){
       for(var i = 0; i < incidents.length; i++){
@@ -497,78 +478,20 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     }
   }
 
-  Future saveIncidentsTutor(incidents, i) async {
+  Future saveIncidentsTutor(incidents, i, {id}) async {
     if(incidents[i]["value"]){
       TutorsIncidents incident = TutorsIncidents();
-      incident.idTutor = widget.id;
+      incident.idTutor = id == null ? widget.id : id;
       incident.idIncidents = incidents[i]["id"];
-      await db.saveTutorIncidents(incident);
+      await TutorIncidentRepository.saveTutorIncidents(incident);
     }
   }
 
-  void updateUsers(value) async {
-    db = DatabaseConnect();
-    var text = "";
-    User user = User();
-    Vet vet = Vet();
-    User dbUser = await db.getUser(widget.id);
-    if(value['name'] == ""){
-      value['name'] = dbUser.name;
-    }
-    if(value['email'] == ""){
-      value['email'] = dbUser.email;
-    }
-    if(value['password'] == ""){
-      value['password'] = dbUser.password;
-    }
-    if(value['password'] == ""){
-      value['password'] = dbUser.password;
-    }
-    if(value['city'] == ""){
-      value['city'] = dbUser.city;
-    }
-    if(value['state'] == null){
-      value['state'] = dbUser.state;
-    }
-    if(value['telephone1'] == ""){
-      value['telephone1'] = dbUser.telephone1;
-    }
-    if(value['telephone2'] == ""){
-      value['telephone2'] = dbUser.telephone2;
-    }
-    if(value['levelsOfAccess'] == null){
-      value['levelsOfAccess'] = dbUser.levelsOfAccess;
-    }
-    user.setValues(value);
-    user.id = widget.id;
-    user.createdDate = dbUser.createdDate;
-    user.createdBy = dbUser.createdBy;
-    user.removed = 0;
-    user.registered = dbUser.registered;
-    user.edited = 1;
-    var response = await db.updateUser(user);
-    if(value['crmv'] != null){
-      Vet dbVet = await db.getVet(user.id);
-      vet.userId = user.id;
-      vet.crmv = value['crmv'];
-      if(dbVet == null){
-        db.saveVet(vet);
-      }else{
-        vet.id = dbVet.id;
-        db.updateVet(vet);
-      }
-    }
-    if(response == 1){
-      text = "Usuário Editado com sucesso";
-      Navigator.pop(context, text);
-    }
-  }
 
   void updateMedications(value) async {
-    db = DatabaseConnect();
     var text = "";
     Medications medication = Medications();
-    Medications dbMedication = await db.getMedications(widget.id);
+    Medications dbMedication = await MedicationsRepository.getMedications(widget.id);
     medication.setValues(value);
     medication.id = widget.id;
     medication.createdDate = dbMedication.createdDate;
@@ -576,7 +499,7 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     medication.removed = 0;
     medication.registered = dbMedication.registered;
     medication.edited = 1;
-    var response = await db.updateMedication(medication);
+    var response = await MedicationsRepository.updateMedication(medication);
     if(response == 1){
       text = "Medicação Editada com sucesso";
       Navigator.pop(context, text);
@@ -593,13 +516,12 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
 
   void saveMedications(value) async{
     try{
-      db = DatabaseConnect();
       Medications medication = Medications();
       medication.setValues(value);
       medication.registered = 1;
       medication.edited = 0;
       medication.removed = 0;
-      Medications medicationSaved = await db.saveMedications(medication);
+      Medications medicationSaved = await MedicationsRepository.saveMedications(medication);
       if(medicationSaved != null){
         text = "Medicação Cadastrada com sucesso";
         Navigator.pop(context, text);
@@ -610,48 +532,14 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
     }
   }
 
-  void saveUser(value) async{
-    try{
-      db = DatabaseConnect();
-      Vet vet = Vet();
-      Vet vetSaved;
-      vet.user.setValues(value);
-      vet.user.registered = 1;
-      vet.user..edited = 0;
-      vet.user..removed = 0;
-      User userSaved = await db.saveUser(vet.user);
-      if(userSaved != null){
-        if(vet.user.levelsOfAccess == "VETERINARIO"){
-          vet.crmv = value['crmv'];
-          vet.userId = userSaved.id;
-          vetSaved = await db.saveOnlyVet(vet);
-          if(vetSaved != null){
-            text = "Usuário Cadastrado com sucesso";
-            Navigator.pop(context, text);
-          }
-        }else{
-          if(userSaved != null){
-            text = "Usuário Cadastrado com sucesso";
-            Navigator.pop(context, text);
-          }
-        }
-      }
-    }catch(e){
-      text = "Erro ao realizaro cadastro";
-      Navigator.pop(context, text);
-    }
-  }
-
-
   void saveIncidents(value) async{
     try{
-      db = DatabaseConnect();
       Incidents incident = Incidents();
       incident.setValues(value);
       incident.registered = 1;
       incident.edited = 0;
       incident.removed = 0;
-      Incidents incidentSaved = await db.saveIncidents(incident);
+      Incidents incidentSaved = await IncidentsRepository.saveIncidents(incident);
       if(incidentSaved != null){
         text = "Incidente Cadastrado com sucesso";
         Navigator.pop(context, text);
@@ -684,6 +572,8 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
         maxTabs = 5;
         break;
       case 11:
+        maxTabs = 8;
+        break;
       case 10:
         maxTabs = 9;
         break;

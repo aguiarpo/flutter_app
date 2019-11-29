@@ -17,7 +17,6 @@ class _RegisterMedicationsState extends State<RegisterMedications> {
   List<Widget> kIcons(bloc) {
     return [
       TabPage1(
-        validator: ValidateMedication.validateName,
         jsonBloc: bloc,
       ),
     ];

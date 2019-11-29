@@ -7,8 +7,9 @@ import 'package:flutter_app/validates/validator_user_login.dart';
 
 class TabPage1 extends StatelessWidget {
   var jsonBloc;
-  final validator;
-  TabPage1({@required this.jsonBloc, this.validator});
+  final name;
+  TextEditingController myControllerName = TextEditingController();
+  TabPage1({@required this.jsonBloc, this.name});
 
   void onSaved(values)  {
     jsonBloc.addValue(values['title'], values['value']);
@@ -16,12 +17,14 @@ class TabPage1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    myControllerName.text = name;
     return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             MyTextField(
-              validate: validator,
+              controller: myControllerName,
+              validate: ValidateUserLogin.validateCity,
               parentAction: onSaved,
               title: 'name',
               icon: Surca.vaccine,

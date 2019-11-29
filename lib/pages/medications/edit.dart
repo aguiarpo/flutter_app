@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/json_bloc.dart';
 import 'package:flutter_app/components/my_body_tabs.dart';
 import 'package:flutter_app/components/my_scaffold_tabs.dart';
+import 'package:flutter_app/models/medications.dart';
 import 'package:flutter_app/pages/medications/tabs/tab_page1.dart';
 import 'package:flutter_app/validates/validator_medications.dart';
 
@@ -11,6 +12,8 @@ class EditMedications extends StatefulWidget {
 }
 
 class _EditMedicationsState extends State<EditMedications> {
+  TextEditingController controllerName = TextEditingController();
+  Medications medication;
 
   var bloc = JsonBloc();
   int id;
@@ -18,8 +21,8 @@ class _EditMedicationsState extends State<EditMedications> {
   List<Widget> kIcons(bloc) {
     return [
       TabPage1(
-        validator: ValidateMedication.validateName2,
         jsonBloc: bloc,
+        name : medication.name,
       ),
     ];
   }
@@ -32,7 +35,8 @@ class _EditMedicationsState extends State<EditMedications> {
 
   @override
   Widget build(BuildContext context) {
-    if(id == null)id = ModalRoute.of(context).settings.arguments;
+    if(medication == null)medication = ModalRoute.of(context).settings.arguments;
+    id = medication.id;
     return MyScaffoldTabs(
       body: StreamBuilder<Object>(
           stream: bloc.getJSON,

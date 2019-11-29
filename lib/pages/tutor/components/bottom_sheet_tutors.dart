@@ -88,5 +88,19 @@ List<Widget> showMyBottomSheet(Tutor tutor){
         ),
       ),
     ),
+    Visibility(
+      visible: LoginDatabase.levelsOfAccess == "ADMIN",
+      child: MyBottomSheet(
+        title: "Criado por: ",
+        subtitle: tutor.createdBy == null ? LoginDatabase.email : tutor.createdBy,
+      ),
+    ),
+    Visibility(
+      visible: LoginDatabase.levelsOfAccess == "ADMIN",
+      child: MyBottomSheet(
+        title: "Último a modificar: ",
+        subtitle: tutor.lastModifiedBy == null ? LoginDatabase.email : tutor.lastModifiedBy,
+      ),
+    ),
   ];
 }

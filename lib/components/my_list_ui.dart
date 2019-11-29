@@ -56,7 +56,8 @@ class _MyListUIState extends State<MyListUI> {
                   width: 10.0,
                 ),
                 Select(
-                  title: "Nome",
+                  title: "",
+                  value: "Nome",
                   parentAction: setValue,
                   list: widget.selectList,
                 )

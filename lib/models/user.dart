@@ -3,7 +3,6 @@ class User{
   String name;
   String email;
   String crmv;
-  String password;
   String levelsOfAccess;
   String state;
   String city;
@@ -21,7 +20,6 @@ class User{
     id = map['idColumn'];
     name = map['nameColumn'];
     email = map['emailColumn'];
-    password = map['passwordColumn'];
     city = map['cityColumn'];
     state = map['stateColumn'];
     telephone1 = map['telephone1Column'];
@@ -42,7 +40,6 @@ class User{
     id = map['code'];
     name = map['name'];
     email = map['email'];
-    password = map['password'];
     city = map['city'];
     state = map['state'];
     telephone1 = map['telephone1'];
@@ -59,7 +56,6 @@ class User{
     Map<String, dynamic> map = {
       'nameColumn' : name,
       'emailColumn': email,
-      'passwordColumn': password,
       'levelsOfAccessColumn' : levelsOfAccess,
       'stateColumn' : state,
       'cityColumn' : city,
@@ -79,7 +75,7 @@ class User{
 
   @override
   String toString() {
-    return "User(id: $id, name: $name, email: $email, password: $password,"
+    return "User(id: $id, name: $name, email: $email, "
         " state: $state, city: $city, telephone: $telephone1, telephone: $telephone2, type: $levelsOfAccess)";
   }
 }

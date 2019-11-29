@@ -26,6 +26,7 @@ class _MyTextFieldState extends State<MyTextField> {
   bool _obscureText;
   TextEditingController myController = TextEditingController();
   var _type;
+  FocusNode myFocusNode = new FocusNode();
 
   @override
   void initState(){
@@ -59,6 +60,7 @@ class _MyTextFieldState extends State<MyTextField> {
           }
         },
         validator: widget.validate,
+        focusNode: myFocusNode,
         style: new TextStyle(color: Colors.grey),
         decoration: InputDecoration(
           prefixIcon: Container(
@@ -78,7 +80,10 @@ class _MyTextFieldState extends State<MyTextField> {
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey, width: 1),
           ),
-          hintText: _hint,
+          labelText: _hint,
+            labelStyle: TextStyle(
+                color: myFocusNode.hasFocus ? ColorsUsed.greenDarkColor : Colors.grey
+            )
         ),
       ),
     );

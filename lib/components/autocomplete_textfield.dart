@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/database/repository/all_repository.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:http/http.dart';
 
 class AutoComplete extends StatefulWidget {
   final select;
@@ -16,7 +15,6 @@ class AutoComplete extends StatefulWidget {
 class _AutoCompleteState extends State<AutoComplete> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _typeAheadController = TextEditingController();
-  DatabaseConnect db = DatabaseConnect();
 
   @override
   void initState() {
@@ -43,7 +41,7 @@ class _AutoCompleteState extends State<AutoComplete> {
         suggestionsCallback: (pattern)async{
           if(pattern == "")widget.parentAction(pattern);
           else{
-            suggestions = await db.getLike(widget.title, widget.select, pattern);
+            suggestions = await AllRepository.getLike(widget.title, widget.select, pattern);
           }
           if(suggestions == null)suggestions = [];
           return suggestions;

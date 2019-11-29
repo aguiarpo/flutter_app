@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_text_field.dart';
 import 'package:flutter_app/icons/surca_icons.dart';
+import 'package:flutter_app/validates/validator_incidents.dart';
+import 'package:flutter_app/validates/validator_user_login.dart';
+
+import '../../../colors.dart';
 
 class TabPage1 extends StatefulWidget {
   var jsonBloc;
-  final validator;
-  TabPage1({@required this.jsonBloc, this.validator});
+  final name;
+  final comments;
+
+  TabPage1({@required this.jsonBloc, this.name, this.comments});
 
   @override
   _TabPage1State createState() => _TabPage1State();
@@ -13,6 +19,9 @@ class TabPage1 extends StatefulWidget {
 
 class _TabPage1State extends State<TabPage1> {
   var jsonBloc;
+  TextEditingController controllerName = TextEditingController();
+  TextEditingController controllerComments = TextEditingController();
+  FocusNode myFocusNode = new FocusNode();
 
   void onSaved(values)  {
     jsonBloc.addValue(values['title'], values['value']);
@@ -21,6 +30,8 @@ class _TabPage1State extends State<TabPage1> {
 
   @override
   void initState() {
+    controllerName.text = widget.name;
+    controllerComments.text = widget.comments;
     jsonBloc = widget.jsonBloc;
     super.initState();
   }
@@ -32,7 +43,8 @@ class _TabPage1State extends State<TabPage1> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             MyTextField(
-              validate: widget.validator,
+              controller: controllerName,
+              validate: (value) => ValidateIncidents.validateName(value),
               parentAction: onSaved,
               title: 'name',
               icon: Surca.alert,
@@ -41,6 +53,9 @@ class _TabPage1State extends State<TabPage1> {
             Padding(
               padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
               child: TextFormField(
+                focusNode: myFocusNode,
+                validator: ValidateUserLogin.validateComments,
+                controller: controllerComments,
                 onSaved: (value){
                   Map values = {"title" : "comments", "value" : value.trim()};
                   onSaved(values);
@@ -54,7 +69,10 @@ class _TabPage1State extends State<TabPage1> {
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey, width: 1),
                   ),
-                  hintText: "Observações",
+                  labelText: "Observações",
+                    labelStyle: TextStyle(
+                        color: myFocusNode.hasFocus ? ColorsUsed.greenDarkColor : Colors.grey
+                    )
                 ),
               ),
             ),

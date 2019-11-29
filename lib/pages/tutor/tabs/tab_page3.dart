@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_text_field.dart';
+import 'package:flutter_app/validates/validator_tutor.dart';
+import 'package:flutter_app/validates/validator_user_login.dart';
+
+import '../../../colors.dart';
 
 class TabPage3 extends StatefulWidget {
   final jsonBloc;
-  final validateStreet;
-  final validateNumber;
-  final validateComplement;
+  final street;
+  final number;
+  final complements;
 
-  const TabPage3({Key key, this.jsonBloc, this.validateStreet, this.validateNumber, this.validateComplement}) : super(key: key);
+  const TabPage3({Key key, this.jsonBloc, this.street, this.number, this.complements}) : super(key: key);
 
   @override
   _TabPage3State createState() => _TabPage3State();
@@ -16,9 +20,16 @@ class TabPage3 extends StatefulWidget {
 class _TabPage3State extends State<TabPage3> with AutomaticKeepAliveClientMixin<TabPage3> {
 
   var jsonBloc;
+  TextEditingController controllerNumber = TextEditingController();
+  TextEditingController controllerStreet = TextEditingController();
+  TextEditingController controllerComplements = TextEditingController();
+  FocusNode myFocusNode = new FocusNode();
 
   @override
   void initState() {
+    controllerComplements.text = widget.complements;
+    if(widget.number != "null")controllerNumber.text = widget.number;
+    controllerStreet.text = widget.street;
     super.initState();
     jsonBloc = widget.jsonBloc;
   }
@@ -35,15 +46,17 @@ class _TabPage3State extends State<TabPage3> with AutomaticKeepAliveClientMixin<
           child: Column(
             children: <Widget>[
               MyTextField(
-                  validate: widget.validateStreet,
+                  controller: controllerStreet,
+                  validate: ValidateUserLogin.validateCity,
                   icon: Icons.location_city,
                   hint: "Rua",
                   parentAction: onSaved,
                   title: 'street'
               ),
               MyTextField(
+                controller: controllerNumber,
                 type: TextInputType.number,
-                validate: widget.validateNumber,
+                validate: ValidateTutor.validateRg,
                 parentAction: onSaved,
                 title: 'number',
                 icon: Icons.mode_edit,
@@ -52,7 +65,9 @@ class _TabPage3State extends State<TabPage3> with AutomaticKeepAliveClientMixin<
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
                 child: TextFormField(
-                  validator: widget.validateComplement,
+                  validator: ValidateUserLogin.validateComments,
+                  controller: controllerComplements,
+                  focusNode: myFocusNode,
                   onSaved: (value){
                     Map values = {"title" : "complement", "value" : value.trim()};
                     onSaved(values);
@@ -66,7 +81,10 @@ class _TabPage3State extends State<TabPage3> with AutomaticKeepAliveClientMixin<
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey, width: 1),
                     ),
-                    hintText: "Complemento",
+                    labelText: "Complemento",
+                      labelStyle: TextStyle(
+                          color: myFocusNode.hasFocus ? ColorsUsed.greenDarkColor : Colors.grey
+                      )
                   ),
                 ),
               ),

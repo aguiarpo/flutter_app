@@ -46,6 +46,7 @@ class _TabPage5State extends State<TabPage5> with AutomaticKeepAliveClientMixin<
           itemBuilder: (BuildContext context, int index) {
             if(!incidentsWithTutor.contains(itens[index].id) && checkbox[index] == null)checkbox[index] = {"id" : itens[index].id, "value" : false};
             else if(checkbox[index] == null) checkbox[index] = {"id" : itens[index].id, "value" : true};
+            addIndexBloc();
             return Container(
               child: Card(
                 clipBehavior: Clip.antiAlias,

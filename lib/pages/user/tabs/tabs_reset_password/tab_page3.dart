@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/email_bloc.dart';
 import 'package:flutter_app/components/my_button.dart';
 import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/services/login_request.dart';
+import 'package:flutter_app/services/user_request.dart';
 import 'package:flutter_app/validates/validator_user_login.dart';
 
 class TabPage3 extends StatefulWidget {
@@ -60,7 +60,7 @@ class _TabPage3State extends State<TabPage3> {
 
   void request() async{
     var response;
-    LoginRequest loginRequest = LoginRequest();
+    UserRequest loginRequest = UserRequest();
     disabledOrEnabledButton(true);
     response = await loginRequest.setPassword(json.encode(_passwords),_bloc.getId.toString(), _bloc.getToken);
     disabledOrEnabledButton(false);

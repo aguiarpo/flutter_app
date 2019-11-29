@@ -3,18 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/json_bloc.dart';
 import 'package:flutter_app/components/my_body_tabs.dart';
 import 'package:flutter_app/components/my_scaffold_tabs.dart';
-import 'package:flutter_app/database/connect.dart';
-import 'package:flutter_app/models/animal_medications.dart';
+import 'package:flutter_app/models/animal.dart';
 import 'package:flutter_app/pages/animals/tabs/tab_page5.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page1.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page2.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page3.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page4.dart';
 import 'package:flutter_app/pages/animals/tabs/tab_page8.dart';
-import 'package:flutter_app/validates/validator_animals.dart';
-import 'package:flutter_app/validates/validator_tutor.dart';
-import 'package:flutter_app/validates/validator_user.dart';
-import 'package:flutter_app/validates/validator_vet.dart';
 import 'tabs/tab_page6.dart';
 import 'tabs/tab_page7.dart';
 import 'tabs/tab_page5.dart';
@@ -30,49 +25,57 @@ class _EditUser extends State<EditAnimals> {
   var bloc = JsonBloc();
   int id;
   var level;
-  DatabaseConnect db = DatabaseConnect();
   List medications = [];
   Map dates = {};
   List list =[];
+  Animal animal;
 
   List<Widget> kIcons(bloc){
     return <Widget>[
       TabPage1(
-        validateName: ValidateUser.validateNameEdit,
-        validateMotherName: ValidateUser.validateNameEdit,
-        validateRG: ValidateTutor.validateRgEdit,
-        validateCpf: ValidateTutor.validateCpfEdit,
+        parentAction: getTutor,
+        name: animal.tutor.name,
+        motherName: animal.tutor.motherName,
+        cpf: animal.tutor.cpf,
+        rg: animal.tutor.rg,
         jsonBloc: bloc,
       ),
       TabPage2(
-        validateCep: ValidateTutor.validateCepEdit,
-        validateCity: ValidateUser.validateCityEdit,
-        validateNeighborhood: ValidateUser.validateCityEdit,
+        cep: animal.tutor.cep,
+        city: animal.tutor.city,
+        neighborhood: animal.tutor.neighborhood,
+        state: animal.tutor.state,
         jsonBloc: bloc,
       ),
       TabPage3(
-        validateStreet: ValidateUser.validateCityEdit,
+        complements: animal.tutor.complements,
+        number: animal.tutor.number.toString(),
+        street: animal.tutor.street,
         jsonBloc: bloc,
       ),
       TabPage4(
-        validateProfession: ValidateUser.validateCityEdit,
-        validateTelephone1: ValidateUser.validateTelephoneEdit,
+        profession: animal.tutor.profession,
+        telephone1: animal.tutor.telephone1,
+        telephone2: animal.tutor.telephone2,
         jsonBloc: bloc,
       ),
       TabPage5(
-        validateName: ValidateUser.validateCityEdit,
-        validateMicrochip: ValidateTutor.validateRgEdit,
-        validateBreed: ValidateUser.validateCityEdit,
+        date : animal.birthDate,
+        name: animal.name,
+        microchip : animal.microchipNumber,
+        breed: animal.breed,
         jsonBloc: bloc,
       ),
       TabPage6(
-        validateCoatColor: ValidateUser.validateCityEdit,
-        validateSize: ValidateAnimals.validateSizeCmEdit,
-        validateSpecies: ValidateUser.validateCityEdit,
+        date : animal.dateMicrochip,
+        coatColor: animal.coatColor,
+        size: animal.sizeCm,
+        species: animal.species,
         jsonBloc: bloc,
       ),
       TabPage7(
-        validateCrmv: ValidateVet.validateCRMV2,
+        comments: animal.comments,
+        vet: animal.vet.crmv,
         jsonBloc: bloc,
       ),
       TabPage8(
@@ -85,13 +88,9 @@ class _EditUser extends State<EditAnimals> {
     ];
   }
 
-  Future display() async{
-    var list2 = await db.getAllMedicationsByIdAnimal(id);
-    for(AnimalMedications value in list2){
-      medications.add(value.idMedication);
-      dates[value.idMedication] = DateTime.parse(value.dateMedication);
-    }
-    list =  await db.getAllMedications();
+  void getTutor(tutor){
+    animal.tutor = tutor;
+    setState(() {});
   }
 
   @override
@@ -101,8 +100,11 @@ class _EditUser extends State<EditAnimals> {
 
   @override
   Widget build(BuildContext context) {
-    if(id == null)id = ModalRoute.of(context).settings.arguments;
-    display();
+    if(animal == null)animal = ModalRoute.of(context).settings.arguments;
+    id = animal.id;
+    list = animal.list;
+    medications = animal.medications;
+    dates = animal.dates;
     return MyScaffoldTabs(
       body: StreamBuilder<Object>(
           stream: bloc.getJSON,

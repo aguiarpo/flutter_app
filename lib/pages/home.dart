@@ -1,13 +1,15 @@
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/show_message_snackbar.dart';
-import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/database/repository/incidents_repository.dart';
+import 'package:flutter_app/database/repository/medications_repository.dart';
+import 'package:flutter_app/models/animal.dart';
 import 'package:flutter_app/pages/animals/page_view_animals.dart';
 import 'package:flutter_app/pages/incidents/page_view_incidents.dart';
 import 'package:flutter_app/pages/medications/page_view_medications.dart';
-import 'package:flutter_app/pages/page_view_persons.dart';
 
 import 'package:flutter_app/icons/surca_icons.dart';
+import 'package:flutter_app/pages/tutor/page_view_tutors.dart';
 import 'package:flutter_app/user_login.dart';
 
 import '../blocs/page_tab_bloc.dart';
@@ -26,32 +28,25 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
   TabController _tabController;
   var bloc = NavigationDrawerBloc();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  DatabaseConnect db = DatabaseConnect();
 
   List<Widget> _kTabPages(){
     switch(LoginDatabase.levelsOfAccess){
       case "ADMIN":
         return [
           PageViewListAnimals(),
-          PageViewListPersons(
-            parentAction: _updateNavigationWithChild,
-          ),
+          PageViewListTutors(),
           PageViewListMedications(),
           PageViewListIncidents()
         ];
       case "USUARIO":
         return [
           PageViewListAnimals(),
-          PageViewListPersons(
-            parentAction: _updateNavigationWithChild,
-          ),
+          PageViewListTutors(),
         ];
       case "VETERINARIO":
         return [
           PageViewListAnimals(),
-          PageViewListPersons(
-            parentAction: _updateNavigationWithChild,
-          ),
+          PageViewListTutors()
         ];
     }
 
@@ -79,11 +74,6 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
     }
   }
 
-  _updateNavigationWithChild(int navigation) {
-    bloc.updateNavigationPagePersons(navigation);
-    setState(() {});
-  }
-
   Future _getPage(navigator) async{
     var response;
     response = await navigator;
@@ -96,14 +86,10 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
         await _getPage(Navigator.pushNamed(context, '/registerMedications'));
         break;
       case 0:
-        Navigator.pushNamed(context, '/registerAnimals');
-        break;
-      case 1:
-        switch(bloc.getCurrentNavigationPagePersons){
-          case 0:
-            await _getPage(Navigator.pushNamed(context, '/registerUser'));
-            break;
-        }
+        Animal animal = Animal();
+        animal.tutor.incidents = await IncidentsRepository.getAllIncidents();
+        animal.list = await MedicationsRepository.getAllMedications();
+        await _getPage(Navigator.pushNamed(context, '/registerAnimals', arguments: animal));
         break;
       case 3:
         await _getPage(Navigator.pushNamed(context, '/registerIncidents'));
@@ -113,9 +99,7 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
 
   void selectTabBar(index) async{
     bloc.updateNavigation(index);
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -126,6 +110,9 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
       initialIndex: 0,
       vsync: this,
     );
+    _tabController.addListener(() {
+      _scaffoldKey.currentState.hideCurrentSnackBar();
+    });
     super.initState();
   }
 
@@ -142,7 +129,7 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
       floatingActionButton: Visibility(
         visible: LoginDatabase.levelsOfAccess == "USUARIO" ? false : true,
         child: AnimatedOpacity(
-          opacity: bloc.getCurrentNavigation == 1 ? bloc.getCurrentNavigationPagePersons == 1 ? 0 : 1 : 1,
+          opacity: bloc.getCurrentNavigation == 1 ? 0 : 1,
           child: DraggableFab(
             child: FloatingActionButton(
               onPressed: selectPage,
@@ -176,7 +163,6 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
               unselectedLabelColor: ColorsUsed.secundaryColor,
               tabs: _kTabs(),
               onTap: (index){
-                Scaffold.of(context).hideCurrentSnackBar();
                 selectTabBar(index);
               },
               controller: _tabController,
@@ -188,10 +174,11 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
         stream: bloc.getNavigation,
         initialData: bloc.navigationProvider.currentNavigation,
         builder: (context, snapshot) {
-          return TabBarView(
-            children: _kTabPages(),
-            physics: NeverScrollableScrollPhysics(),
-            controller: _tabController,
+          return GestureDetector(
+            child: TabBarView(
+              children: _kTabPages(),
+              controller: _tabController,
+            ),
           );
         }
       ),

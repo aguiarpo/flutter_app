@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_list.dart';
 import 'package:flutter_app/components/my_list_ui.dart';
-import 'package:flutter_app/database/connect.dart';
-import 'package:flutter_app/models/animal.dart';
+import 'package:flutter_app/database/repository/animal_repository.dart';
 import 'package:flutter_app/pages/animals/components/bottom_sheet_animals.dart';
 import 'package:flutter_app/user_login.dart';
 
@@ -14,7 +13,6 @@ class PageViewListAnimals extends StatefulWidget {
 }
 
 class _PageViewListAnimals extends State<PageViewListAnimals> with AutomaticKeepAliveClientMixin<PageViewListAnimals> {
-  DatabaseConnect db = DatabaseConnect();
   String suggestion;
   String valueSelect;
 
@@ -22,12 +20,13 @@ class _PageViewListAnimals extends State<PageViewListAnimals> with AutomaticKeep
 
   void removeAnimal(animal) async{
     animal.removed = 1;
-    int erro = await db.updateAnimal(animal);
+    await AnimalRepository.updateAnimal(animal);
   }
 
   void saveAnimal(animal) async{
     animal.removed = 0;
-    await db.updateAnimal(animal);
+    animal.edited = 1;
+    await AnimalRepository.updateAnimal(animal);
   }
 
   getSuggestion(String suggestion){
@@ -47,6 +46,7 @@ class _PageViewListAnimals extends State<PageViewListAnimals> with AutomaticKeep
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return MyListUI(
       selectAction: getSelect,

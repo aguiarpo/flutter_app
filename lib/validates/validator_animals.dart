@@ -13,14 +13,14 @@ abstract class ValidateAnimals{
     return null;
   }
   static String validateSizeCm(String value) {
-    String empty = ValidateIsEmpty.isEmpty(value);
-    if (empty != null) return empty;
-    value = value.trim();
-    RegExp regExp = RegExp(
-        r"^([A-Za-z]{,2})$");
-    if (!regExp.hasMatch(value)) {
-      return 'Caracteres inválidos: Exemplo PP, P, MM, M, EG';
-    }
+//    String empty = ValidateIsEmpty.isEmpty(value);
+//    if (empty != null) return empty;
+//    value = value.trim();
+//    RegExp regExp = RegExp(
+//        r"^([A-Za-z]{,2})$");
+//    if (!regExp.hasMatch(value)) {
+//      return 'Caracteres inválidos: Exemplo PP, P, MM, M, EG';
+//    }
     return null;
   }
 

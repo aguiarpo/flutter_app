@@ -5,7 +5,6 @@ import 'animal.dart';
 class AnimalMedications {
   AnimalMedications();
 
-  int id;
   int idMedication;
   int idAnimal;
   String dateMedication;
@@ -18,18 +17,11 @@ class AnimalMedications {
       "idMedicationsColumn": idMedication,
       "dateMedicationColumn" : dateMedication,
     };
-    if (id != null) {
-      map["idColumn"] = id;
-    }
     return map;
   }
 
-  setValues(Map map){
-    id = map['code'];
-  }
 
   AnimalMedications.fromMap(Map map) {
-    id = map["idColumn"];
     idAnimal = map["idAnimalColumn"];
     idMedication = map['idMedicationsColumn'];
     dateMedication = map['dateMedicationColumn'];

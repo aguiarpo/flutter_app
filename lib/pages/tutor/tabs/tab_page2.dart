@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/colors.dart';
 import 'package:flutter_app/components/dropdown_button.dart';
 import 'package:flutter_app/components/my_text_field.dart';
+import 'package:flutter_app/validates/validator_tutor.dart';
+import 'package:flutter_app/validates/validator_user_login.dart';
 
 class TabPage2 extends StatefulWidget {
   final jsonBloc;
-  final validateCep;
-  final validateNeighborhood;
-  final validateCity;
+  final neighborhood;
+  final state;
+  final city;
+  final cep;
 
-  const TabPage2({Key key, this.jsonBloc, this.validateCep, this.validateNeighborhood, this.validateCity}) : super(key: key);
+  const TabPage2({Key key, this.jsonBloc, this.neighborhood, this.state, this.city, this.cep}) : super(key: key);
 
   @override
   _TabPage2State createState() => _TabPage2State();
@@ -17,15 +21,20 @@ class TabPage2 extends StatefulWidget {
 class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<TabPage2>{
 
   var jsonBloc;
-  var myControllerTelephone1;
-  var myControllerTelephone2;
+  TextEditingController controllerCep = TextEditingController();
+  TextEditingController controllerCity = TextEditingController();
+  TextEditingController controllerNeighborhood = TextEditingController();
+  String state;
 
   @override
   void initState() {
     super.initState();
-    myControllerTelephone1 = TextEditingController();
-    myControllerTelephone2 = TextEditingController();
+    controllerCity.text = widget.city;
+    controllerCep.text = widget.cep;
+    controllerNeighborhood.text = widget.neighborhood;
+    state = widget.state;
     jsonBloc = widget.jsonBloc;
+    if(state != null)setSelectValue(state);
   }
 
   void onSaved(values)  {
@@ -33,12 +42,7 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
   }
 
   void setSelectValue(String value){
-    if(jsonBloc.getSelectValidator) jsonBloc.updateSelect(false);
     jsonBloc.addValue('state', value);
-    if(value == "SC" && myControllerTelephone1.text == "" && myControllerTelephone2.text == ""){
-      myControllerTelephone1.text = '(47) ';
-      myControllerTelephone2.text = '(47) ';
-    }
   }
 
   @override
@@ -54,6 +58,7 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
                   padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
                   child: Select(
                     title: "Estado",
+                    value: state,
                     parentAction: setSelectValue,
                     list: [ "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
                       "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ",
@@ -68,21 +73,24 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
                 ),
               ),
               MyTextField(
-                validate: widget.validateCep,
+                controller: controllerCep,
+                validate: ValidateTutor.validateCep,
                 icon: Icons.location_city,
                 hint: "CEP",
                 parentAction: onSaved,
                 title: 'cep'
               ),
               MyTextField(
-                validate: widget.validateNeighborhood,
+                controller: controllerNeighborhood,
+                validate: ValidateUserLogin.validateCity,
                 icon: Icons.location_city,
                 hint: "Bairro",
                 parentAction: onSaved,
                 title: 'neighborhood'
               ),
               MyTextField(
-                  validate: widget.validateCity,
+                controller: controllerCity,
+                  validate: ValidateUserLogin.validateCity,
                   icon: Icons.location_city,
                   hint: "Cidade",
                   parentAction: onSaved,

@@ -1,11 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/show_message_snackbar.dart';
-import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/database/repository/animal_medications_repository.dart';
+import 'package:flutter_app/database/repository/animal_repository.dart';
+import 'package:flutter_app/database/repository/incidents_repository.dart';
+import 'package:flutter_app/database/repository/medications_repository.dart';
+import 'package:flutter_app/database/repository/tutor_incidents_repository.dart';
+import 'package:flutter_app/database/repository/tutor_repository.dart';
 import 'package:flutter_app/models/animal_medications.dart';
-import 'package:flutter_app/models/medications.dart';
 import 'package:flutter_app/models/tutors_incidents.dart';
-import 'package:flutter_app/models/vet.dart';
 import 'package:flutter_app/user_login.dart';
+import 'package:intl/intl.dart';
 
 import '../colors.dart';
 import 'my_bootom_sheet.dart';
@@ -37,9 +43,8 @@ class _MyListState extends State<MyList> {
   var lastSuggestion;
   var lastValueSelect;
   var lastRemoved;
-  dynamic list;
+  List list;
   bool refresh = false;
-  DatabaseConnect db = DatabaseConnect();
 
   @override
   void initState() {
@@ -57,48 +62,38 @@ class _MyListState extends State<MyList> {
     switch(widget.indexName){
       case 1:
         if(widget.selectValue == "Removidos"){
-          if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllMedicationsRemoved();
-          else list = await db.getAllMedicationsWhere(widget.selectValue, widget.suggestion);
+          if(widget.suggestion == null || widget.suggestion == "") list = await MedicationsRepository.getAllMedicationsRemoved();
+          else list = await MedicationsRepository.getAllMedicationsWhere(widget.selectValue, widget.suggestion);
         }else{
-          if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllMedications();
-          else list = await db.getAllMedicationsWhere(widget.selectValue, widget.suggestion);
+          if(widget.suggestion == null || widget.suggestion == "") list = await MedicationsRepository.getAllMedications();
+          else list = await MedicationsRepository.getAllMedicationsWhere(widget.selectValue, widget.suggestion);
         }
         break;
       case 2:
         if(widget.selectValue == "Removidos"){
-          if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllAnimalsRemoved();
-          else list = await db.getAllAnimalsWhere(widget.selectValue, widget.suggestion);
+          if(widget.suggestion == null || widget.suggestion == "") list = await AnimalRepository.getAllAnimalsRemoved();
+          else list = await AnimalRepository.getAllAnimalsWhere(widget.selectValue, widget.suggestion);
         }else{
-          if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllAnimals();
-          else list = await db.getAllAnimalsWhere(widget.selectValue, widget.suggestion);
+          if(widget.suggestion == null || widget.suggestion == "") list = await AnimalRepository.getAllAnimals();
+          else list = await AnimalRepository.getAllAnimalsWhere(widget.selectValue, widget.suggestion);
         }
         break;
       case 3:
-        if(widget.indexName2 == 0){
           if(widget.selectValue == "Removidos"){
-            if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllUserRemoved();
-            else list = await db.getAllUsersWhere(widget.selectValue, widget.suggestion);
+            if(widget.suggestion == null || widget.suggestion == "") list = await TutorRepository.getAllTutorsRemoved();
+            else list = await TutorRepository.getAllTutorWhere(widget.selectValue, widget.suggestion);
           }else{
-            if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllUser();
-            else list = await db.getAllUsersWhere(widget.selectValue, widget.suggestion);
+            if(widget.suggestion == null || widget.suggestion == "") list = await TutorRepository.getAllTutors();
+            else list = await TutorRepository.getAllTutorWhere(widget.selectValue, widget.suggestion);
           }
-        } else {
-          if(widget.selectValue == "Removidos"){
-            if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllTutorsRemoved();
-            else list = await db.getAllTutorWhere(widget.selectValue, widget.suggestion);
-          }else{
-            if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllTutors();
-            else list = await db.getAllTutorWhere(widget.selectValue, widget.suggestion);
-          }
-        }
         break;
       case 4:
         if(widget.selectValue == "Removidos"){
-          if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllIncidentsRemoved();
-          else list = await db.getAllIncidentsWhere(widget.selectValue, widget.suggestion);
+          if(widget.suggestion == null || widget.suggestion == "") list = await IncidentsRepository.getAllIncidentsRemoved();
+          else list = await IncidentsRepository.getAllIncidentsWhere(widget.selectValue, widget.suggestion);
         }else{
-          if(widget.suggestion == null || widget.suggestion == "") list = await db.getAllIncidents();
-          else list = await db.getAllIncidentsWhere(widget.selectValue, widget.suggestion);
+          if(widget.suggestion == null || widget.suggestion == "") list = await IncidentsRepository.getAllIncidents();
+          else list = await IncidentsRepository.getAllIncidentsWhere(widget.selectValue, widget.suggestion);
         }
         break;
     }
@@ -159,22 +154,22 @@ class _MyListState extends State<MyList> {
     return [];
   }
 
-  void dimissed(dynamicModel){
+  void dimissed(dynamicModel, index){
     Scaffold.of(context).hideCurrentSnackBar();
     lastRemoved = dynamicModel;
     if(dynamicModel.removed == 0) widget.remove(dynamicModel);
     else widget.add(dynamicModel);
+    list.removeAt(index);
     Scaffold.of(context).showSnackBar(
       SnackBar(
         content: Text('${dynamicModel.name} removido.'),
         action: SnackBarAction(
           label: 'UNDO',
           onPressed: () {
-            if(dynamicModel.removed == 0) widget.remove(dynamicModel);
+            if(dynamicModel.removed == 0)  widget.remove(dynamicModel);
             else widget.add(dynamicModel);
-            setState(() {
-
-            });
+            refresh = true;
+            setState(() {});
           },
         ),
       ),
@@ -182,40 +177,33 @@ class _MyListState extends State<MyList> {
   }
 
   void getById(id)async{
-    DatabaseConnect db = DatabaseConnect();
-    var dynamicModal;
-    switch(widget.indexName){
-      case 1:
-        dynamicModal = await db.getMedications(id);
-        break;
-      case 2:
-        dynamicModal = await db.getAnimal(id);
-        dynamicModal.medicationsWidget = await createMedicationsWidget(id);
-        break;
-      case 4:
-        dynamicModal = await db.getIncidents(id);
-        break;
-      case 3:
-        if(widget.indexName2 == 0){
-          dynamicModal = await db.getUser(id);
-          Vet vet = Vet();
-          if(dynamicModal != null && dynamicModal.levelsOfAccess == "VETERINARIO"){
-            DatabaseConnect db = DatabaseConnect();
-            vet = await db.getVet(dynamicModal.id);
-            dynamicModal.setCrmv(vet.crmv);
-          }
-        }
-        else{
-          dynamicModal = await db.getTutor(id);
-          if(dynamicModal != null) dynamicModal.nameIncidents =  await createIncidentsList(id);
-        }
-        break;
-    }
+    var dynamicModal = await dynamicModalGet(id);
     if(dynamicModal != null)ShowModalOptions.showOption(context, id, widget.showBottomSheet(dynamicModal));
   }
 
+  Future dynamicModalGet(id)async{
+    var dynamicModal;
+    switch(widget.indexName){
+      case 1:
+        dynamicModal = await MedicationsRepository.getMedications(id);
+        break;
+      case 2:
+        dynamicModal = await AnimalRepository.getAnimal(id);
+        dynamicModal.medicationsWidget = await createMedicationsWidget(id);
+        break;
+      case 4:
+        dynamicModal = await IncidentsRepository.getIncidents(id);
+        break;
+      case 3:
+        dynamicModal = await TutorRepository.getTutor(id);
+        if(dynamicModal != null) dynamicModal.nameIncidents =  await createIncidentsList(id);
+        break;
+    }
+    return dynamicModal;
+  }
+
   Future<List> createMedicationsWidget(id) async {
-    List<AnimalMedications> list = await db.getAllMedicationsByIdAnimal(id);
+    List<AnimalMedications> list = await AnimalMedicationRepository.getAllMedicationsByIdAnimal(id);
     List<Widget> listWigdet = [];
     listWigdet.add(
       Padding(
@@ -227,7 +215,7 @@ class _MyListState extends State<MyList> {
       listWigdet.add(
           MyBottomSheet(
             title: "Nome: " + value.medications.name,
-            subtitle: "Data: " + value.dateMedication,
+            subtitle: "Data: " + DateFormat("dd-MM-yyyy").format( DateTime.parse(value.dateMedication)).toString(),
             color: Colors.white,
           )
       );
@@ -237,13 +225,33 @@ class _MyListState extends State<MyList> {
 
 
   Future<List> createIncidentsList(int idTutor) async {
-    DatabaseConnect db = DatabaseConnect();
     List<Widget> listText = [];
-    List<TutorsIncidents> list = await db.getAllIncidentsByIdTutor(idTutor);
+    List<TutorsIncidents> list = await TutorIncidentRepository.getAllIncidentsByIdTutor(idTutor);
     for(TutorsIncidents value in list){
       listText.add(Text(value.incident.name));
     }
     return listText;
+  }
+
+  Future editClick(id)async{
+      var modal = await dynamicModalGet(id);
+      if(widget.indexName == 3 && modal != null){
+        modal.incidents = await IncidentsRepository.getAllIncidents();
+        List incidents = await TutorIncidentRepository.getAllIncidentsByIdTutor(id);
+        for(TutorsIncidents value in incidents){
+          modal.incidentsWithTutors.add(value.idIncidents);
+        }
+      }
+      if(widget.indexName == 2 && modal != null){
+        modal.tutor = await TutorRepository.getTutorByIdAnimal(modal.id);
+        var list2 = await AnimalMedicationRepository.getAllMedicationsByIdAnimal(id);
+        for(AnimalMedications value in list2){
+          modal.medications.add(value.idMedication);
+          modal.dates[value.idMedication] = DateTime.parse(value.dateMedication);
+        }
+        modal.list =  await MedicationsRepository.getAllMedications();
+      }
+      if(modal != null)getPage(Navigator.pushNamed(context, widget.navigation, arguments: modal));
   }
 
   Widget listBuilderADMIN(itens){
@@ -256,7 +264,7 @@ class _MyListState extends State<MyList> {
           return Dismissible(
             key: Key(UniqueKey().toString()),
             onDismissed: (DismissDirection dir){
-              dimissed(itens[index]);
+              dimissed(itens[index], index);
             },
             background: Container(
               color: Colors.red,
@@ -301,9 +309,7 @@ class _MyListState extends State<MyList> {
                         visible: LoginDatabase.levelsOfAccess == "USUARIO" ? false : true,
                         child: MyButton(
                           text: "Editar",
-                          onPress: (){
-                            getPage(Navigator.pushNamed(context, widget.navigation, arguments: itens[index].id));
-                          },
+                          onPress: ()async => editClick(itens[index].id),
                         ),
                       )
                     ],
@@ -355,9 +361,7 @@ class _MyListState extends State<MyList> {
                         visible: LoginDatabase.levelsOfAccess == "USUARIO" ? false : true,
                         child: MyButton(
                           text: "Editar",
-                          onPress: (){
-                            getPage(Navigator.pushNamed(context, widget.navigation, arguments: itens[index].id));
-                          },
+                          onPress: ()async => editClick(itens[index].id),
                         ),
                       )
                     ],

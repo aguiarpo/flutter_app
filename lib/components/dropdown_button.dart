@@ -48,18 +48,29 @@ class _Select extends State<Select> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      padding: _padding,
-      decoration: _border,
-      child: DropdownButton(
-        style: TextStyle(color: Colors.grey),
-        iconEnabledColor: Colors.grey,
-        underline: SizedBox(),
-        hint: Text(_title),
-        value: _value,
-        items: _dropDownMenuItems,
-        onChanged: changedDropDownItem,
-      ),
+    return Row(
+      children: <Widget>[
+        Visibility(
+          visible: _title == "" ? false : true,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Text("$_title :", style: TextStyle(color: Colors.grey),),
+          ),
+        ),
+        new Container(
+          padding: _padding,
+          decoration: _border,
+          child: DropdownButton(
+            style: TextStyle(color: Colors.grey),
+            iconEnabledColor: Colors.grey,
+            underline: SizedBox(),
+            hint: Text(_title),
+            value: _value,
+            items: _dropDownMenuItems,
+            onChanged: changedDropDownItem,
+          ),
+        ),
+      ],
     );
   }
 

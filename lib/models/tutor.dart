@@ -19,11 +19,14 @@ class Tutor{
   String telephone1;
   String telephone2;
   String createdBy;
+  String lastModifiedBy;
   String createdDate;
   int removed;
   int registered;
   int edited;
   List<Widget> nameIncidents = [];
+  List incidents;
+  List incidentsWithTutors = [];
 
   Tutor();
 
@@ -38,6 +41,7 @@ class Tutor{
     state = map['stateColumn'];
     street = map['streetColumn'];
     neighborhood = map['neighborhoodColumn'];
+    lastModifiedBy = map['lastModifiedByColumn'];
     number = map['numberColumn'];
     complements = map['complementColumn'];
     profession = map['professionColumn'];
@@ -56,6 +60,7 @@ class Tutor{
     cpf = map['cpf'];
     rg = map['rg'];
     motherName = map['motherName'];
+    lastModifiedBy = map['lastModifiedBy'];
     street = map['street'];
     neighborhood = map['neighborhood'];
     number = map['number'];
@@ -68,7 +73,7 @@ class Tutor{
     telephone2 = map['telephone2'];
     createdBy = map['createdBy'];
     createdDate = map['createdDate'];
-    removed = 0;
+    removed = map['status'] == "INVISIBLE" ? 1 : 0;
     registered = 0;
     edited = 0;
   }
@@ -100,6 +105,7 @@ class Tutor{
       'nameColumn' : name,
       'cpfColumn' : cpf,
       'rgColumn' : rg,
+      'lastModifiedByColumn' : lastModifiedBy,
       'motherNameColumn' : motherName,
       'streetColumn' : street,
       'cepColumn' : cep,

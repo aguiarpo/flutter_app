@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/my_list.dart';
 import 'package:flutter_app/components/my_list_ui.dart';
-import 'package:flutter_app/database/connect.dart';
-import 'package:flutter_app/models/medications.dart';
-
+import 'package:flutter_app/database/repository/medications_repository.dart';
 import 'components/bottom_sheet_medications.dart';
 
 class PageViewListMedications extends StatefulWidget {
@@ -16,18 +14,17 @@ class PageViewListMedications extends StatefulWidget {
 }
 
 class _PageViewListMedications extends State<PageViewListMedications> with AutomaticKeepAliveClientMixin<PageViewListMedications>{
-  DatabaseConnect db = DatabaseConnect();
   String suggestion;
   String valueSelect;
 
   void removeMedications(medications) async{
     medications.removed = 1;
-    int erro = await db.updateMedication(medications);
+    await MedicationsRepository.updateMedication(medications);
   }
 
   void saveMedications(medication) async{
     medication.removed = 0;
-    await db.updateMedication(medication);
+    await MedicationsRepository.updateMedication(medication);
   }
 
   getSuggestion(String suggestion){

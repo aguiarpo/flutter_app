@@ -14,8 +14,6 @@ class JsonBloc {
 
   Map get getValueAnimal => jsonProvider.animal;
 
-  bool get getSelectValidator => jsonProvider.selectValidator;
-
   void addValue(index, value) {
     jsonProvider.addValue(index, value);
     jsonController.sink.add(jsonProvider
@@ -28,12 +26,6 @@ class JsonBloc {
         .animal);
   }
 
-  void updateSelect(value) {
-    jsonProvider.updateSelect(value);
-    jsonController.sink.add(jsonProvider
-        .values);
-  }
-
   void dispose() {
     jsonController
         .close();
@@ -43,7 +35,6 @@ class JsonBloc {
 class JsonProvider {
   Map values = {};
   Map animal = {};
-  bool selectValidator = true;
 
   void addValue(index, value){
     values[index] = value;
@@ -51,9 +42,5 @@ class JsonProvider {
 
   void addValueAnimal(index,value){
     animal[index] = value;
-  }
-
-  void updateSelect(value){
-    selectValidator = value;
   }
 }

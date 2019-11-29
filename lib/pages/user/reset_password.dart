@@ -9,7 +9,9 @@ import 'package:flutter_app/components/show_message_snackbar.dart';
 import 'package:flutter_app/pages/user/tabs/tabs_reset_password/tab_page3.dart';
 import 'package:flutter_app/pages/user/tabs/tabs_reset_password/tab_page2.dart';
 import 'package:flutter_app/pages/user/tabs/tabs_reset_password/tab_page1.dart';
-import 'package:flutter_app/services/login_request.dart';
+import 'package:flutter_app/services/client.dart';
+import 'package:flutter_app/services/user_request.dart';
+import 'package:http/http.dart' as http;
 
 class ResetPassword extends StatefulWidget {
   const ResetPassword({Key key}) : super(key: key);
@@ -65,7 +67,7 @@ class _ResetPasswordState extends State<ResetPassword> with SingleTickerProvider
 
 
   void request(values) async{
-    LoginRequest loginRequest = LoginRequest();
+    UserRequest loginRequest = UserRequest();
     await loginRequest.addToken(json.encode(values));
     MySnackBar.message('Email Enviado', scaffoldKey: _scaffoldKey);
   }

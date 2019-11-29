@@ -8,14 +8,14 @@ class Animal{
   String microchipNumber;
   String species;
   String birthDate;
-  int animalCastrated;
   String coatColor;
   String breed;
-  int sizeCm;
+  String sizeCm;
   String dateMicrochip;
   String comments;
   String createdBy;
   String createdDate;
+  String lastModifiedBy;
   int removed;
   int registered;
   int edited;
@@ -23,6 +23,9 @@ class Animal{
   int idTutor;
   Tutor tutor = Tutor();
   Vet vet = Vet();
+  List medications = [];
+  List list;
+  Map dates = {};
   List<Widget> medicationsWidget;
 
   Animal();
@@ -33,11 +36,11 @@ class Animal{
     microchipNumber = map['microchipNumberColumn'];
     species = map['speciesColumn'];
     birthDate = map['birthDateColumn'];
-    animalCastrated = map['animalCastratedColumn'];
     coatColor = map['coatColorColumn'];
     breed = map['breedColumn'];
     sizeCm = map['sizeCmColumn'];
     dateMicrochip = map['dateMicrochipColumn'];
+    lastModifiedBy = map['lastModifiedByColumn'];
     comments = map['commentsColumn'];
     createdBy = map['createdByColumn'];
     createdDate = map['createdDateColumn'];
@@ -52,24 +55,40 @@ class Animal{
   }
 
   setValues(Map map){
+    switch(map['size']){
+      case "MINI":
+        sizeCm = "Mini";
+        break;
+      case "PEQUENO":
+        sizeCm = "Pequeno";
+        break;
+      case "MEDIO":
+        sizeCm = "Médio";
+        break;
+      case "GRANDE":
+        sizeCm = "Grande";
+        break;
+      case "GIGANTE":
+        sizeCm = "Gigante";
+        break;
+    }
     id = map['code'];
     name = map['name'];
     microchipNumber = map['microchipNumber'];
     species = map['species'];
     birthDate = map['birthDate'];
-    animalCastrated = map['animalCastrated'] ? 1 : 0;
     coatColor = map['coatColor'];
     breed = map['breed'];
-    sizeCm = map['sizeCm'];
     dateMicrochip = map['dateMicrochip'];
     comments = map['comments'];
     createdBy = map['createdBy'];
+    lastModifiedBy = map['lastModifiedBy'];
     createdDate = map['createdDate'];
     idVet = map['vetMicrochip']['code'];
     idTutor = map["tutor"]["code"];
-    removed = 0;
     registered = 0;
     edited = 0;
+    removed = map['status'] == "INVISIBLE" ? 1 : 0;
   }
 
   setValuesWithoutId(Map map){
@@ -80,7 +99,7 @@ class Animal{
     birthDate = map['birthDate'];
     coatColor = map['coatColor'];
     breed = map['breed'];
-    sizeCm = map['sizeCm'];
+    sizeCm = map['size'];
     dateMicrochip = map['dateMicrochip'];
     comments = map['comments'];
     createdBy = map['createdBy'];
@@ -96,7 +115,7 @@ class Animal{
       'microchipNumberColumn' : microchipNumber,
       'speciesColumn' : species,
       'birthDateColumn' : birthDate,
-      'animalCastratedColumn' : animalCastrated,
+      'lastModifiedByColumn' : lastModifiedBy,
       'coatColorColumn' : coatColor,
       'breedColumn' : breed,
       'sizeCmColumn' : sizeCm,

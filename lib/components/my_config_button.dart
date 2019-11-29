@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/database/repository/user_login_repository.dart';
 import 'package:flutter_app/pages/user/login.dart';
 
 import '../colors.dart';
@@ -10,7 +10,6 @@ class MyConfigButton extends StatelessWidget {
   final String text;
   final String navigation;
   final scaffoldKey;
-  DatabaseConnect db = DatabaseConnect();
   BuildContext _context;
 
   MyConfigButton({Key key, this.text, this.navigation, this.scaffoldKey}) : super(key: key);
@@ -22,15 +21,7 @@ class MyConfigButton extends StatelessWidget {
 
   void onTap()async{
     if(text == "Sair"){
-      await db.truncateIncidentsWithTutor();
-      await db.truncateMedications();
-      await db.truncateIncidents();
-      await db.truncateUsers();
-      await db.truncateTutor();
-      await db.truncateAnimal();
-      await db.truncateVets();
-      await db.truncateAnimalMedications();
-      await db.truncateUserLogin();
+      await UserLoginRepository.truncateContacts();
       Navigator.pushAndRemoveUntil(
           _context,
           MaterialPageRoute(

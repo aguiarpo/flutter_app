@@ -26,6 +26,16 @@ abstract class ValidateUserLogin{
     return null;
   }
 
+  static String validateComments(String value) {
+    value = value.trim();
+    RegExp regExp = RegExp(
+        r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$");
+    if (!regExp.hasMatch(value)) {
+      return 'Caracteres inválidos';
+    }
+    return null;
+  }
+
   static String validateEmail(String value){
     String empty = ValidateIsEmpty.isEmpty(value);
     if (empty != null) return empty;
@@ -70,6 +80,18 @@ abstract class ValidateUserLogin{
     String empty = ValidateIsEmpty.isEmpty(value);
     if (empty != null) return empty;
     value = value.trim();
+    Pattern pattern =
+        r'\(\d{2}\)\s\d{4,5}-\d{4}';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value)) {
+      return 'Formato do Telefone (47) 9999-0000\nou (47) 99999-0000';
+    }
+    return null;
+  }
+
+  static String validateTelephone2(String value){
+    value = value.trim();
+    if(value.length == 0) return null;
     Pattern pattern =
         r'\(\d{2}\)\s\d{4,5}-\d{4}';
     RegExp regex = new RegExp(pattern);

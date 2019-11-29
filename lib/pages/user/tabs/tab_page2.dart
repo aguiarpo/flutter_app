@@ -21,6 +21,7 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
   JsonBloc jsonBloc;
   var myControllerTelephone1;
   var myControllerTelephone2;
+  String controllerState;
 
   @override
   void initState() {
@@ -36,7 +37,12 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
       myControllerTelephone2 = widget.controllerTelephone2;
     }
     jsonBloc = widget.jsonBloc;
-    if(widget.controllerState != null)setSelectValue(widget.controllerState);
+    if(widget.controllerState != null){
+      controllerState = widget.controllerState;
+    }else{
+      controllerState = "SC";
+    }
+    setSelectValue(controllerState);
   }
 
   void onSaved(values){
@@ -44,7 +50,6 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
   }
 
   void setSelectValue(String value){
-    if(jsonBloc.getSelectValidator) jsonBloc.updateSelect(false);
     jsonBloc.addValue('state', value);
     if(value == "SC" && myControllerTelephone1.text == "" && myControllerTelephone2.text == ""){
       myControllerTelephone1.text = '(47) ';
@@ -64,7 +69,7 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                   child: Select(
-                    value: widget.controllerState,
+                    value: controllerState,
                     title: "Estado",
                     parentAction: setSelectValue,
                     list: [ "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
@@ -77,14 +82,6 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                ),
-              ),
-              Visibility(
-                visible: jsonBloc.getSelectValidator,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(bottom: 20, left: 30, top: 5),
-                  child: Text("Escolha um estado", style: TextStyle(color: Colors.redAccent, fontSize: 12),),
                 ),
               ),
               MyTextField(
@@ -107,7 +104,7 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
               MyTextField(
                 type: TextInputType.number,
                 controller: myControllerTelephone2,
-                validate: ValidateUserLogin.validateTelephone,
+                validate: ValidateUserLogin.validateTelephone2,
                 parentAction: onSaved,
                 title: "telephone2",
                 icon: Icons.phone,
