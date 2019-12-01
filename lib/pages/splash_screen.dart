@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/database/repository/user_login_repository.dart';
-import 'package:flutter_app/services/request_splash_screen.dart';
+import 'package:flutter_app/services/request/request_splash_screen.dart';
 
 class SplashScreen  extends StatefulWidget {
   @override

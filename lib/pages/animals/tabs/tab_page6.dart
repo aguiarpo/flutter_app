@@ -1,10 +1,10 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/dropdown_button.dart';
-import 'package:flutter_app/components/my_text_field.dart';
+import 'package:flutter_app/components/inputs/select.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
 import 'package:flutter_app/icons/surca_icons.dart';
+import 'package:flutter_app/validates/validate.dart';
 import 'package:flutter_app/validates/validator_dates.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
 import 'package:intl/intl.dart';
 
 class TabPage6 extends StatefulWidget {
@@ -36,11 +36,14 @@ class _TabPage6State extends State<TabPage6> with AutomaticKeepAliveClientMixin<
     jsonBloc = widget.jsonBloc;
     controllerCoatColor.text = widget.coatColor;
     controllerSpecies.text = widget.species;
-    controllerSize = widget.size;
+    if(widget.size != null)controllerSize = widget.size;
+    else controllerSize = "Médio";
     setSelectValue(controllerSize);
-    if(widget.date != null)controllerDate = DateTime.parse(widget.date);
-    Map values = {"title" : "dateMicrochip", "value" : ""};
-    onSaved(values);
+    if(widget.date != null){
+      controllerDate = DateTime.parse(widget.date);
+      Map values = {"title" : "dateMicrochip", "value" : ""};
+      onSaved(values);
+    }
   }
 
   void onSaved(values){
@@ -74,7 +77,9 @@ class _TabPage6State extends State<TabPage6> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerSpecies,
-                validate: ValidateUserLogin.validateCity,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                    'Caracteres inválidos'),
                 icon: Surca.animal,
                 hint: "Espécie",
                 parentAction: onSaved,
@@ -82,7 +87,9 @@ class _TabPage6State extends State<TabPage6> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerCoatColor,
-                validate: ValidateUserLogin.validateCity,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                    'Caracteres inválidos'),
                 icon: Icons.color_lens,
                 hint: "Cor da pelagem",
                 parentAction: onSaved,
@@ -91,7 +98,7 @@ class _TabPage6State extends State<TabPage6> with AutomaticKeepAliveClientMixin<
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
                 child: DateTimePickerFormField(
-                  validator: (d) => ValidateDates.validateDate2(d),
+                  validator: ValidateDates.validateDate2,
                   inputType: InputType.date,
                   format: DateFormat("yyyy-MM-dd"),
                   initialValue: controllerDate,

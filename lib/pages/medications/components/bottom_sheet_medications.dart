@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app/components/my_bootom_sheet.dart';
+import 'package:flutter_app/components/others/my_bootom_sheet.dart';
 import 'package:flutter_app/models/medications.dart';
 
 import '../../../user_login.dart';

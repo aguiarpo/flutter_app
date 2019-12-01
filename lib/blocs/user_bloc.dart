@@ -1,6 +1,6 @@
 import 'dart:async';
 
-class EmailBloc {
+class UserBloc {
   final emailController = StreamController();
   EmailProvider emailProvider = new EmailProvider();
 

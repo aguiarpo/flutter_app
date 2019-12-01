@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_text_field.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
+import 'package:flutter_app/components/inputs/textarea.dart';
 import 'package:flutter_app/icons/surca_icons.dart';
-import 'package:flutter_app/validates/validator_incidents.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
-
-import '../../../colors.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage1 extends StatefulWidget {
   var jsonBloc;
@@ -21,12 +19,10 @@ class _TabPage1State extends State<TabPage1> {
   var jsonBloc;
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerComments = TextEditingController();
-  FocusNode myFocusNode = new FocusNode();
 
   void onSaved(values)  {
     jsonBloc.addValue(values['title'], values['value']);
   }
-
 
   @override
   void initState() {
@@ -44,38 +40,20 @@ class _TabPage1State extends State<TabPage1> {
           children: <Widget>[
             MyTextField(
               controller: controllerName,
-              validate: (value) => ValidateIncidents.validateName(value),
+              validate: (value) => Validate.validateAll(value,
+                  r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                  'Caracteres inválidos'),
               parentAction: onSaved,
               title: 'name',
               icon: Surca.alert,
               hint: "Nome",
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-              child: TextFormField(
-                focusNode: myFocusNode,
-                validator: ValidateUserLogin.validateComments,
-                controller: controllerComments,
-                onSaved: (value){
-                  Map values = {"title" : "comments", "value" : value.trim()};
-                  onSaved(values);
-                },
-                maxLines: 5,
-                style: new TextStyle(color: Colors.grey),
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 1),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 1),
-                  ),
-                  labelText: "Observações",
-                    labelStyle: TextStyle(
-                        color: myFocusNode.hasFocus ? ColorsUsed.greenDarkColor : Colors.grey
-                    )
-                ),
-              ),
-            ),
+            TextArea(
+              onSaved: onSaved,
+              controllerComments: controllerComments,
+              labelText: "Observações",
+              title: "comments",
+            )
           ],
         )
     );

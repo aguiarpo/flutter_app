@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/colors.dart';
-import 'package:flutter_app/components/my_config_button.dart';
+import 'package:flutter_app/components/buttons/my_config_button.dart';
 
 class ConfigPage extends StatefulWidget {
 

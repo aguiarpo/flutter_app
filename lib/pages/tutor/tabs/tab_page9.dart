@@ -1,27 +1,24 @@
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_app/database/connect.dart';
 
-import '../../../colors.dart';
 
-class TabPage5 extends StatefulWidget {
+class TabPage9 extends StatefulWidget {
   final incidents;
   final jsonBloc;
   final incidentsWithTutor;
 
-  const TabPage5({Key key, this.incidents, this.jsonBloc, this.incidentsWithTutor}) : super(key: key);
+  const TabPage9({Key key, this.incidents, this.jsonBloc, this.incidentsWithTutor}) : super(key: key);
 
   @override
-  _TabPage5State createState() => _TabPage5State();
+  _TabPage9State createState() => _TabPage9State();
 }
 
-class _TabPage5State extends State<TabPage5> with AutomaticKeepAliveClientMixin<TabPage5>{
+class _TabPage9State extends State<TabPage9> with AutomaticKeepAliveClientMixin<TabPage9>{
   Map checkbox = {};
   var jsonBloc;
   var incidentsWithTutor;
   DatabaseConnect db = DatabaseConnect();
+  bool refresh;
 
   void addIndexBloc(){
     Map values = {"title" : "incidents", "value" : checkbox};
@@ -31,6 +28,7 @@ class _TabPage5State extends State<TabPage5> with AutomaticKeepAliveClientMixin<
   @override
   void initState() {
     super.initState();
+    refresh = false;
     incidentsWithTutor = widget.incidentsWithTutor;
     jsonBloc = widget.jsonBloc;
   }
@@ -75,9 +73,52 @@ class _TabPage5State extends State<TabPage5> with AutomaticKeepAliveClientMixin<
     );
   }
 
+  Future display()async{
+    if(refresh == false){
+      await Future.delayed(Duration(seconds: 1));
+      refresh = true;
+      return widget.incidents;
+    }else{
+      return widget.incidents;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return listBuilder(widget.incidents);
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text("Incientes do Tutor", style: TextStyle(fontSize: 15),),
+            ),
+          ),
+          FutureBuilder(
+          future: display(),
+            builder: (context, snapshot) {
+              if(refresh == false){
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting: return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                  default:
+                    if (snapshot.hasError)
+                      return new Text('Error: ${snapshot.error}');
+                    else
+                      return listBuilder(snapshot.data);
+                }
+              }else{
+                return listBuilder(snapshot.data);
+              }
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override

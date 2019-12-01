@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
 import 'package:flutter_app/icons/surca_icons.dart';
-import 'package:flutter_app/models/medications.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage1 extends StatelessWidget {
   var jsonBloc;
@@ -24,7 +22,9 @@ class TabPage1 extends StatelessWidget {
           children: <Widget>[
             MyTextField(
               controller: myControllerName,
-              validate: ValidateUserLogin.validateCity,
+              validate: (value) => Validate.validateAll(value,
+                  r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                  'Caracteres inválidos'),
               parentAction: onSaved,
               title: 'name',
               icon: Surca.vaccine,

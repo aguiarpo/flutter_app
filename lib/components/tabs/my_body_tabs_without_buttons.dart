@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
+import '../../colors.dart';
 import 'my_tab_page_selector.dart';
 
 class MyBodyTabsWithoutButtons extends StatefulWidget {

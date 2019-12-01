@@ -3,7 +3,8 @@ import 'package:flutter_app/services/url.dart';
 import 'package:flutter_app/user_login.dart';
 import 'package:http/http.dart' as http;
 
-import 'client.dart';
+import '../client.dart';
+
 
 class UserRequest extends UserAgentClient{
 

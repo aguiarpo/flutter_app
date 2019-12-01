@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_button.dart';
+import 'package:flutter_app/components/buttons/my_button.dart';
 
 class MyRaiseButton extends StatelessWidget {
   final tabController;

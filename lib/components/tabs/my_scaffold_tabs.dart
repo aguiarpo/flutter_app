@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
-
+import '../../colors.dart';
 
 class MyScaffoldTabs extends StatefulWidget {
   final Widget body;

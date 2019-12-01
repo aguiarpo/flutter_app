@@ -1,4 +1,4 @@
-import 'package:flutter_app/models/animal.dart';
+
 import 'package:flutter_app/models/tutor.dart';
 import 'package:sqflite/sqflite.dart';
 import '../columns_names.dart';

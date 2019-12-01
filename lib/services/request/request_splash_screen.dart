@@ -2,20 +2,18 @@ import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app/components/show_message_snackbar.dart';
+import 'package:flutter_app/components/others/show_message_snackbar.dart';
 import 'package:flutter_app/database/repository/all_repository.dart';
-import 'package:flutter_app/database/repository/incidents_repository.dart';
-import 'package:flutter_app/database/repository/medications_repository.dart';
 import 'package:flutter_app/database/repository/user_login_repository.dart';
-import 'package:flutter_app/models/medications.dart';
 import 'package:flutter_app/models/user_login.dart';
 import 'package:flutter_app/services/client.dart';
-import 'package:flutter_app/services/incidents_request.dart';
-import 'package:flutter_app/services/medications_request.dart';
-import 'package:flutter_app/services/refresh_db_backend.dart';
+import 'package:flutter_app/services/refresh_db/refresh_db_animal.dart';
+import 'package:flutter_app/services/refresh_db/refresh_db_incidents.dart';
+import 'package:flutter_app/services/refresh_db/refresh_db_medications.dart';
+import 'package:flutter_app/services/refresh_db/refresh_db_tutor.dart';
+import 'package:flutter_app/services/request/user_request.dart';
 
-import '../user_login.dart';
-import 'user_request.dart';
+import '../../user_login.dart';
 
 class Request{
 
@@ -54,7 +52,6 @@ class Request{
         response = await _user.getLogin();
         await responseVerify(response, responseMedications, userLogin);
       }
-      await Future.delayed(const Duration(seconds: 2));
       navigation(response);
     }catch(exception){
       UserAgentClient.client.close();
@@ -97,16 +94,14 @@ class Request{
   Future requestSaveAll()async{
     switch(LoginDatabase.levelsOfAccess){
       case "ADMIN":
-        await RefreshDb.refreshMedications();
-        await RefreshDb.refreshIncidents();
-        await RefreshDb.refreshTutors();
-        await RefreshDb.refreshAnimals();
-        await RefreshDb.refreshAnimalsSave();
-        await RefreshDb.refreshAnimalsDelete();
-        break;
-      case "USUARIO":
+        await RefreshMedications.refresh();
+        await RefreshIncidents.refresh();
+        await RefreshTutor.refresh();
+        await RefreshAnimal.refresh();
         break;
       case "VETERINARIO":
+        await RefreshTutor.refresh();
+        await RefreshAnimal.refresh();
         break;
     }
   }

@@ -1,16 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/blocs/email_bloc.dart';
-import 'package:flutter_app/colors.dart';
-import 'package:flutter_app/components/my_button.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/services/user_request.dart';
-import 'package:flutter_app/validates/validator_token.dart';
+import 'package:flutter_app/blocs/user_bloc.dart';
+import 'package:flutter_app/components/buttons/my_button.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
+import 'package:flutter_app/components/others/show_message_snackbar.dart';
+import 'package:flutter_app/services/client.dart';
+import 'package:flutter_app/services/request/user_request.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage2 extends StatefulWidget {
   final ValueChanged<Map> parentAction;
-  final EmailBloc bloc;
+  final UserBloc bloc;
 
   const TabPage2({Key key, this.parentAction, this.bloc}) : super(key: key);
 
@@ -22,7 +23,6 @@ class _TabPage2State extends State<TabPage2> {
   final GlobalKey<FormState> _formKeyTab2 = GlobalKey<FormState>();
   String _code;
   bool disabledButton = false;
-  ValidatorToken validator;
 
   void onSaved(values){
     _code = values['value'];
@@ -36,39 +36,36 @@ class _TabPage2State extends State<TabPage2> {
   }
 
   void request() async{
-    var response;
-    UserRequest loginRequest = UserRequest();
-    disabledOrEnabledButton(true);
-    response = await loginRequest.getToken(widget.bloc.getEmail, _code);
-    disabledOrEnabledButton(false);
-    var body;
-    if(response == null){
-      errorMessage('Erro ao Conectar no Banco de Dados, tente novamente mais tarde');
-    }else{
-      body = json.decode(response.body);
-      switch(response.statusCode){
-        case 200:
-          widget.bloc.updateToken(_code);
-          widget.bloc.updateId(body['user']['code']);
-          Map list = {'page' : 2};
-          widget.parentAction(list);
-          break;
-        case 404:
-          body = json.decode(response.body);
-          if(body['title'] == 'Resource Not Found')
-            if(body['fieldMessage'] != null)
-              errorMessage(body['fieldMessage']);
-          break;
+    try {
+      var response;
+      UserRequest loginRequest = UserRequest();
+      disabledOrEnabledButton(true);
+      response = await loginRequest.getToken(widget.bloc.getEmail, _code);
+      disabledOrEnabledButton(false);
+      var body;
+      if(response == null){
+        MySnackBar.message('Erro ao Conectar no Banco de Dados, tente novamente mais tarde', context: context);
+      }else{
+        body = json.decode(response.body);
+        switch(response.statusCode){
+          case 200:
+            widget.bloc.updateToken(_code);
+            widget.bloc.updateId(body['user']['code']);
+            Map list = {'page' : 2};
+            widget.parentAction(list);
+            break;
+          case 404:
+            body = json.decode(response.body);
+            if(body['title'] == 'Resource Not Found')
+              if(body['fieldMessage'] != null)
+                MySnackBar.message(body['fieldMessage'],context: context);
+            break;
+        }
       }
+    }catch (e){
+      UserAgentClient.client.close();
+      MySnackBar.message("Erro",context: context);
     }
-  }
-
-  void errorMessage(String text){
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: Text(text),
-      ),
-    );
   }
 
   void disabledOrEnabledButton(bool value){
@@ -92,7 +89,7 @@ class _TabPage2State extends State<TabPage2> {
             child: Column(
               children: <Widget>[
                 MyTextField(
-                  validate: ValidatorToken.validateToken,
+                  validate: (value) => Validate.validateAll(value, r'[0-9]{6}', 'Código inválido'),
                   type: TextInputType.number,
                   parentAction: onSaved,
                   title: 'code',

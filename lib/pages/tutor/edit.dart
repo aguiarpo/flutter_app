@@ -1,16 +1,15 @@
-import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/json_bloc.dart';
-import 'package:flutter_app/components/my_body_tabs.dart';
-import 'package:flutter_app/components/my_scaffold_tabs.dart';
+import 'package:flutter_app/components/tabs/my_body_tabs.dart';
+import 'package:flutter_app/components/tabs/my_scaffold_tabs.dart';
 import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page1.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page2.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page3.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page4.dart';
-import 'package:flutter_app/pages/tutor/tabs/tab_page5.dart';
+import 'package:flutter_app/pages/tutor/tabs/tab_page9.dart';
 
 class EditTutors extends StatefulWidget {
   const EditTutors({Key key}) : super(key: key);
@@ -57,7 +56,7 @@ class _EditTutors extends State<EditTutors>{
         telephone2 : tutor.telephone2,
         jsonBloc: bloc,
       ),
-      TabPage5(
+      TabPage9(
         incidentsWithTutor : incidentsWithTutors,
         jsonBloc: bloc,
         incidents: incidents,
@@ -77,26 +76,12 @@ class _EditTutors extends State<EditTutors>{
     id = tutor.id;
     incidentsWithTutors = tutor.incidentsWithTutors;
     return MyScaffoldTabs(
-      body: StreamBuilder<Object>(
-                    stream: bloc.getJSON,
-                    initialData: bloc.jsonProvider.values,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return MyBodyTabs(
+      body: MyBodyTabs(
                           id : id,
                           requestNumber: 9,
                           jsonSchemaBloc: bloc,
                           kIcons: kIcons(bloc),
-                        );
-                      } else {
-                        return Container(
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                    }
-      ),
+                        ),
       title: "Editar",
     );
   }

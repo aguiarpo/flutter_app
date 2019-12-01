@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/validates/validator_tutor.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
-
-import '../../../colors.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
+import 'package:flutter_app/components/inputs/textarea.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage3 extends StatefulWidget {
   final jsonBloc;
@@ -47,7 +45,9 @@ class _TabPage3State extends State<TabPage3> with AutomaticKeepAliveClientMixin<
             children: <Widget>[
               MyTextField(
                   controller: controllerStreet,
-                  validate: ValidateUserLogin.validateCity,
+                  validate: (value) => Validate.validateAll(value,
+                      r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                      'Caracteres inválidos'),
                   icon: Icons.location_city,
                   hint: "Rua",
                   parentAction: onSaved,
@@ -56,38 +56,19 @@ class _TabPage3State extends State<TabPage3> with AutomaticKeepAliveClientMixin<
               MyTextField(
                 controller: controllerNumber,
                 type: TextInputType.number,
-                validate: ValidateTutor.validateRg,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([0-9.\-]+)\w+", 'Caracteres inválidos'),
                 parentAction: onSaved,
                 title: 'number',
                 icon: Icons.mode_edit,
                 hint: "Número",
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-                child: TextFormField(
-                  validator: ValidateUserLogin.validateComments,
-                  controller: controllerComplements,
-                  focusNode: myFocusNode,
-                  onSaved: (value){
-                    Map values = {"title" : "complement", "value" : value.trim()};
-                    onSaved(values);
-                  },
-                  maxLines: 5,
-                  style: new TextStyle(color: Colors.grey),
-                  decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 1),
-                    ),
-                    labelText: "Complemento",
-                      labelStyle: TextStyle(
-                          color: myFocusNode.hasFocus ? ColorsUsed.greenDarkColor : Colors.grey
-                      )
-                  ),
-                ),
-              ),
+              TextArea(
+                onSaved: onSaved,
+                controllerComments: controllerComplements,
+                labelText: "Complemento",
+                title: "complement",
+              )
             ],
           ),
         ),

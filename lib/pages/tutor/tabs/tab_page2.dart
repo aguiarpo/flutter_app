@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/colors.dart';
-import 'package:flutter_app/components/dropdown_button.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/validates/validator_tutor.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
+import 'package:flutter_app/components/inputs/select.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage2 extends StatefulWidget {
   final jsonBloc;
@@ -74,7 +72,9 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerCep,
-                validate: ValidateTutor.validateCep,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([0-9]{5}-[\d]{3})$",
+                    'Caracteres inválidos: 00000-000'),
                 icon: Icons.location_city,
                 hint: "CEP",
                 parentAction: onSaved,
@@ -82,7 +82,9 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerNeighborhood,
-                validate: ValidateUserLogin.validateCity,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                    'Caracteres inválidos'),
                 icon: Icons.location_city,
                 hint: "Bairro",
                 parentAction: onSaved,
@@ -90,7 +92,9 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerCity,
-                  validate: ValidateUserLogin.validateCity,
+                  validate: (value) => Validate.validateAll(value,
+                      r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                      'Caracteres inválidos'),
                   icon: Icons.location_city,
                   hint: "Cidade",
                   parentAction: onSaved,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/json_bloc.dart';
-import 'package:flutter_app/components/dropdown_button.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
+import 'package:flutter_app/components/inputs/select.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage2 extends StatefulWidget {
   final JsonBloc jsonBloc;
@@ -86,7 +86,9 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: widget.controllerCity,
-                validate: ValidateUserLogin.validateCity,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                    'Caracteres inválidos'),
                 parentAction: onSaved,
                 title: "city",
                 icon: Icons.location_city,
@@ -95,7 +97,9 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
               MyTextField(
                 type: TextInputType.number,
                 controller: myControllerTelephone1,
-                validate: ValidateUserLogin.validateTelephone,
+                validate: (value) => Validate.validateAll(value,
+                    r'\(\d{2}\)\s\d{4,5}-\d{4}',
+                    'Formato do Telefone (47) 9999-0000\nou (47) 99999-0000'),
                 parentAction: onSaved,
                 title: "telephone1",
                 icon: Icons.phone,
@@ -104,7 +108,9 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
               MyTextField(
                 type: TextInputType.number,
                 controller: myControllerTelephone2,
-                validate: ValidateUserLogin.validateTelephone2,
+                validate: (value) => Validate.validateAllWithoutEmpty(value,
+                    r'\(\d{2}\)\s\d{4,5}-\d{4}',
+                    'Formato do Telefone (47) 9999-0000\nou (47) 99999-0000'),
                 parentAction: onSaved,
                 title: "telephone2",
                 icon: Icons.phone,

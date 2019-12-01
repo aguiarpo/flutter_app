@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/database/repository/all_repository.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
+import 'package:flutter_app/components/inputs/my_text_field_autocomplete.dart';
 import 'package:flutter_app/database/repository/tutor_repository.dart';
 import 'package:flutter_app/models/tutor.dart';
-import 'package:flutter_app/validates/validator_tutor.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-
-import '../../../colors.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage1 extends StatefulWidget {
   final jsonBloc;
@@ -36,13 +32,21 @@ class _TabPage1State extends State<TabPage1> with AutomaticKeepAliveClientMixin<
 
   @override
   void initState(){
+    initConfigure();
+    super.initState();
+  }
+
+  void initConfigure(){
     controllerName.text = widget.name;
     controllerMotherName.text = widget.motherName;
     controllerCpf.text = widget.cpf;
     _typeAheadController.text = widget.cpf;
     controllerRg.text = widget.rg;
-    super.initState();
     jsonBloc = widget.jsonBloc;
+    addEventListener();
+  }
+
+  void addEventListener(){
     myFocusNode.addListener(()async{
       if (!myFocusNode.hasFocus) {
         Tutor tutor = await TutorRepository.getTutorByCpf(_typeAheadController.text);
@@ -72,74 +76,33 @@ class _TabPage1State extends State<TabPage1> with AutomaticKeepAliveClientMixin<
             children: <Widget>[
               Visibility(
                 visible: widget.parentAction == null ? false : true,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30, right: 30, bottom: 18),
-                  child: GestureDetector(
-                    child: TypeAheadFormField(
-                      onSaved: (value){
-                        Map values = {"title" : "cpf", "value" : value.trim()};
-                        onSaved(values);
-                      },
-                      validator: ValidateTutor.validateCpf,
-                      textFieldConfiguration: TextFieldConfiguration(
-                        focusNode: myFocusNode,
-                        controller: this._typeAheadController,
-                        style: new TextStyle(color: Colors.grey),
-                        decoration: InputDecoration(
-                            prefixIcon: Container(
-                              margin: EdgeInsets.only(right: 20),
-                              padding: EdgeInsets.all(19),
-                              decoration: BoxDecoration(
-                                color: ColorsUsed.greenDarkColor,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Icon(Icons.person,
-                                color: Colors.white,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey, width: 1),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey, width: 1),
-                            ),
-                            labelText: "CPF",
-                            labelStyle: TextStyle(
-                                color: myFocusNode.hasFocus ? ColorsUsed.greenDarkColor : Colors.grey
-                            )
-                        ),
-                      ),
-                      suggestionsCallback: (pattern)async{
-                        if(pattern != "") suggestions = await AllRepository.getLike("Tutores", "CPF", pattern);
-                        if(suggestions == null)suggestions = [];
-                        return suggestions;
-                      },
-                      itemBuilder: (context, suggestion) {
-                        return ListTile(
-                          title: Text(suggestion),
-                        );
-                      },
-                      transitionBuilder: (context, suggestionsBox, controller) {
-                        return suggestionsBox;
-                      },
-                      onSuggestionSelected: (suggestion) async{
-                        this._typeAheadController.text = suggestion;
-                      },
-                    ),
-                  ),
+                child: MyAutoComplete(
+                  focusNode: myFocusNode,
+                  parentAction: onSaved,
+                  typeAheadController: _typeAheadController,
+                  title: "cpf",
+                  validator: Validate.validateAll,
+                  regex : r"^([0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2})|([0-9]{3}[\.][0-9]{3}[\.][0-9]{3}[-][0-9]{2})$",
+                  returnText: 'Formato invalído (123.123.123-12)',
+                  hint: "Cpf",
+                  table: "Tutores",
                 ),
               ),
               MyTextField(
                 controller: controllerName,
-                validate: ValidateUserLogin.validateName,
+                validate: (value) => Validate.validateAll(value,
+                    r"^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$",
+                    'Caracteres inválidos'),
                 parentAction: onSaved,
                 title: 'name',
                 icon: Icons.person,
-                hint: "Nome",
+                hint: "Nome do Tutor",
               ),
               MyTextField(
                   controller: controllerMotherName,
-                  validate: ValidateUserLogin.validateName,
+                  validate: (value) => Validate.validateAll(value,
+                      r"^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$",
+                      'Caracteres inválidos'),
                   parentAction: onSaved,
                   title: 'motherName',
                   icon: Icons.person,
@@ -149,7 +112,9 @@ class _TabPage1State extends State<TabPage1> with AutomaticKeepAliveClientMixin<
                 visible: widget.parentAction == null ? true : false,
                 child: MyTextField(
                   controller: controllerCpf,
-                  validate: ValidateTutor.validateCpf,
+                  validate: (value) => Validate.validateAll(value,
+                      r"^([0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/][0-9]{4}[-][0-9]{2})|([0-9]{3}[\.][0-9]{3}[\.][0-9]{3}[-][0-9]{2})$",
+                      'Formato invalído (123.123.123-12)'),
                   parentAction: onSaved,
                   title: 'cpf',
                   icon: Icons.person_pin,
@@ -158,7 +123,8 @@ class _TabPage1State extends State<TabPage1> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerRg,
-                validate: ValidateTutor.validateRg,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([0-9.\-]+)*$", 'Caracteres inválidos'),
                 parentAction: onSaved,
                 title: 'rg',
                 icon: Icons.person_pin,

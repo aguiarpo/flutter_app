@@ -13,11 +13,9 @@ import 'package:flutter_app/models/incidents.dart';
 import 'package:flutter_app/models/medications.dart';
 import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/models/tutors_incidents.dart';
-import 'package:flutter_app/models/user.dart';
 import 'package:flutter_app/models/vet.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../user_login.dart';
 import '../columns_names.dart';
 
 abstract class AllRepository{
@@ -36,7 +34,6 @@ abstract class AllRepository{
   static saveAll(valuesBody)async{
     Medications medications = Medications();
     Incidents incident = Incidents();
-    User user = User();
     Vet vet = Vet();
     Tutor tutor = Tutor();
     Animal animal = Animal();
@@ -126,6 +123,7 @@ abstract class AllRepository{
         listMap = await dbContact.rawQuery("SELECT * FROM $tableName WHERE $removedColumn == 0 AND $columnName LIKE '$value%' LIMIT 5");
         break;
       case "CPF":
+      case "Cpf":
         columnName = cpfColumn;
         listMap = await dbContact.rawQuery("SELECT * FROM $tableName WHERE $removedColumn == 0 AND $columnName LIKE '$value%' LIMIT 5");
         break;

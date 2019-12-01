@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'autocomplete_textfield.dart';
-import 'dropdown_button.dart';
+import '../inputs/autocomplete_textfield.dart';
+import '../inputs/select.dart';
 
 class MyListUI extends StatefulWidget {
   final Widget list;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_list.dart';
-import 'package:flutter_app/components/my_list_ui.dart';
+import 'package:flutter_app/components/list/my_list.dart';
+import 'package:flutter_app/components/list/my_list_ui.dart';
 import 'package:flutter_app/database/repository/incidents_repository.dart';
 
 import 'components/bottom_sheet_incidents.dart';

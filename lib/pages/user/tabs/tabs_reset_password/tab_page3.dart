@@ -1,14 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/blocs/email_bloc.dart';
-import 'package:flutter_app/components/my_button.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/services/user_request.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
+import 'package:flutter_app/blocs/user_bloc.dart';
+import 'package:flutter_app/components/buttons/my_button.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
+import 'package:flutter_app/components/others/show_message_snackbar.dart';
+import 'package:flutter_app/services/client.dart';
+import 'package:flutter_app/services/request/user_request.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage3 extends StatefulWidget {
-  final EmailBloc bloc;
+  final UserBloc bloc;
 
   const TabPage3({Key key, this.bloc}) : super(key: key);
 
@@ -19,7 +21,7 @@ class TabPage3 extends StatefulWidget {
 class _TabPage3State extends State<TabPage3> {
   final GlobalKey<FormState> _formKeyTab3 = GlobalKey<FormState>();
   Map _passwords = {};
-  EmailBloc _bloc;
+  UserBloc _bloc;
   bool disabledButton = false;
 
   @override
@@ -27,8 +29,6 @@ class _TabPage3State extends State<TabPage3> {
     super.initState();
     _bloc = widget.bloc;
   }
-
-
 
   void onSaved(values){
    _passwords[values['title']] = values['value'];
@@ -40,7 +40,7 @@ class _TabPage3State extends State<TabPage3> {
       if(_passwords['password'] == _passwords['confirmPassword']){
         request();
       }else{
-        errorMessage('Senhas não coincidem');
+        MySnackBar.message('Senhas não coincidem', context:  context);
       }
     }
   }
@@ -50,27 +50,25 @@ class _TabPage3State extends State<TabPage3> {
     setState(() {});
   }
 
-  void errorMessage(String text){
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        content: Text(text),
-      ),
-    );
-  }
-
   void request() async{
-    var response;
-    UserRequest loginRequest = UserRequest();
-    disabledOrEnabledButton(true);
-    response = await loginRequest.setPassword(json.encode(_passwords),_bloc.getId.toString(), _bloc.getToken);
-    disabledOrEnabledButton(false);
-    if(response == null) errorMessage('Erro ao Conectar no Banco de Dados, tente novamente mais tarde');
-    else{
-      if(response.statusCode == 200){
-        Navigator.pop(context, 'Senha atualizada com sucesso');
-      }else{
-        errorMessage('Erro ao Conectar no Banco de Dados, tente novamente mais tarde');
+    try {
+      var response;
+      UserRequest loginRequest = UserRequest();
+      disabledOrEnabledButton(true);
+      response = await loginRequest.setPassword(json.encode(_passwords),_bloc.getId.toString(), _bloc.getToken);
+      disabledOrEnabledButton(false);
+      if(response == null)
+        MySnackBar.message('Erro ao Conectar no Banco de Dados, tente novamente mais tarde', context:  context);
+      else{
+        if(response.statusCode == 200){
+          Navigator.pop(context, 'Senha atualizada com sucesso');
+        }else{
+          MySnackBar.message('Erro ao Conectar no Banco de Dados, tente novamente mais tarde', context:  context);
+        }
       }
+    }catch (e){
+      UserAgentClient.client.close();
+      MySnackBar.message("Erro", context:  context);
     }
   }
 
@@ -84,7 +82,7 @@ class _TabPage3State extends State<TabPage3> {
             child: Column(
               children: <Widget>[
                 MyTextField(
-                  validate: ValidateUserLogin.validatePassword,
+                  validate: Validate.validatePassword,
                   parentAction: onSaved,
                   title: 'password',
                   icon: Icons.vpn_key,

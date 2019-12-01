@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-import 'incidents.dart';
-
 class Tutor{
   int id;
   String name;

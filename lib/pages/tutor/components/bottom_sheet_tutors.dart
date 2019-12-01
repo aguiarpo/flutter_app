@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_bootom_sheet.dart';
-import 'package:flutter_app/database/connect.dart';
+import 'package:flutter_app/components/others/my_bootom_sheet.dart';
 import 'package:flutter_app/models/tutor.dart';
-import 'package:flutter_app/models/tutors_incidents.dart';
 
 import '../../../user_login.dart';
 

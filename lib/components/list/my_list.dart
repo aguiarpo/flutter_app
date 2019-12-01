@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/show_message_snackbar.dart';
+import 'package:flutter_app/components/others/show_message_snackbar.dart';
 import 'package:flutter_app/database/repository/animal_medications_repository.dart';
 import 'package:flutter_app/database/repository/animal_repository.dart';
 import 'package:flutter_app/database/repository/incidents_repository.dart';
@@ -13,10 +13,9 @@ import 'package:flutter_app/models/tutors_incidents.dart';
 import 'package:flutter_app/user_login.dart';
 import 'package:intl/intl.dart';
 
-import '../colors.dart';
-import 'my_bootom_sheet.dart';
-import 'my_button.dart';
-import 'show_modal_options.dart';
+import '../others/my_bootom_sheet.dart';
+import '../others/show_modal_options.dart';
+import 'list_builder.dart';
 
 // ignore: must_be_immutable
 class MyList extends StatefulWidget {
@@ -108,7 +107,7 @@ class _MyListState extends State<MyList> {
 
   Future display() async {
     if(list == null || lastSuggestion != widget.suggestion || lastValueSelect != widget.selectValue || refresh){
-      await Future.delayed(const Duration(milliseconds: 700));
+      await Future.delayed(Duration(seconds: 1));
       list = await getModals();
       lastSuggestion = widget.suggestion;
       lastValueSelect = widget.selectValue;
@@ -254,145 +253,35 @@ class _MyListState extends State<MyList> {
       if(modal != null)getPage(Navigator.pushNamed(context, widget.navigation, arguments: modal));
   }
 
-  Widget listBuilderADMIN(itens){
-    return ListView.builder(
-        padding: EdgeInsets.only(bottom: 100),
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: itens.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Dismissible(
-            key: Key(UniqueKey().toString()),
-            onDismissed: (DismissDirection dir){
-              dimissed(itens[index], index);
-            },
-            background: Container(
-              color: Colors.red,
-              child: Icon(Icons.delete),
-              alignment: Alignment.centerLeft,
-            ),
-            secondaryBackground: Container(
-              color: Colors.red,
-              child: Icon(Icons.delete),
-              alignment: Alignment.centerRight,
-            ),
-            child: Container(
-                height: widget.height,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0)),
-                  color: Colors.white,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        color: ColorsUsed.blueColor,
-                        width: 10,
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            getById(itens[index].id);
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: getChildren(itens, index),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: LoginDatabase.levelsOfAccess == "USUARIO" ? false : true,
-                        child: MyButton(
-                          text: "Editar",
-                          onPress: ()async => editClick(itens[index].id),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-            ),
-          );
-        }
-    );
-  }
-
-  Widget listBuilder(itens){
-    return ListView.builder(
-        padding: EdgeInsets.only(bottom: 100),
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: itens.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-                height: widget.height,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0)),
-                  color: Colors.white,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        color: ColorsUsed.blueColor,
-                        width: 10,
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            getById(itens[index].id);
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: getChildren(itens, index),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: LoginDatabase.levelsOfAccess == "USUARIO" ? false : true,
-                        child: MyButton(
-                          text: "Editar",
-                          onPress: ()async => editClick(itens[index].id),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-            );
-        }
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: display(),
       builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting: return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),
-          );
-          default:
-            if (snapshot.hasError)
-              return new Text('Error: ${snapshot.error}');
-            else
+        if(lastSuggestion != widget.suggestion || lastValueSelect != widget.selectValue || refresh){
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting: return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
+              ),
+            );
+            default:
+              if (snapshot.hasError)
+                return new Text('Error: ${snapshot.error}');
+              else
               if(LoginDatabase.levelsOfAccess == "USUARIO"){
-                return listBuilder(snapshot.data);
+                return ListBuilder.listBuilder(snapshot.data, widget.height, getById, getChildren, editClick);
               }else{
-                return listBuilderADMIN(snapshot.data);
+                return ListBuilder.listBuilderADMIN(snapshot.data, widget.height, dimissed, getById, getChildren, editClick);
               }
+          }
+        }else{
+          if(LoginDatabase.levelsOfAccess == "USUARIO"){
+            return ListBuilder.listBuilder(snapshot.data, widget.height, getById, getChildren, editClick);
+          }else{
+            return ListBuilder.listBuilderADMIN(snapshot.data, widget.height, dimissed, getById, getChildren, editClick);
+          }
         }
       },
     );

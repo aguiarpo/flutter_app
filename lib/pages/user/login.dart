@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_button.dart';
-import 'package:flutter_app/components/my_text_field.dart';
+import 'package:flutter_app/components/buttons/my_button.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
 import 'package:flutter_app/colors.dart';
-import 'package:flutter_app/components/show_message_snackbar.dart';
-import 'package:flutter_app/components/timer.dart';
-import 'package:flutter_app/database/repository/all_repository.dart';
+import 'package:flutter_app/components/others/show_message_snackbar.dart';
+import 'package:flutter_app/components/others/timer.dart';
 import 'package:flutter_app/database/repository/user_login_repository.dart';
 import 'package:flutter_app/models/user_login.dart';
-import 'package:flutter_app/services/user_request.dart';
+import 'package:flutter_app/services/client.dart';
+import 'package:flutter_app/services/request/user_request.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -68,29 +68,28 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     }catch(exception){
+      UserAgentClient.client.close();
       disabledOrEnabledButton(false);
       MySnackBar.message('Erro',scaffoldKey: _scaffoldKey);
     }
   }
 
   Future saveUser(response) async {
-    var body;
-    body = json.decode(response.body);
-    UserLogin user = UserLogin();
-    user.setValues(body);
-    user.password = dataRequest['password'];
-    await UserLoginRepository.truncateContacts();
-    var saved = await UserLoginRepository.saveContact(user);
-    if(saved != null)
-      Navigator.pushReplacementNamed(context, "/home");
-    else
+    try{
+      var body;
+      body = json.decode(response.body);
+      UserLogin user = UserLogin();
+      user.setValues(body);
+      user.password = dataRequest['password'];
+      await UserLoginRepository.truncateContacts();
+      var saved = await UserLoginRepository.saveContact(user);
+      if(saved != null)
+        Navigator.pushReplacementNamed(context, "/home");
+      else
+        MySnackBar.message('Erro', scaffoldKey: _scaffoldKey);
+    }catch (e){
       MySnackBar.message('Erro', scaffoldKey: _scaffoldKey);
-  }
-
-  Future saveAllValuesDatabase(responseMedications) async {
-    Map valuesMedications = json.decode(responseMedications.body);
-    await AllRepository.truncateAll();
-    await AllRepository.saveAll(valuesMedications);
+    }
   }
 
   @override

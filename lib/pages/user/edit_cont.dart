@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/json_bloc.dart';
-import 'package:flutter_app/components/my_body_tabs.dart';
-import 'package:flutter_app/components/my_scaffold_tabs.dart';
+import 'package:flutter_app/components/tabs/my_body_tabs.dart';
+import 'package:flutter_app/components/tabs/my_scaffold_tabs.dart';
 import 'package:flutter_app/pages/user/tabs/tab_page1.dart';
 import 'package:flutter_app/pages/user/tabs/tab_page2.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 import '../../user_login.dart';
 
@@ -25,7 +25,7 @@ class _EditCont extends State<EditCont>{
   List<Widget> kIcons(bloc){
     return <Widget>[
       TabPage1(
-        validatePassword : ValidateUserLogin.validatePassword2,
+        validatePassword : Validate.validatePassword2,
         controllerName: myControllerName,
         emailVisible: false,
         jsonBloc: bloc,
@@ -53,24 +53,10 @@ class _EditCont extends State<EditCont>{
   @override
   Widget build(BuildContext context) {
     return MyScaffoldTabs(
-      body: StreamBuilder<Object>(
-          stream: bloc.getJSON,
-          initialData: bloc.jsonProvider.values,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return MyBodyTabs(
-                requestNumber: 1,
-                jsonSchemaBloc: bloc,
-                kIcons: kIcons(bloc),
-              );
-            } else {
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          }
+      body: MyBodyTabs(
+        requestNumber: 1,
+        jsonSchemaBloc: bloc,
+        kIcons: kIcons(bloc),
       ),
       title: "Editar",
     );

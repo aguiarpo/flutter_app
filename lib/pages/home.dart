@@ -1,6 +1,6 @@
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/show_message_snackbar.dart';
+import 'package:flutter_app/components/others/show_message_snackbar.dart';
 import 'package:flutter_app/database/repository/incidents_repository.dart';
 import 'package:flutter_app/database/repository/medications_repository.dart';
 import 'package:flutter_app/models/animal.dart';
@@ -98,6 +98,7 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
   }
 
   void selectTabBar(index) async{
+    _scaffoldKey.currentState.hideCurrentSnackBar();
     bloc.updateNavigation(index);
     setState(() {});
   }
@@ -111,7 +112,7 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
       vsync: this,
     );
     _tabController.addListener(() {
-      _scaffoldKey.currentState.hideCurrentSnackBar();
+      selectTabBar(_tabController.index);
     });
     super.initState();
   }
@@ -162,26 +163,19 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
               labelColor: ColorsUsed.greenDarkColor,
               unselectedLabelColor: ColorsUsed.secundaryColor,
               tabs: _kTabs(),
-              onTap: (index){
-                selectTabBar(index);
-              },
               controller: _tabController,
             );
           }
         ),
       ),
-      body: StreamBuilder<Object>(
-        stream: bloc.getNavigation,
-        initialData: bloc.navigationProvider.currentNavigation,
-        builder: (context, snapshot) {
-          return GestureDetector(
-            child: TabBarView(
-              children: _kTabPages(),
-              controller: _tabController,
+      body: Container(
+            child: GestureDetector(
+              child: TabBarView(
+                children: _kTabPages(),
+                controller: _tabController,
+              ),
             ),
-          );
-        }
-      ),
+          )
     );
   }
 }

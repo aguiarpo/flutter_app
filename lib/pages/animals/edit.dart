@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/json_bloc.dart';
-import 'package:flutter_app/components/my_body_tabs.dart';
-import 'package:flutter_app/components/my_scaffold_tabs.dart';
+import 'package:flutter_app/components/tabs/my_body_tabs.dart';
+import 'package:flutter_app/components/tabs/my_scaffold_tabs.dart';
 import 'package:flutter_app/models/animal.dart';
 import 'package:flutter_app/pages/animals/tabs/tab_page5.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page1.dart';
@@ -106,25 +106,11 @@ class _EditUser extends State<EditAnimals> {
     medications = animal.medications;
     dates = animal.dates;
     return MyScaffoldTabs(
-      body: StreamBuilder<Object>(
-          stream: bloc.getJSON,
-          initialData: bloc.jsonProvider.values,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return MyBodyTabs(
-                id : id,
-                requestNumber: 11,
-                jsonSchemaBloc: bloc,
-                kIcons: kIcons(bloc),
-              );
-            } else {
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          }
+      body: MyBodyTabs(
+        id : id,
+        requestNumber: 11,
+        jsonSchemaBloc: bloc,
+        kIcons: kIcons(bloc),
       ),
       title: "Editar",
     );

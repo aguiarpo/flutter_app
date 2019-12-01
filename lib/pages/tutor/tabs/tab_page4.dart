@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_text_field.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
+import 'package:flutter_app/validates/validate.dart';
 
 class TabPage4 extends StatefulWidget {
   final jsonBloc;
@@ -42,7 +42,9 @@ class _TabPage4State extends State<TabPage4> with AutomaticKeepAliveClientMixin<
             children: <Widget>[
               MyTextField(
                 controller: controllerProfession,
-                validate: ValidateUserLogin.validateCity,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                    'Caracteres inválidos'),
                 icon: Icons.build,
                 hint: "Profissão",
                 parentAction: onSaved,
@@ -50,7 +52,9 @@ class _TabPage4State extends State<TabPage4> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerTelephone1,
-                validate: ValidateUserLogin.validateTelephone,
+                validate: (value) => Validate.validateAll(value,
+                    r'\(\d{2}\)\s\d{4,5}-\d{4}',
+                    'Formato do Telefone (47) 9999-0000\nou (47) 99999-0000'),
                 icon: Icons.phone,
                 hint: "Telefone",
                 parentAction: onSaved,
@@ -58,7 +62,9 @@ class _TabPage4State extends State<TabPage4> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerTelephone2,
-                validate: ValidateUserLogin.validateTelephone2,
+                validate: (value) => Validate.validateAllWithoutEmpty(value,
+                    r'\(\d{2}\)\s\d{4,5}-\d{4}',
+                    'Formato do Telefone (47) 9999-0000\nou (47) 99999-0000'),
                 icon: Icons.phone,
                 hint: "Telefone",
                 parentAction: onSaved,

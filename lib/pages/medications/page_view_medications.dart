@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_list.dart';
-import 'package:flutter_app/components/my_list_ui.dart';
+import 'package:flutter_app/components/list/my_list.dart';
+import 'package:flutter_app/components/list/my_list_ui.dart';
 import 'package:flutter_app/database/repository/medications_repository.dart';
 import 'components/bottom_sheet_medications.dart';
 

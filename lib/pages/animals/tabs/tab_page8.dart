@@ -1,11 +1,7 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/database/connect.dart';
-import 'package:flutter_app/models/animal_medications.dart';
 import 'package:flutter_app/validates/validator_dates.dart';
 import 'package:intl/intl.dart';
-
-import '../../../colors.dart';
 
 class TabPage8 extends StatefulWidget {
   final id;
@@ -24,6 +20,7 @@ class _TabPage8State extends State<TabPage8> with AutomaticKeepAliveClientMixin<
   Map checkbox = {};
   var jsonBloc;
   Map datesSaved = {};
+  bool refresh;
 
 
   void onSaved(value, check){
@@ -117,14 +114,55 @@ class _TabPage8State extends State<TabPage8> with AutomaticKeepAliveClientMixin<
     );
   }
 
+  Future display()async{
+    if(refresh == false){
+      await Future.delayed(Duration(seconds: 1));
+      refresh = true;
+      return widget.list;
+    }else{
+      return widget.list;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return listBuilder(widget.list);
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Center(
+            child: Text("Medicações do Animal", style: TextStyle(fontSize: 15),),
+          ),
+          FutureBuilder(
+            future: display(),
+            builder: (context, snapshot) {
+            if(refresh == false){
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting: return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+                default:
+                  if (snapshot.hasError)
+                    return new Text('Error: ${snapshot.error}');
+                  else
+                    return listBuilder(snapshot.data);
+              }
+            }else{
+              return listBuilder(snapshot.data);
+            }
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   void initState() {
     super.initState();
+    refresh = false;
     jsonBloc = widget.jsonBloc;
   }
 

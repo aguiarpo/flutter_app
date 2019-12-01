@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_bootom_sheet.dart';
-import 'package:flutter_app/models/animal.dart';
+import 'package:flutter_app/components/others/my_bootom_sheet.dart';
 import 'package:flutter_app/user_login.dart';
 import 'package:intl/intl.dart';
 

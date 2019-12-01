@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/database/repository/user_login_repository.dart';
 import 'package:flutter_app/pages/user/login.dart';
 
-import '../colors.dart';
-import 'show_message_snackbar.dart';
+import '../../colors.dart';
+import '../others/show_message_snackbar.dart';
 
 // ignore: must_be_immutable
 class MyConfigButton extends StatelessWidget {

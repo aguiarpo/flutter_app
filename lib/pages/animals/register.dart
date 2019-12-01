@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/blocs/json_bloc.dart';
-import 'package:flutter_app/components/my_body_tabs.dart';
+import 'package:flutter_app/components/tabs/my_body_tabs.dart';
 import 'package:flutter_app/database/repository/tutor_incidents_repository.dart';
 import 'package:flutter_app/models/animal.dart';
 import 'package:flutter_app/models/tutor.dart';
@@ -12,8 +12,8 @@ import 'package:flutter_app/pages/tutor/tabs/tab_page1.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page2.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page3.dart';
 import 'package:flutter_app/pages/tutor/tabs/tab_page4.dart';
-import 'package:flutter_app/pages/tutor/tabs/tab_page5.dart' as prefix0;
-import '../../components/my_scaffold_tabs.dart';
+import 'package:flutter_app/pages/tutor/tabs/tab_page9.dart';
+import '../../components/tabs/my_scaffold_tabs.dart';
 import 'tabs/tab_page5.dart';
 import 'tabs/tab_page7.dart';
 
@@ -65,16 +65,10 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
         profession: tutor.profession,
         jsonBloc: bloc,
       ),
-      prefix0.TabPage5(
-        incidentsWithTutor : tutor.incidentsWithTutors,
-        jsonBloc: bloc,
-        incidents: incidents,
-      ),
       TabPage5(
         jsonBloc: bloc,
       ),
       TabPage6(
-        size: "Médio",
         jsonBloc: bloc,
       ),
       TabPage7(
@@ -86,6 +80,11 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
         dates : dates,
         list : list,
         jsonBloc: bloc,
+      ),
+      TabPage9(
+        incidentsWithTutor: tutor.incidentsWithTutors,
+        jsonBloc: bloc,
+        incidents: incidents,
       ),
     ];
   }
@@ -99,7 +98,6 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
 
   void getTutor(tutor){
     this.tutor = tutor;
-    setState(() {});
   }
 
   @override
@@ -114,24 +112,10 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
     list = animal.list;
     incidents = animal.tutor.incidents;
     return MyScaffoldTabs(
-      body: StreamBuilder<Object>(
-          stream: bloc.getJSON,
-          initialData: bloc.jsonProvider.values,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return MyBodyTabs(
-                requestNumber: 10,
-                jsonSchemaBloc: bloc,
-                kIcons: kIcons(bloc),
-              );
-            } else {
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          }
+      body: MyBodyTabs(
+        requestNumber: 10,
+        jsonSchemaBloc: bloc,
+        kIcons: kIcons(bloc),
       ),
       title: "Registrar",
     );

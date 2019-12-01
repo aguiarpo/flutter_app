@@ -1,10 +1,9 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/components/my_text_field.dart';
+import 'package:flutter_app/components/inputs/my_text_field.dart';
 import 'package:flutter_app/icons/surca_icons.dart';
+import 'package:flutter_app/validates/validate.dart';
 import 'package:flutter_app/validates/validator_dates.dart';
-import 'package:flutter_app/validates/validator_tutor.dart';
-import 'package:flutter_app/validates/validator_user_login.dart';
 import 'package:intl/intl.dart';
 
 class TabPage5 extends StatefulWidget {
@@ -36,9 +35,11 @@ class _TabPage5State extends State<TabPage5> with AutomaticKeepAliveClientMixin<
     controllerName.text = widget.name;
     controllerBreed.text = widget.breed;
     controllerMicrochip.text = widget.microchip;
-    if(widget.date != null)controllerDate = DateTime.parse(widget.date);
-    Map values = {"title" : "birthDate", "value" : ""};
-    onSaved(values);
+    if(widget.date != null){
+      controllerDate = DateTime.parse(widget.date);
+      Map values = {"title" : "birthDate", "value" : ""};
+      onSaved(values);
+    }
   }
 
 
@@ -56,15 +57,18 @@ class _TabPage5State extends State<TabPage5> with AutomaticKeepAliveClientMixin<
             children: <Widget>[
               MyTextField(
                 controller: controllerName,
-                validate: ValidateUserLogin.validateCity,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                    'Caracteres inválidos'),
                 icon: Icons.person,
-                hint: "Nome",
+                hint: "Nome do animal",
                 parentAction: onSaved,
                 title: 'name',
               ),
               MyTextField(
                 controller: controllerMicrochip,
-                validate: ValidateTutor.validateRg,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([0-9.\-]+)*$", 'Caracteres inválidos'),
                 icon: Surca.animal,
                 hint: "Microchip",
                 parentAction: onSaved,
@@ -72,7 +76,9 @@ class _TabPage5State extends State<TabPage5> with AutomaticKeepAliveClientMixin<
               ),
               MyTextField(
                 controller: controllerBreed,
-                validate: ValidateUserLogin.validateCity,
+                validate: (value) => Validate.validateAll(value,
+                    r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
+                    'Caracteres inválidos'),
                 icon: Surca.animal,
                 hint: "Raça",
                 parentAction: onSaved,
@@ -81,7 +87,7 @@ class _TabPage5State extends State<TabPage5> with AutomaticKeepAliveClientMixin<
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
                 child: DateTimePickerFormField(
-                  validator: (d) => ValidateDates.validateDate2(d),
+                  validator: ValidateDates.validateDate2,
                   inputType: InputType.date,
                   initialValue: controllerDate,
                   format: DateFormat("yyyy-MM-dd"),
