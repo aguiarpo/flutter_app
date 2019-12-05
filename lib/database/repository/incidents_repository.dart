@@ -85,11 +85,11 @@ abstract class IncidentsRepository{
     switch(column){
       case "Nome":
         columnName = nameColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $incidentsTable WHERE $removedColumn == 0 AND $columnName == '$value' LIMIT 1");
+        listMap = await dbContact.rawQuery("SELECT * FROM $incidentsTable WHERE $removedColumn == 0 AND $columnName like '$value%'");
         break;
       case "Removidos":
         columnName = nameColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $incidentsTable WHERE $removedColumn == 1 AND $columnName == '$value' LIMIT 1");
+        listMap = await dbContact.rawQuery("SELECT * FROM $incidentsTable WHERE $removedColumn == 1 AND $columnName like '$value%'");
         break;
     }
     List<Incidents> listContact = List();

@@ -51,6 +51,11 @@ class _ConfigPageState extends State<ConfigPage> {
                     ),
                     MyConfigButton(
                       scaffoldKey: _scaffoldKey,
+                      text: "Atualizar o Banco de Dados",
+                      navigation: '/',
+                    ),
+                    MyConfigButton(
+                      scaffoldKey: _scaffoldKey,
                       text: "Sair",
                       navigation: '/login',
                     ),

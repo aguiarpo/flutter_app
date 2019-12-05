@@ -57,7 +57,7 @@ class _TabPage3State extends State<TabPage3> with AutomaticKeepAliveClientMixin<
                 controller: controllerNumber,
                 type: TextInputType.number,
                 validate: (value) => Validate.validateAll(value,
-                    r"^([0-9.\-]+)\w+", 'Caracteres inválidos'),
+                    r"^([0-9.\-]+)*$", 'Caracteres inválidos'),
                 parentAction: onSaved,
                 title: 'number',
                 icon: Icons.mode_edit,

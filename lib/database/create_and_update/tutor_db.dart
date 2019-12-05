@@ -23,13 +23,33 @@ abstract class TutorDb{
     var response = await TutorRepository.updateTutor(tutor);
     await TutorIncidentRepository.deleteTutorIncidents(id);
     var incidents = value['incidents'];
-    if(incidents.isNotEmpty){
+    if(incidents != null){
       for(var i = 0; i < incidents.length; i++){
         await saveIncidentsTutor(incidents, i, id);
       }
     }
     if(response == 1){
       text = "Tutor Editado com sucesso";
+      Navigator.pop(context, text);
+    }
+  }
+
+  static Future saveTutors(value, context) async {
+    Tutor tutor = Tutor();
+    value['number'] = int.parse(value['number']);
+    tutor.setValues(value);
+    tutor.removed = 0;
+    tutor.registered = 1;
+    tutor.edited = 0;
+    Tutor response = await TutorRepository.saveTutor(tutor);
+    var incidents = value['incidents'];
+    if(incidents != null){
+      for(var i = 0; i < incidents.length; i++){
+        await saveIncidentsTutor(incidents, i, response.id);
+      }
+    }
+    if(response != null){
+      text = "Tutor Registrado com sucesso";
       Navigator.pop(context, text);
     }
   }

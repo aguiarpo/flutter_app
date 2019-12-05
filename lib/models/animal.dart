@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/database/columns_names.dart';
 import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/models/vet.dart';
 
@@ -16,6 +17,8 @@ class Animal{
   String createdBy;
   String createdDate;
   String lastModifiedBy;
+  String genre;
+  int castrated;
   int removed;
   int registered;
   int edited;
@@ -42,6 +45,8 @@ class Animal{
     dateMicrochip = map['dateMicrochipColumn'];
     lastModifiedBy = map['lastModifiedByColumn'];
     comments = map['commentsColumn'];
+    castrated = map['castratedColumn'];
+    genre = map['genreColumn'];
     createdBy = map['createdByColumn'];
     createdDate = map['createdDateColumn'];
     removed = map['removedColumn'];
@@ -84,6 +89,8 @@ class Animal{
     createdBy = map['createdBy'];
     lastModifiedBy = map['lastModifiedBy'];
     createdDate = map['createdDate'];
+    castrated = map['castrated'] ? 1 : 0;
+    genre = map['genre'];
     idVet = map['vetMicrochip']['code'];
     idTutor = map["tutor"]["code"];
     registered = 0;
@@ -103,6 +110,8 @@ class Animal{
     dateMicrochip = map['dateMicrochip'];
     comments = map['comments'];
     createdBy = map['createdBy'];
+    castrated = map['castrated'];
+    genre = map['genre'];
     createdDate = map['createdDate'];
     removed = 0;
     registered = 0;
@@ -126,6 +135,8 @@ class Animal{
       'removedColumn' : removed,
       'registeredColumn' : registered,
       'editedColumn' : edited,
+      'castratedColumn' : castrated,
+      'genreColumn' : genre,
       'vetColumn' : idVet,
       "idTutorColumn" : idTutor,
     };

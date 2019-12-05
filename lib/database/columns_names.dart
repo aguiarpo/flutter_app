@@ -9,6 +9,8 @@ final String tutorIncidentsTable = "incidentsTutor";
 final String animalMedicationsTable = "animalMedications";
 
 final String idColumn = "idColumn";
+final String genreColumn = 'genreColumn';
+final String castratedColumn = 'castratedColumn';
 final String idIncidentsColumn = "idIncidentsColumn";
 final String idTutorColumn = "idTutorColumn";
 final String idUserColumn = "idUserColumn";

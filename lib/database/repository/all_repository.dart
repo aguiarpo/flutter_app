@@ -116,11 +116,11 @@ abstract class AllRepository{
         break;
       case "Espécie":
         columnName = speciesColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $tableName WHERE $removedColumn == 0 AND $columnName LIKE '$value%' LIMIT 5");
+        listMap = await dbContact.rawQuery("SELECT * FROM $tableName WHERE $removedColumn == 0 AND $columnName LIKE '$value%' GROUP BY $speciesColumn LIMIT 5");
         break;
       case "Raça":
         columnName = breedColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $tableName WHERE $removedColumn == 0 AND $columnName LIKE '$value%' LIMIT 5");
+        listMap = await dbContact.rawQuery("SELECT * FROM $tableName WHERE $removedColumn == 0 AND $columnName LIKE '$value%' GROUP BY $breedColumn LIMIT 5");
         break;
       case "CPF":
       case "Cpf":

@@ -21,7 +21,7 @@ abstract class AnimalRepository{
     List<Map> maps = await dbContact.rawQuery("SELECT $animalTable.$idColumn, $animalTable.$nameColumn, $animalTable.$removedColumn, "
         "$animalTable.$registeredColumn, $animalTable.$lastModifiedByColumn, $animalTable.$editedColumn, $animalTable.$commentsColumn, "
         "$animalTable.$microchipNumberColumn, $animalTable.$speciesColumn, $animalTable.$birthDateColumn,"
-        " $animalTable.$coatColorColumn, $tutorTable.$nameColumn as name,"
+        " $animalTable.$coatColorColumn, $animalTable.$castratedColumn, $animalTable.$genreColumn, $tutorTable.$nameColumn as name,"
         "$animalTable.$breedColumn, $animalTable.$sizeCmColumn, $animalTable.$dateMicrochipColumn, "
         "$animalTable.$createdDateColumn, $animalTable.$idVetColumn, $animalTable.$idTutorColumn, $vetTable.$crmvColumn, $tutorTable.$cpfColumn "
         " FROM $animalTable JOIN $vetTable ON $vetTable.$idColumn = $animalTable.$idVetColumn"
@@ -67,23 +67,23 @@ abstract class AnimalRepository{
     switch(column){
       case "Nome":
         columnName = nameColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 0 AND $columnName == '$value'");
+        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 0 AND $columnName like '$value%'");
         break;
       case "Microchip":
         columnName = microchipNumberColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 0 AND $columnName == '$value' LIMIT 1");
+        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 0 AND $columnName like '$value%'");
         break;
       case "Espécie":
         columnName = speciesColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 0 AND $columnName == '$value'");
+        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 0 AND $columnName like '$value%'");
         break;
       case "Raça":
         columnName = breedColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 0 AND $columnName == '$value'");
+        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 0 AND $columnName like '$value%'");
         break;
       case "Removidos":
         columnName = nameColumn;
-        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 1 AND $columnName == '$value' LIMIT 1");
+        listMap = await dbContact.rawQuery("SELECT * FROM $animalTable WHERE $removedColumn == 1 AND $columnName like '$value%'");
         break;
     }
     List<Animal> listContact = List();
@@ -97,7 +97,8 @@ abstract class AnimalRepository{
     Database dbContact = await DatabaseConnect.internal().db;
     List listMap = await dbContact.rawQuery("SELECT $animalTable.$idColumn as code,"
         " $animalTable.$nameColumn as name, $animalTable.$removedColumn as status, "
-        "$animalTable.$commentsColumn as comments, "
+        "$animalTable.$commentsColumn as comments, $animalTable.$genreColumn as genre,"
+        "$animalTable.$castratedColumn as castrated,  "
         "$animalTable.$microchipNumberColumn as microchipNumber, "
         "$animalTable.$speciesColumn as species, $animalTable.$birthDateColumn as birthDate,"
         "$animalTable.$coatColorColumn as coatColor,"
@@ -114,7 +115,8 @@ abstract class AnimalRepository{
     Database dbContact = await DatabaseConnect.internal().db;
     List listMap = await dbContact.rawQuery("SELECT $animalTable.$idColumn as code,"
         " $animalTable.$nameColumn as name, $animalTable.$removedColumn as status, "
-        "$animalTable.$commentsColumn as comments, "
+        "$animalTable.$commentsColumn as comments, $animalTable.$genreColumn as genre,"
+        "$animalTable.$castratedColumn as catrated, "
         "$animalTable.$microchipNumberColumn as microchipNumber, "
         "$animalTable.$speciesColumn as species, $animalTable.$birthDateColumn as birthDate,"
         "$animalTable.$coatColorColumn as coatColor,"

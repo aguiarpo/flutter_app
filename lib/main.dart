@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/animals/edit.dart';
 import 'package:flutter_app/pages/animals/register.dart';
 import 'package:flutter_app/pages/config.dart';
+import 'package:flutter_app/pages/tutor/register.dart';
 import 'package:flutter_app/pages/user/edit_cont.dart';
 import 'package:flutter_app/pages/home.dart';
 import 'package:flutter_app/pages/incidents/edit.dart';
@@ -37,6 +38,7 @@ void main() => runApp(MaterialApp(
     '/registerMedications' : (context) => RegisterMedications(),
     '/registerIncidents' : (context) => RegisterIncidents(),
     '/registerAnimals' : (context) => RegisterAnimals(),
+    '/registerTutor' : (context) => RegisterTutors(),
   },
 )
 );

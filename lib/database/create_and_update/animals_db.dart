@@ -43,7 +43,7 @@ abstract class AnimalDb{
       }else{
         await TutorIncidentRepository.deleteTutorIncidents(savedTutor.id);
         var incidents = value['incidents'];
-        if(incidents.isNotEmpty){
+        if(incidents != null){
           for(var i = 0; i < incidents.length; i++){
             await TutorDb.saveIncidentsTutor(incidents, i, savedTutor.id);
           }

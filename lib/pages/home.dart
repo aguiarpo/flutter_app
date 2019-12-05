@@ -4,6 +4,7 @@ import 'package:flutter_app/components/others/show_message_snackbar.dart';
 import 'package:flutter_app/database/repository/incidents_repository.dart';
 import 'package:flutter_app/database/repository/medications_repository.dart';
 import 'package:flutter_app/models/animal.dart';
+import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/pages/animals/page_view_animals.dart';
 import 'package:flutter_app/pages/incidents/page_view_incidents.dart';
 import 'package:flutter_app/pages/medications/page_view_medications.dart';
@@ -85,6 +86,11 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
       case 2:
         await _getPage(Navigator.pushNamed(context, '/registerMedications'));
         break;
+      case 1:
+        Tutor tutor = Tutor();
+        tutor.incidents = await IncidentsRepository.getAllIncidents();
+        await _getPage(Navigator.pushNamed(context, '/registerTutor', arguments: tutor));
+        break;
       case 0:
         Animal animal = Animal();
         animal.tutor.incidents = await IncidentsRepository.getAllIncidents();
@@ -129,16 +135,13 @@ class NavBar extends State<HomePage> with SingleTickerProviderStateMixin {
       key: _scaffoldKey,
       floatingActionButton: Visibility(
         visible: LoginDatabase.levelsOfAccess == "USUARIO" ? false : true,
-        child: AnimatedOpacity(
-          opacity: bloc.getCurrentNavigation == 1 ? 0 : 1,
-          child: DraggableFab(
-            child: FloatingActionButton(
-              onPressed: selectPage,
-              child: Icon(Icons.add, color: Colors.white,),
-              backgroundColor: Color(0xffAD4347),
-            ),
-        ), duration: Duration(milliseconds: 500),
-    ),
+        child: DraggableFab(
+          child: FloatingActionButton(
+            onPressed: selectPage,
+            child: Icon(Icons.add, color: Colors.white,),
+            backgroundColor: Color(0xffAD4347),
+          ),
+        ),
       ),
       appBar: AppBar(
         elevation: bloc.getCurrentNavigation == 1 ? 0 : 1,

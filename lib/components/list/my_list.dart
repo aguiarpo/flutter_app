@@ -112,8 +112,10 @@ class _MyListState extends State<MyList> {
       lastSuggestion = widget.suggestion;
       lastValueSelect = widget.selectValue;
       refresh = false;
+      if( list == null ) list = [];
       return list;
     }else{
+      if( list == null ) list = [];
       return list;
     }
   }

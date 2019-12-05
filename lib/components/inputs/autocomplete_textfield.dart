@@ -29,6 +29,10 @@ class _AutoCompleteState extends State<AutoComplete> {
       key: this._formKey,
       child: TypeAheadFormField(
         textFieldConfiguration: TextFieldConfiguration(
+          onSubmitted: (s){
+            this._typeAheadController.text = this._typeAheadController.text;
+            widget.parentAction(this._typeAheadController.text);
+            },
             controller: this._typeAheadController,
             decoration: InputDecoration(
               border: InputBorder.none,

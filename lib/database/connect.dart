@@ -67,7 +67,9 @@ class DatabaseConnect {
       await db.execute(
           "CREATE TABLE $animalTable($idColumn INTEGER PRIMARY KEY,"
               "$nameColumn TEXT NOT NULL, $lastModifiedByColumn TEXT, $microchipNumberColumn VARCHAR(20) UNIQUE NOT NULL, "
-              "$speciesColumn TEXT NOT NULL, $birthDateColumn TEXT NOT NULL,"
+              "$speciesColumn TEXT NOT NULL,"
+              "$genreColumn TEXT NOT NULL, $castratedColumn tinyint(1) NOT NULL,"
+              "$birthDateColumn TEXT NOT NULL,"
               "$coatColorColumn VARCHAR(10) NOT NULL,"
               "$breedColumn VARCHAR(2) NOT NULL, $sizeCmColumn VARCHAR(13) NOT NULL,"
               "$dateMicrochipColumn TEXT NOT NULL, $commentsColumn TEXT, $createdByColumn TEXT,"

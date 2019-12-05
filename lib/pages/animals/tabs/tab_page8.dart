@@ -41,7 +41,6 @@ class _TabPage8State extends State<TabPage8> with AutomaticKeepAliveClientMixin<
           physics: const NeverScrollableScrollPhysics(),
           itemCount: itens.length,
           itemBuilder: (BuildContext context, int index) {
-            myController[index] = TextEditingController();
             if(!widget.medications.contains(itens[index].id) && checkbox[index] == null)checkbox[index] = {"id" : itens[index].id, "value" : false};
             else if(checkbox[index] == null) checkbox[index] = {"id" : itens[index].id, "value" : true};
             return Container(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/database/repository/user_login_repository.dart';
+import 'package:flutter_app/pages/splash_screen.dart';
 import 'package:flutter_app/pages/user/login.dart';
 
 import '../../colors.dart';
@@ -30,7 +31,14 @@ class MyConfigButton extends StatelessWidget {
           ModalRoute.withName("/login")
       );
     } else{
-      navigationEditUser(navigation);
+      if(navigation == "/")Navigator.pushAndRemoveUntil(
+          _context,
+          MaterialPageRoute(
+              builder: (context) => SplashScreen()
+          ),
+          ModalRoute.withName("/")
+      );
+      else navigationEditUser(navigation);
     }
   }
 

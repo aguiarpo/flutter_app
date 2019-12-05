@@ -72,6 +72,11 @@ class RequestMyBodyTabs{
           if(await uniqueValidate(incidentsTable, nameColumn, value['name']) == 0)
             await IncidentsDb.updateIncidents(value, id, context);
           break;
+        case 8:
+          if(await uniqueValidate(tutorTable, cpfColumn, value['cpf']) == 0)
+            if(await uniqueValidate(tutorTable, rgColumn, value['rg']) == 0)
+              await TutorDb.saveTutors(value, context);
+          break;
         case 9:
           if(await uniqueValidate(tutorTable, cpfColumn, value['cpf']) == 0)
             if(await uniqueValidate(tutorTable, rgColumn, value['rg']) == 0)

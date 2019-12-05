@@ -18,6 +18,10 @@ List<Widget> showMyBottomSheet(animal){
       subtitle: animal.microchipNumber,
     ),
     MyBottomSheet(
+      title: "Espécie: ",
+      subtitle: animal.species,
+    ),
+    MyBottomSheet(
       title: "Nascimento: ",
       subtitle: DateFormat("dd-MM-yyyy").format( DateTime.parse(animal.birthDate)).toString(),
     ),
@@ -30,8 +34,12 @@ List<Widget> showMyBottomSheet(animal){
       subtitle: animal.breed,
     ),
     MyBottomSheet(
-      title: "Espécie: ",
-      subtitle: animal.species,
+      title: "Gênero: ",
+      subtitle: animal.genre,
+    ),
+    MyBottomSheet(
+      title: "Castrado: ",
+      subtitle: animal.castrated == 1 ? "Castrado" : "Não Castrado",
     ),
     MyBottomSheet(
       title: "Microchipagem data: ",

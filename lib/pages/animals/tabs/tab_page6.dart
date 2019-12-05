@@ -9,12 +9,12 @@ import 'package:intl/intl.dart';
 
 class TabPage6 extends StatefulWidget {
   final jsonBloc;
-  final species;
   final coatColor;
   final size;
   final date;
+  final breed;
 
-  const TabPage6({Key key, this.jsonBloc, this.species, this.coatColor, this.size, this.date}) : super(key: key);
+  const TabPage6({Key key, this.jsonBloc, this.coatColor, this.size, this.date, this.breed}) : super(key: key);
 
   @override
   _TabPage6State createState() => _TabPage6State();
@@ -23,10 +23,10 @@ class TabPage6 extends StatefulWidget {
 class _TabPage6State extends State<TabPage6> with AutomaticKeepAliveClientMixin<TabPage6>{
   DateTime date2;
 
-  TextEditingController controllerSpecies = TextEditingController();
   TextEditingController controllerCoatColor = TextEditingController();
   String controllerSize;
   DateTime controllerDate;
+  TextEditingController controllerBreed = TextEditingController();
 
   var jsonBloc;
 
@@ -35,13 +35,13 @@ class _TabPage6State extends State<TabPage6> with AutomaticKeepAliveClientMixin<
     super.initState();
     jsonBloc = widget.jsonBloc;
     controllerCoatColor.text = widget.coatColor;
-    controllerSpecies.text = widget.species;
+    controllerBreed.text = widget.breed;
     if(widget.size != null)controllerSize = widget.size;
     else controllerSize = "Médio";
     setSelectValue(controllerSize);
-    if(widget.date != null){
+    if(widget.date != null && widget.date != "") {
       controllerDate = DateTime.parse(widget.date);
-      Map values = {"title" : "dateMicrochip", "value" : ""};
+      Map values = {"title": "dateMicrochip", "value": DateFormat("yyyy-MM-dd").format(controllerDate).toString()};
       onSaved(values);
     }
   }
@@ -61,29 +61,33 @@ class _TabPage6State extends State<TabPage6> with AutomaticKeepAliveClientMixin<
         child: Container(
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 30, bottom: 10),
-                child: Select(
-                  title: "Porte",
-                  value: controllerSize,
-                  parentAction: setSelectValue,
-                  list: ["Mini", "Pequeno",'Médio', "Grande", "Gigante"],
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  border: BoxDecoration(
-                    border: Border.all(color: Colors.grey,),
-                    borderRadius: BorderRadius.circular(5),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30, bottom: 10),
+                    child: Select(
+                      title: "Porte",
+                      value: controllerSize,
+                      parentAction: setSelectValue,
+                      list: ["Mini", "Pequeno",'Médio', "Grande", "Gigante"],
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      border: BoxDecoration(
+                        border: Border.all(color: Colors.grey,),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
               MyTextField(
-                controller: controllerSpecies,
+                controller: controllerBreed,
                 validate: (value) => Validate.validateAll(value,
                     r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
                     'Caracteres inválidos'),
                 icon: Surca.animal,
-                hint: "Espécie",
+                hint: "Raça",
                 parentAction: onSaved,
-                title: 'species',
+                title: 'breed',
               ),
               MyTextField(
                 controller: controllerCoatColor,

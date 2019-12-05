@@ -9,7 +9,7 @@ import '../client.dart';
 class UserRequest extends UserAgentClient{
 
   Future getLogin() async {
-     var response = await UserAgentClient.client.get(Url.name + 'v1/user/usuario/login').timeout(const Duration(seconds: 5));
+     var response = await UserAgentClient.client.get(Url.name + 'v1/user/usuario/login').timeout(const Duration(seconds: 2));
       return response;
   }
 
