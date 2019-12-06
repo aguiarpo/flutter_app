@@ -41,10 +41,10 @@ class _EditUser extends State<EditAnimals> {
         jsonBloc: bloc,
       ),
       TabPage2(
+        state: animal.tutor.neighborhood.city.state.name,
         cep: animal.tutor.cep,
-        city: animal.tutor.city,
-        neighborhood: animal.tutor.neighborhood,
-        state: animal.tutor.state,
+        city: animal.tutor.neighborhood.city.name,
+        neighborhood: animal.tutor.neighborhood.name,
         jsonBloc: bloc,
       ),
       TabPage3(

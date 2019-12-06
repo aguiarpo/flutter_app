@@ -7,8 +7,11 @@ import 'package:flutter_app/database/repository/tutor_repository.dart';
 import 'package:flutter_app/database/repository/vet_repository.dart';
 import 'package:flutter_app/models/animal.dart';
 import 'package:flutter_app/models/animal_medications.dart';
+import 'package:flutter_app/models/neighborhood.dart';
 import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/models/vet.dart';
+
+import 'address_db.dart';
 
 abstract class AnimalDb{
 
@@ -24,12 +27,14 @@ abstract class AnimalDb{
       Navigator.pop(context, text);
     }else{
       value['number'] = int.parse(value['number']);
-      tutor.setValues(value);
+      tutor.setValuesWithAddress(value);
       tutor.registered = 1;
       animal.setValuesWithoutId(animalValue);
       animal.idVet = dbVet.id;
       Tutor savedTutor;
       Tutor findTutor = await TutorRepository.getTutorByCpf(tutor.cpf);
+      Neighborhood neighborhood = await AddressDb.saveAddress(tutor.neighborhood);
+      if(neighborhood != null)tutor.neighborhoodId = neighborhood.id;
       if(findTutor == null) savedTutor = await TutorRepository.saveTutor(tutor);
       else{
         tutor.id = findTutor.id;
@@ -100,7 +105,7 @@ abstract class AnimalDb{
         Navigator.pop(context, text);
       }else{
         value['number'] = int.parse(value['number']);
-        tutor.setValues(value);
+        tutor.setValuesWithAddress(value);
         tutor.id = dbTutor.id;
         tutor.createdDate = dbTutor.createdDate;
         tutor.createdBy = dbTutor.createdBy;
@@ -116,6 +121,8 @@ abstract class AnimalDb{
         animal.removed = 0;
         animal.registered = animal.registered;
         animal.edited = 1;
+        Neighborhood neighborhood = await AddressDb.saveAddress(tutor.neighborhood);
+        if(neighborhood != null)tutor.neighborhoodId = neighborhood.id;
         var response = await TutorRepository.updateTutor(tutor);
         if(response != 1){
           Navigator.pop(context, "Erro");

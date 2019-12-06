@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/database/create_and_update/address_db.dart';
 import 'package:flutter_app/database/repository/tutor_incidents_repository.dart';
 import 'package:flutter_app/database/repository/tutor_repository.dart';
+import 'package:flutter_app/models/neighborhood.dart';
 import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/models/tutors_incidents.dart';
 
@@ -13,13 +15,15 @@ abstract class TutorDb{
     Tutor tutor = Tutor();
     Tutor dbTutor = await TutorRepository.getTutor(id);
     value['number'] = int.parse(value['number']);
-    tutor.setValues(value);
+    tutor.setValuesWithAddress(value);
     tutor.id = id;
     tutor.createdDate = dbTutor.createdDate;
     tutor.createdBy = dbTutor.createdBy;
     tutor.removed = 0;
     tutor.registered = dbTutor.registered;
     tutor.edited = 1;
+    Neighborhood neighborhood = await AddressDb.saveAddress(tutor.neighborhood);
+    if(neighborhood != null)tutor.neighborhoodId = neighborhood.id;
     var response = await TutorRepository.updateTutor(tutor);
     await TutorIncidentRepository.deleteTutorIncidents(id);
     var incidents = value['incidents'];
@@ -37,10 +41,12 @@ abstract class TutorDb{
   static Future saveTutors(value, context) async {
     Tutor tutor = Tutor();
     value['number'] = int.parse(value['number']);
-    tutor.setValues(value);
+    tutor.setValuesWithAddress(value);
     tutor.removed = 0;
     tutor.registered = 1;
     tutor.edited = 0;
+    Neighborhood neighborhood = await AddressDb.saveAddress(tutor.neighborhood);
+    if(neighborhood != null)tutor.neighborhoodId = neighborhood.id;
     Tutor response = await TutorRepository.saveTutor(tutor);
     var incidents = value['incidents'];
     if(incidents != null){

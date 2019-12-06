@@ -1,16 +1,22 @@
 import 'package:flutter_app/database/connect.dart';
 import 'package:flutter_app/database/repository/animal_medications_repository.dart';
 import 'package:flutter_app/database/repository/animal_repository.dart';
+import 'package:flutter_app/database/repository/city_repository.dart';
 import 'package:flutter_app/database/repository/incidents_repository.dart';
 import 'package:flutter_app/database/repository/medications_repository.dart';
+import 'package:flutter_app/database/repository/neighborhood_repository.dart';
+import 'package:flutter_app/database/repository/state_repository.dart';
 import 'package:flutter_app/database/repository/tutor_incidents_repository.dart';
 import 'package:flutter_app/database/repository/tutor_repository.dart';
 import 'package:flutter_app/database/repository/user_repository.dart';
 import 'package:flutter_app/database/repository/vet_repository.dart';
 import 'package:flutter_app/models/animal.dart';
 import 'package:flutter_app/models/animal_medications.dart';
+import 'package:flutter_app/models/city.dart';
 import 'package:flutter_app/models/incidents.dart';
 import 'package:flutter_app/models/medications.dart';
+import 'package:flutter_app/models/neighborhood.dart';
+import 'package:flutter_app/models/state.dart';
 import 'package:flutter_app/models/tutor.dart';
 import 'package:flutter_app/models/tutors_incidents.dart';
 import 'package:flutter_app/models/vet.dart';
@@ -21,6 +27,9 @@ import '../columns_names.dart';
 abstract class AllRepository{
 
   static truncateAll() async{
+    await StateRepository.truncateState();
+    await CityRepository.truncateCity();
+    await NeighborhoodRepository.truncateNeighborhood();
     await TutorIncidentRepository.truncateIncidentsWithTutor();
     await MedicationsRepository.truncateMedications();
     await IncidentsRepository.truncateIncidents();
@@ -37,6 +46,21 @@ abstract class AllRepository{
     Vet vet = Vet();
     Tutor tutor = Tutor();
     Animal animal = Animal();
+    State state = State();
+    City city = City();
+    Neighborhood neighborhood = Neighborhood();
+    for(var i = 0; i<valuesBody['states'].length; i++){
+      state.setValues(valuesBody['states'][i]);
+      await StateRepository.saveState(state);
+    }
+    for(var i = 0; i<valuesBody['cities'].length; i++){
+      city.setValues(valuesBody['cities'][i]);
+      await CityRepository.saveCity(city);
+    }
+    for(var i = 0; i<valuesBody['neighborhood'].length; i++){
+      neighborhood.setValues(valuesBody['neighborhood'][i]);
+      await NeighborhoodRepository.saveNeighborhood(neighborhood);
+    }
     for(var i = 0; i<valuesBody['medications'].length; i++){
       medications.setValues(valuesBody['medications'][i]);
       await MedicationsRepository.saveMedications(medications);

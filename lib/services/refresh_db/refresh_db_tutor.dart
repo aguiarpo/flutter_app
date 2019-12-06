@@ -25,8 +25,15 @@ abstract class RefreshTutor{
       for(int i = 0; i < tutorRegistered.length; i++){
         List incidents = await TutorIncidentRepository.getAllIncidentsByIdTutorList(tutorRegistered[i]['code']);
         tutorRegistered[i]['incidents'] = incidents;
+        tutorRegistered[i]['neighborhood'] = { "name" : tutorRegistered[i]['neighborhoodColumn'],
+          "city" : { "name" : tutorRegistered[i]['cityColumn'],
+            "state" : { "name" : tutorRegistered[i]['stateColumn']
+            }
+          }
+        };
         if(tutorRegistered[i]['status'] == 1)tutorRegistered[i]['status'] = "INVISIBLE";
         else tutorRegistered[i]['status'] = "VISIBLE";
+        tutorRegistered[i]['code'] = null;
       }
       await ModalsRequest.post(tutorRegistered, urlName);
     }
@@ -41,6 +48,12 @@ abstract class RefreshTutor{
       for(int i = 0; i < tutorEdited.length; i++){
         List incidents = await TutorIncidentRepository.getAllIncidentsByIdTutorList(tutorEdited[i]['code']);
         tutorEdited[i]['incidents'] = incidents;
+        tutorEdited[i]['neighborhood'] = { "name" : tutorEdited[i]['neighborhoodColumn'],
+          "city" : { "name" : tutorEdited[i]['cityColumn'],
+            "state" : { "name" : tutorEdited[i]['stateColumn']
+          }
+         }
+        };
         if(tutorEdited[i]['status'] == 1)tutorEdited[i]['status'] = "INVISIBLE";
         else tutorEdited[i]['status'] = "VISIBLE";
       }

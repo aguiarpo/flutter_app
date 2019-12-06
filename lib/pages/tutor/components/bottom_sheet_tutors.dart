@@ -5,6 +5,7 @@ import 'package:flutter_app/models/tutor.dart';
 import '../../../user_login.dart';
 
 List<Widget> showMyBottomSheet(Tutor tutor){
+  tutor;
   return <Widget>[
     MyBottomSheet(
       title: "Nome: ",
@@ -30,15 +31,15 @@ List<Widget> showMyBottomSheet(Tutor tutor){
     ),
     MyBottomSheet(
       title: "Estado: ",
-      subtitle: tutor.state,
+      subtitle: tutor.neighborhood.city.state.name,
     ),
     MyBottomSheet(
       title: "Cidade: ",
-      subtitle: tutor.city,
+      subtitle: tutor.neighborhood.city.name,
     ),
     MyBottomSheet(
       title: "Bairro: ",
-      subtitle: tutor.neighborhood,
+      subtitle: tutor.neighborhood.name,
     ),
     MyBottomSheet(
       title: "Rua: ",

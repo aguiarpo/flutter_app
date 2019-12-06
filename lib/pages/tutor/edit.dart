@@ -38,10 +38,10 @@ class _EditTutors extends State<EditTutors>{
         jsonBloc: bloc,
       ),
       TabPage2(
-        state : tutor.state,
+        state: tutor.neighborhood.city.state.name,
         cep : tutor.cep,
-        neighborhood : tutor.neighborhood,
-        city : tutor.city,
+        city: tutor.neighborhood.city.name,
+        neighborhood : tutor.neighborhood.name,
         jsonBloc: bloc,
       ),
       TabPage3(

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_app/models/neighborhood.dart';
 
 class Tutor{
   int id;
@@ -6,10 +7,9 @@ class Tutor{
   String cpf;
   String rg;
   String motherName;
-  String state;
-  String city;
   String cep;
-  String neighborhood;
+  int neighborhoodId;
+  Neighborhood neighborhood = Neighborhood();
   String street;
   int number;
   String profession;
@@ -34,11 +34,13 @@ class Tutor{
     cpf = map['cpfColumn'];
     rg = map['rgColumn'];
     motherName = map['motherNameColumn'];
-    city = map['cityColumn'];
     cep = map['cepColumn'];
-    state = map['stateColumn'];
     street = map['streetColumn'];
-    neighborhood = map['neighborhoodColumn'];
+    if(map['neighborhoodColumn'] != null){
+      neighborhood.name = map['neighborhoodColumn'];
+      neighborhood.city.name = map['cityColumn'];
+      neighborhood.city.state.name = map['stateColumn'];
+    }
     lastModifiedBy = map['lastModifiedByColumn'];
     number = map['numberColumn'];
     complements = map['complementColumn'];
@@ -60,13 +62,11 @@ class Tutor{
     motherName = map['motherName'];
     lastModifiedBy = map['lastModifiedBy'];
     street = map['street'];
-    neighborhood = map['neighborhood'];
+    neighborhoodId = map['neighborhood']['code'];
     number = map['number'];
     cep = map['cep'];
     complements = map['complement'];
     profession = map['profession'];
-    city = map['city'];
-    state = map['state'];
     telephone1 = map['telephone1'];
     telephone2 = map['telephone2'];
     createdBy = map['createdBy'];
@@ -76,24 +76,26 @@ class Tutor{
     edited = 0;
   }
 
-  setValuesWithoutNumber(Map map){
+  setValuesWithAddress(Map map){
     id = map['code'];
     name = map['name'];
     cpf = map['cpf'];
     rg = map['rg'];
     motherName = map['motherName'];
+    lastModifiedBy = map['lastModifiedBy'];
     street = map['street'];
-    neighborhood = map['neighborhood'];
+    if(map['neighborhood'] != null)neighborhood.name = map['neighborhood'];
+    if(map['city'] != null)neighborhood.city.name = map['city'];
+    if(map['state'] != null)neighborhood.city.state.name = map['state'];
+    number = map['number'];
     cep = map['cep'];
     complements = map['complement'];
     profession = map['profession'];
-    city = map['city'];
-    state = map['state'];
     telephone1 = map['telephone1'];
     telephone2 = map['telephone2'];
     createdBy = map['createdBy'];
     createdDate = map['createdDate'];
-    removed = 0;
+    removed = map['status'] == "INVISIBLE" ? 1 : 0;
     registered = 0;
     edited = 0;
   }
@@ -107,12 +109,10 @@ class Tutor{
       'motherNameColumn' : motherName,
       'streetColumn' : street,
       'cepColumn' : cep,
-      'neighborhoodColumn' : neighborhood,
+      'idNeighborhoodColumn' : neighborhoodId,
       'numberColumn' : number,
       'complementColumn' : complements,
       'professionColumn' : profession,
-      'stateColumn' : state,
-      'cityColumn' : city,
       'telephone1Column' : telephone1,
       'telephone2Column' : telephone2,
       'createdByColumn': createdBy,
@@ -125,11 +125,5 @@ class Tutor{
       map['idColumn'] = id;
     }
     return map;
-  }
-
-  @override
-  String toString() {
-    return "User(id: $id, name: $name,"
-        " state: $state, city: $city, telephone: $telephone1, telephone: $telephone2)";
   }
 }

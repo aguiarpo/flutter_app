@@ -47,9 +47,9 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
         jsonBloc: bloc,
       ),
       TabPage2(
-        state: tutor.state,
-        neighborhood: tutor.neighborhood,
-        city: tutor.city,
+        state: tutor.neighborhood.city.state.name,
+        city: tutor.neighborhood.city.name,
+        neighborhood: tutor.neighborhood.name,
         cep: tutor.cep,
         jsonBloc: bloc,
       ),
@@ -102,8 +102,8 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
 
   @override
   void initState() {
-    tutor.state = "SC";
     super.initState();
+    tutor.neighborhood.city.state.name = "SC";
   }
 
   @override

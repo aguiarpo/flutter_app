@@ -56,13 +56,14 @@ class DatabaseConnect {
           "CREATE TABLE $tutorTable($idColumn INTEGER PRIMARY KEY,"
               "$nameColumn TEXT NOT NULL, $lastModifiedByColumn TEXT, $motherNameColumn TEXT NOT NULL, "
               "$telephoneColumn1 TEXT NOT NULL, $telephoneColumn2 TEXT,"
-              "$cpfColumn VARCHAR(15) NOT NULL,$rgColumn VARCHAR(10) NOT NULL, $stateColumn VARCHAR(2) NOT NULL, $cityColumn TEXT NOT NULL,"
-              "$cepColumn VARCHAR(15) NOT NULL, $neighborhoodColumn TEXT NOT NULL, "
+              "$cpfColumn VARCHAR(15) NOT NULL,$rgColumn VARCHAR(10) NOT NULL,"
+              "$cepColumn VARCHAR(15) NOT NULL, $idNeighborhoodColumn INTEGER NOT NULL, "
               "$streetColumn TEXT NOT NULL, $numberColumn INTEGER(5) NOT NULL, $professionColumn TEXT NOT NULL, "
               "$complementColumn TEXT, $createdByColumn TEXT,"
               "$createdDateColumn TEXT, "
               "$removedColumn INTEGER(1) DEFAULT 0, $registeredColumn INTEGER(1) DEFAULT 0,"
-              "$editedColumn INTEGER(1) DEFAULT 0)"
+              "$editedColumn INTEGER(1) DEFAULT 0,"
+              "FOREIGN KEY($idNeighborhoodColumn) REFERENCES $neighborhoodTable($idColumn))"
       );
       await db.execute(
           "CREATE TABLE $animalTable($idColumn INTEGER PRIMARY KEY,"
@@ -96,6 +97,20 @@ class DatabaseConnect {
               "$dateMedicationColumn TEXT NOT NULL, "
               "FOREIGN KEY($idAnimalColumn) REFERENCES $animalTable($idColumn),"
               "FOREIGN KEY($idMedicationsColumn) REFERENCES $medicationsTable($idColumn))"
+      );
+      await db.execute(
+          "CREATE TABLE $stateTable($idColumn INTEGER PRIMARY KEY,"
+              "$nameColumn VARCHAR(2) UNIQUE NOT NULL)"
+      );
+      await db.execute(
+          "CREATE TABLE $cityTable($idColumn INTEGER PRIMARY KEY,"
+              "$nameColumn VARCHAR(255)NOT NULL, $idStateColumn INTEGER NOT NULL,"
+              "FOREIGN KEY($idStateColumn) REFERENCES $stateTable($idColumn))"
+      );
+      await db.execute(
+          "CREATE TABLE $neighborhoodTable($idColumn INTEGER PRIMARY KEY,"
+              "$nameColumn VARCHAR(255)NOT NULL, $idCityColumn INTEGER NOT NULL,"
+              "FOREIGN KEY($idCityColumn) REFERENCES $cityTable($idColumn))"
       );
     });
   }
