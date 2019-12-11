@@ -4,11 +4,11 @@ import 'package:flutter_app/validates/validate.dart';
 
 class TabPage4 extends StatefulWidget {
   final jsonBloc;
-  final profession;
   final telephone1;
   final telephone2;
+  final number;
 
-  const TabPage4({Key key, this.jsonBloc, this.profession, this.telephone1, this.telephone2}) : super(key: key);
+  const TabPage4({Key key, this.jsonBloc, this.telephone1, this.telephone2, this.number}) : super(key: key);
 
   @override
   _TabPage4State createState() => _TabPage4State();
@@ -16,16 +16,16 @@ class TabPage4 extends StatefulWidget {
 
 class _TabPage4State extends State<TabPage4> with AutomaticKeepAliveClientMixin<TabPage4> {
   var jsonBloc;
-  TextEditingController controllerProfession = TextEditingController();
   TextEditingController controllerTelephone1= TextEditingController();
   TextEditingController controllerTelephone2= TextEditingController();
+  TextEditingController controllerNumber = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    controllerProfession.text = widget.profession;
     controllerTelephone1.text = widget.telephone1;
     controllerTelephone2.text = widget.telephone2;
+    if(widget.number != "null")controllerNumber.text = widget.number;
     jsonBloc = widget.jsonBloc;
   }
 
@@ -41,14 +41,14 @@ class _TabPage4State extends State<TabPage4> with AutomaticKeepAliveClientMixin<
           child: Column(
             children: <Widget>[
               MyTextField(
-                controller: controllerProfession,
+                controller: controllerNumber,
+                type: TextInputType.number,
                 validate: (value) => Validate.validateAll(value,
-                    r"^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$",
-                    'Caracteres inválidos'),
-                icon: Icons.build,
-                hint: "Profissão",
+                    r"^([0-9.\-]+)*$", 'Caracteres inválidos'),
                 parentAction: onSaved,
-                title: 'profession',
+                title: 'number',
+                icon: Icons.mode_edit,
+                hint: "Número",
               ),
               MyTextField(
                 controller: controllerTelephone1,

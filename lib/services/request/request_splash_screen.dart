@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_app/components/others/show_message_snackbar.dart';
 import 'package:flutter_app/database/repository/all_repository.dart';
 import 'package:flutter_app/database/repository/user_login_repository.dart';
 import 'package:flutter_app/models/user_login.dart';
+import 'package:flutter_app/pages/home.dart';
 import 'package:flutter_app/services/client.dart';
 import 'package:flutter_app/services/refresh_db/refresh_db_animal.dart';
 import 'package:flutter_app/services/refresh_db/refresh_db_incidents.dart';
@@ -38,7 +40,7 @@ class Request{
       navigatePage('/home');
     }
     else if (connectivityResult == ConnectivityResult.none && userList == null) navigatePage('/login');
-    else request();
+    else await request();
   }
 
   request() async{
@@ -127,6 +129,13 @@ class Request{
   }
 
   void navigatePage(page){
+    Navigator.pushAndRemoveUntil(
+        _navigationContext,
+        MaterialPageRoute(
+            builder: (context) => HomePage()
+        ),
+        ModalRoute.withName(page)
+    );
     Navigator.pushReplacementNamed(_navigationContext, page);
   }
 }

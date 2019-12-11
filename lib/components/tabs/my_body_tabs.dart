@@ -114,31 +114,33 @@ class _MyBodyTabsState extends State<MyBodyTabs> with SingleTickerProviderStateM
                 height: MediaQuery.of(context).size.height - 130,
                 child: Form(
                     key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          height: 510,
-                          child: IconTheme(
-                            data: IconThemeData(
-                              size: 128.0,
-                              color: Theme.of(context).accentColor,
-                            ),
-                            child: TabBarView(
-                              controller: _tabController,
-                              children: widget.kIcons,
-                              physics: NeverScrollableScrollPhysics(),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 510,
+                            child: IconTheme(
+                              data: IconThemeData(
+                                size: 128.0,
+                                color: Theme.of(context).accentColor,
+                              ),
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: widget.kIcons,
+                                physics: NeverScrollableScrollPhysics(),
+                              ),
                             ),
                           ),
-                        ),
-                        MyRaiseButton(
-                          color: disabledButton ? Colors.grey.shade400 : null,
-                          tabController: _tabController,
-                          continueButton: disabledButton ? (value){} : (value) async {await formValidate(value);},
-                          backButton : disabledButton ? (value){} : showTabs
-                        ),
-                      ],
+                          MyRaiseButton(
+                            color: disabledButton ? Colors.grey.shade400 : null,
+                            tabController: _tabController,
+                            continueButton: disabledButton ? (value){} : (value) async {await formValidate(value);},
+                            backButton : disabledButton ? (value){} : showTabs
+                          ),
+                        ],
+                      ),
                     ),
                   ),
               ),

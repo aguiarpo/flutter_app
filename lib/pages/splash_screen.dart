@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen > {
     Request request = Request();
     request.setNavigationContext(context);
     request.setScaffoldKey(_scaffoldKey);
-    request.requestGetLogin(userList);
+    await request.requestGetLogin(userList);
   }
 
   @override

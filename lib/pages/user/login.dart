@@ -60,7 +60,6 @@ class _LoginPageState extends State<LoginPage> {
         switch(response.statusCode){
           case 200:
             await saveUser(response);
-            Navigator.pushReplacementNamed(context, "/");
             break;
           default:
             MySnackBar.message('Email ou senha inválida',scaffoldKey: _scaffoldKey);
@@ -84,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
       await UserLoginRepository.truncateContacts();
       var saved = await UserLoginRepository.saveContact(user);
       if(saved != null)
-        Navigator.pushReplacementNamed(context, "/home");
+        Navigator.pushReplacementNamed(context, "/");
       else
         MySnackBar.message('Erro', scaffoldKey: _scaffoldKey);
     }catch (e){

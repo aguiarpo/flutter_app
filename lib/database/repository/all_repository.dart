@@ -106,7 +106,7 @@ abstract class AllRepository{
     return exists;
   }
 
-  static Future<List> getLike(title, column, value) async {
+  static Future<List> getLike(title, column, value, {state, city}) async {
     Database dbContact = await DatabaseConnect.internal().db;
     var tableName;
     var columnName;
@@ -127,6 +127,12 @@ abstract class AllRepository{
         break;
       case "Vet":
         tableName = vetTable;
+        break;
+      case "City":
+        tableName = cityTable;
+        break;
+      case "Neighborhood":
+        tableName = neighborhoodTable;
         break;
     }
     switch(column){
@@ -158,6 +164,20 @@ abstract class AllRepository{
       case "Crmv":
         columnName = crmvColumn;
         listMap = await dbContact.rawQuery("SELECT * FROM $tableName WHERE $columnName LIKE '$value%' LIMIT 5");
+        break;
+      case "Cidade":
+        columnName = nameColumn;
+        listMap = await dbContact.rawQuery("SELECT $cityTable.$nameColumn FROM $cityTable"
+            " JOIN $stateTable ON $stateTable.$idColumn = $cityTable.$idStateColumn"
+            " WHERE $cityTable.$nameColumn like '$value%' AND $stateTable.$nameColumn == '$state'");
+        break;
+      case "Bairro":
+        columnName = nameColumn;
+        listMap = await dbContact.rawQuery("SELECT $neighborhoodTable.$nameColumn FROM $neighborhoodTable"
+            " JOIN $cityTable ON $cityTable.$idColumn = $neighborhoodTable.$idCityColumn"
+            " JOIN $stateTable ON $stateTable.$idColumn = $cityTable.$idStateColumn"
+            " WHERE $neighborhoodTable.$nameColumn like '$value%' AND"
+            " $cityTable.$nameColumn == '$city' AND $stateTable.$nameColumn == '$state'");
         break;
       case "Removidos":
         columnName = nameColumn;

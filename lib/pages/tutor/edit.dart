@@ -40,18 +40,18 @@ class _EditTutors extends State<EditTutors>{
       TabPage2(
         state: tutor.neighborhood.city.state.name,
         cep : tutor.cep,
+        profession: tutor.profession,
         city: tutor.neighborhood.city.name,
-        neighborhood : tutor.neighborhood.name,
         jsonBloc: bloc,
       ),
       TabPage3(
+        neighborhood : tutor.neighborhood.name,
         street: tutor.street,
-        number : tutor.number.toString(),
         complements: tutor.complements,
         jsonBloc: bloc,
       ),
       TabPage4(
-        profession: tutor.profession,
+        number : tutor.number.toString(),
         telephone1 : tutor.telephone1,
         telephone2 : tutor.telephone2,
         jsonBloc: bloc,

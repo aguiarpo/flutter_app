@@ -49,20 +49,20 @@ class _RegisterAnimals extends State<RegisterAnimals> with SingleTickerProviderS
       TabPage2(
         state: tutor.neighborhood.city.state.name,
         city: tutor.neighborhood.city.name,
-        neighborhood: tutor.neighborhood.name,
         cep: tutor.cep,
+        profession: tutor.profession,
         jsonBloc: bloc,
       ),
       TabPage3(
+        neighborhood: tutor.neighborhood.name,
         street: tutor.street,
-        number: tutor.number.toString(),
         complements: tutor.complements,
         jsonBloc: bloc,
       ),
       TabPage4(
+        number: tutor.number.toString(),
         telephone2: tutor.telephone2,
         telephone1: tutor.telephone1,
-        profession: tutor.profession,
         jsonBloc: bloc,
       ),
       TabPage5(

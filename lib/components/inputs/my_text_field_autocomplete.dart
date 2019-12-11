@@ -15,8 +15,11 @@ class MyAutoComplete extends StatefulWidget {
   final table;
   final focusNode;
   final Function validator;
+  final state;
+  final city;
+  final ValueChanged change;
 
-  const MyAutoComplete({Key key, this.parentAction, this.typeAheadController, this.title, this.regex, this.returnText, this.hint, this.table, this.focusNode, this.validator}) : super(key: key);
+  const MyAutoComplete({Key key, this.parentAction, this.typeAheadController, this.title, this.regex, this.returnText, this.hint, this.table, this.focusNode, this.validator, this.state, this.city, this.change}) : super(key: key);
   @override
   _MyAutoCompleteState createState() => _MyAutoCompleteState();
 }
@@ -47,6 +50,7 @@ class _MyAutoCompleteState extends State<MyAutoComplete> {
         validator: (value) => widget.validator(value,
             widget.regex, widget.returnText),
         textFieldConfiguration: TextFieldConfiguration(
+          onChanged: widget.change,
           focusNode: myFocusNode,
           controller: _typeAheadController,
           style: new TextStyle(color: Colors.grey),
@@ -75,13 +79,19 @@ class _MyAutoCompleteState extends State<MyAutoComplete> {
           ),
         ),
         suggestionsCallback: (pattern)async{
-          if(pattern != "") suggestions = await AllRepository.getLike(widget.table, widget.hint, pattern);
+          if(pattern != "")
+            if(widget.state == null && widget.city == null)
+              suggestions = await AllRepository.getLike(widget.table, widget.hint, pattern);
+            else
+                suggestions = await AllRepository.getLike(widget.table, widget.hint, pattern, state: widget.state, city: widget.city);
           if(suggestions == null)suggestions = [];
           return suggestions;
         },
         itemBuilder: (context, suggestion) {
-          return ListTile(
-            title: Text(suggestion),
+          return SingleChildScrollView(
+            child: ListTile(
+              title: Text(suggestion),
+            ),
           );
         },
         transitionBuilder: (context, suggestionsBox, controller) {
