@@ -35,7 +35,7 @@ class Request{
   requestGetLogin(List userList) async {
     _userList = userList;
     var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none && userList != null){
+    if (connectivityResult == ConnectivityResult.none && _userList != null ){
       setLoginDatabase(_userList[0]);
       navigatePage('/home');
     }
@@ -47,7 +47,7 @@ class Request{
     var response;
     var responseMedications;
     try{
-      if(_userList.isNotEmpty){
+      if(_userList.isNotEmpty && _userList != null){
         UserLogin userLogin = _userList[0];
         setLoginDatabase(userLogin);
         _user.setClient(userLogin.email, userLogin.password);
@@ -129,13 +129,6 @@ class Request{
   }
 
   void navigatePage(page){
-    Navigator.pushAndRemoveUntil(
-        _navigationContext,
-        MaterialPageRoute(
-            builder: (context) => HomePage()
-        ),
-        ModalRoute.withName(page)
-    );
     Navigator.pushReplacementNamed(_navigationContext, page);
   }
 }

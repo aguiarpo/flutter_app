@@ -23,6 +23,7 @@ class _ResetPasswordState extends State<ResetPassword> with SingleTickerProvider
   TabController _tabController;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   var bloc = UserBloc();
+  UserRequest loginRequest = UserRequest();
 
   @override
   void initState() {
@@ -56,20 +57,17 @@ class _ResetPasswordState extends State<ResetPassword> with SingleTickerProvider
     ];
   }
 
-  void showTabs(Map values){
+  void showTabs(Map values) async {
     if(values['page'] != null){
       _tabController.animateTo(values['page']);
-      setState(() {});
+      await request(values['value'], values['page']);
     }
-    if(values['value'] != null)request(values['value']);
   }
 
-
-  void request(values) async{
+  Future request(values, page) async{
     try{
-      UserRequest loginRequest = UserRequest();
       await loginRequest.addToken(json.encode(values));
-      MySnackBar.message('Email Enviado', scaffoldKey: _scaffoldKey);
+      if(page == 1)MySnackBar.message('Email Enviado', scaffoldKey: _scaffoldKey);
     }catch(e){
       UserAgentClient.client.close();
       Navigator.pop(context);

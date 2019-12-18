@@ -41,6 +41,9 @@ class Tutor{
       neighborhood.city.name = map['cityColumn'];
       neighborhood.city.state.name = map['stateColumn'];
     }
+    if(map['idNeighborhoodColumn'] != null){
+      neighborhoodId = map['idNeighborhoodColumn'];
+    }
     lastModifiedBy = map['lastModifiedByColumn'];
     number = map['numberColumn'];
     complements = map['complementColumn'];

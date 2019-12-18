@@ -85,6 +85,7 @@ class _TabPage3State extends State<TabPage3> {
                   validate: Validate.validatePassword,
                   parentAction: onSaved,
                   title: 'password',
+                  obscureText: true,
                   icon: Icons.vpn_key,
                   hint: "Senha",
                 ),
@@ -93,6 +94,7 @@ class _TabPage3State extends State<TabPage3> {
                   title: 'confirmPassword',
                   icon: Icons.mode_edit,
                   hint: "Confirmar Senha",
+                  obscureText: true,
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 30),

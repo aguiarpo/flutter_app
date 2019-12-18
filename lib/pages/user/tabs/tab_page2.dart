@@ -95,7 +95,6 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
                 hint: "Cidade",
               ),
               MyTextField(
-                type: TextInputType.number,
                 controller: myControllerTelephone1,
                 validate: (value) => Validate.validateAll(value,
                     r'\(\d{2}\)\s\d{4,5}-\d{4}',
@@ -106,7 +105,6 @@ class _TabPage2State extends State<TabPage2> with AutomaticKeepAliveClientMixin<
                 hint: "Telefone",
               ),
               MyTextField(
-                type: TextInputType.number,
                 controller: myControllerTelephone2,
                 validate: (value) => Validate.validateAllWithoutEmpty(value,
                     r'\(\d{2}\)\s\d{4,5}-\d{4}',
